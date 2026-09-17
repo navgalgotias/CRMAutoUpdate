@@ -1,0 +1,20 @@
+<!-- @dsCard group="Colors" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="_base.css">
+<style>
+  .tok-row{ display:flex; align-items:center; gap:14px; padding:9px 0; border-bottom:1px dashed var(--border-default-color); }
+  .tok-row:last-child{ border-bottom:0; }
+  .tok-chip{ width:34px; height:34px; border-radius:6px; border:1px solid var(--border-default-color); flex-shrink:0; }
+  .tok-name{ font-family:var(--ds-mono); font-size:12px; font-weight:500; width:180px; }
+  .tok-desc{ font-size:12px; color:var(--iron); flex:1; }
+  .tok-var{ font-family:var(--ds-mono); font-size:10.5px; color:var(--iron); background:var(--hover-bg-color); padding:3px 7px; border-radius:4px; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Tables</div></div>
+  <div>
+    <div class="tok-row"><span class="tok-chip" style="background:var(--table-dark-cell)"></span><span class="tok-name">--table-dark-cell</span><span class="tok-desc">header cell bg</span><span class="tok-var">var(--table-dark-cell)</span></div>
+    <div class="tok-row"><span class="tok-chip" style="background:var(--table-hover-bg)"></span><span class="tok-name">--table-hover-bg</span><span class="tok-desc">row hover</span><span class="tok-var">var(--table-hover-bg)</span></div>
+    <div class="tok-row"><span class="tok-chip" style="background:var(--table-border-color)"></span><span class="tok-name">--table-border-color</span><span class="tok-desc">row border</span><span class="tok-var">var(--table-border-color)</span></div>
+  </div>
+</div></body></html>

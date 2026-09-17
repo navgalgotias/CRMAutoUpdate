@@ -1,0 +1,48 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="_base.css">
+<style>
+  body{ background:var(--body-bg); } .card{ background:var(--body-bg); width:1000px; }
+  .sk-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+  .sk-card{ border:1px solid var(--border-default-color); border-radius:8px; background:var(--bg-primary); padding:20px; }
+  .sk-line{ border-radius:6px; }
+  .sk-card .sk-line + .sk-line{ margin-top:12px; }
+  .sk-tbl{ border:1px solid var(--border-default-color); border-radius:8px; overflow:hidden; background:var(--bg-primary); width:100%; }
+  .sk-thead{ display:grid; grid-template-columns:2fr 1.2fr 1fr 1fr; gap:16px; padding:14px 18px; background:var(--table-dark-cell); }
+  .sk-thead span{ font-size:11px; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--body-textColor); }
+  .sk-trow{ display:grid; grid-template-columns:2fr 1.2fr 1fr 1fr; gap:16px; align-items:center; padding:14px 18px; border-top:1px solid var(--table-border-color); }
+  .sk-cellrow{ display:flex; align-items:center; gap:12px; }
+  .sk-avatar{ width:32px; height:32px; border-radius:50%; flex-shrink:0; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Skeleton loader · &lt;fn-skeleton-loader&gt;</div><div class="muted" style="font-size:12px">Shimmering placeholders while data loads · <code class="mono">shape="card | table | line | avatar"</code> + count</div></div>
+
+  <div class="mono" style="margin-top:2px">shape="card" count="3"</div>
+  <div class="sk-grid">
+    <div class="sk-card">
+      <div class="fn-skeleton sk-line" style="height:13px;width:80%"></div>
+      <div class="fn-skeleton sk-line" style="height:13px;width:45%"></div>
+      <div class="fn-skeleton sk-line" style="height:34px;width:100%;margin-top:18px"></div>
+    </div>
+    <div class="sk-card">
+      <div class="fn-skeleton sk-line" style="height:13px;width:80%"></div>
+      <div class="fn-skeleton sk-line" style="height:13px;width:45%"></div>
+      <div class="fn-skeleton sk-line" style="height:34px;width:100%;margin-top:18px"></div>
+    </div>
+    <div class="sk-card">
+      <div class="fn-skeleton sk-line" style="height:13px;width:80%"></div>
+      <div class="fn-skeleton sk-line" style="height:13px;width:45%"></div>
+      <div class="fn-skeleton sk-line" style="height:34px;width:100%;margin-top:18px"></div>
+    </div>
+  </div>
+
+  <div class="mono" style="margin-top:10px">shape="table" count="4"</div>
+  <div class="sk-tbl">
+    <div class="sk-thead"><span>Employee</span><span>Role</span><span>Status</span><span>Shifts</span></div>
+    <div class="sk-trow"><div class="sk-cellrow"><span class="fn-skeleton sk-avatar"></span><span class="fn-skeleton sk-line" style="height:11px;width:55%"></span></div><span class="fn-skeleton sk-line" style="height:11px;width:60%"></span><span class="fn-skeleton sk-line" style="height:11px;width:50%"></span><span class="fn-skeleton sk-line" style="height:11px;width:35%"></span></div>
+    <div class="sk-trow"><div class="sk-cellrow"><span class="fn-skeleton sk-avatar"></span><span class="fn-skeleton sk-line" style="height:11px;width:55%"></span></div><span class="fn-skeleton sk-line" style="height:11px;width:60%"></span><span class="fn-skeleton sk-line" style="height:11px;width:50%"></span><span class="fn-skeleton sk-line" style="height:11px;width:35%"></span></div>
+    <div class="sk-trow"><div class="sk-cellrow"><span class="fn-skeleton sk-avatar"></span><span class="fn-skeleton sk-line" style="height:11px;width:55%"></span></div><span class="fn-skeleton sk-line" style="height:11px;width:60%"></span><span class="fn-skeleton sk-line" style="height:11px;width:50%"></span><span class="fn-skeleton sk-line" style="height:11px;width:35%"></span></div>
+    <div class="sk-trow"><div class="sk-cellrow"><span class="fn-skeleton sk-avatar"></span><span class="fn-skeleton sk-line" style="height:11px;width:55%"></span></div><span class="fn-skeleton sk-line" style="height:11px;width:60%"></span><span class="fn-skeleton sk-line" style="height:11px;width:50%"></span><span class="fn-skeleton sk-line" style="height:11px;width:35%"></span></div>
+  </div>
+</div></body></html>

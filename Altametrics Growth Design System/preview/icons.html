@@ -1,0 +1,57 @@
+<!-- @dsCard group="Brand" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="../global-icons.css">
+<link rel="stylesheet" href="_base.css">
+<style>
+  .sec-label{font-family:var(--ds-mono);font-size:11px;color:var(--iron);display:flex;align-items:center;gap:8px;margin-top:2px}
+  .sec-label b{color:var(--body-textColor);font-weight:600}
+  .tiles{display:grid;grid-template-columns:repeat(10,1fr);gap:8px}
+  .tile{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:6px;
+        padding:10px 4px 8px;border:1px solid var(--border-default-color);border-radius:6px;background:var(--bg-primary);min-height:56px}
+  .tile iconify-icon{font-size:21px;color:var(--body-textColor)}
+  .tile i{font-size:21px;line-height:1;color:var(--blue)}
+  .tile .nm{font-family:var(--ds-mono);font-size:8.5px;color:var(--iron);text-align:center;line-height:1.2;word-break:break-word}
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Iconography</div><div class="muted" style="font-size:12px">Two systems, both via <code class="mono">&lt;fn-icon&gt;</code>: <b>Phosphor</b> for generic UI, the custom <b>fn-global</b> font for product glyphs Phosphor doesn't cover.</div></div>
+
+  <div class="sec-label"><b>Phosphor</b> · Iconify <code class="mono" style="font-size:10px">ph:</code> · regular / bold / fill / duotone</div>
+  <div class="tiles">
+    <div class="tile"><iconify-icon icon="ph:house"></iconify-icon><span class="nm">house</span></div>
+    <div class="tile"><iconify-icon icon="ph:magnifying-glass"></iconify-icon><span class="nm">search</span></div>
+    <div class="tile"><iconify-icon icon="ph:calendar-blank"></iconify-icon><span class="nm">calendar</span></div>
+    <div class="tile"><iconify-icon icon="ph:clock"></iconify-icon><span class="nm">clock</span></div>
+    <div class="tile"><iconify-icon icon="ph:funnel"></iconify-icon><span class="nm">filter</span></div>
+    <div class="tile"><iconify-icon icon="ph:table"></iconify-icon><span class="nm">table</span></div>
+    <div class="tile"><iconify-icon icon="ph:bell"></iconify-icon><span class="nm">bell</span></div>
+    <div class="tile"><iconify-icon icon="ph:gear-six"></iconify-icon><span class="nm">gear</span></div>
+    <div class="tile"><iconify-icon icon="ph:user-circle"></iconify-icon><span class="nm">user</span></div>
+    <div class="tile"><iconify-icon icon="ph:chart-line"></iconify-icon><span class="nm">chart</span></div>
+  </div>
+
+  <div class="sec-label" style="margin-top:6px"><b>fn-global</b> · AG custom icon font · self-hosted <code class="mono" style="font-size:10px">global.woff2</code></div>
+  <div class="tiles">
+    <div class="tile"><i class="fn-global-site"></i><span class="nm">site</span></div>
+    <div class="tile"><i class="fn-global-employee"></i><span class="nm">employee</span></div>
+    <div class="tile"><i class="fn-global-schedule"></i><span class="nm">schedule</span></div>
+    <div class="tile"><i class="fn-global-reports"></i><span class="nm">reports</span></div>
+    <div class="tile"><i class="fn-global-settings"></i><span class="nm">settings</span></div>
+    <div class="tile"><i class="fn-global-clock"></i><span class="nm">clock</span></div>
+    <div class="tile"><i class="fn-global-laborBudget"></i><span class="nm">labor</span></div>
+    <div class="tile"><i class="fn-global-cloud"></i><span class="nm">cloud</span></div>
+    <div class="tile"><i class="fn-global-pdf"></i><span class="nm">pdf</span></div>
+    <div class="tile"><i class="fn-global-excel"></i><span class="nm">excel</span></div>
+    <div class="tile"><i class="fn-global-schedule-time"></i><span class="nm">shift</span></div>
+    <div class="tile"><i class="fn-global-employees"></i><span class="nm">team</span></div>
+    <div class="tile"><i class="fn-global-food"></i><span class="nm">food</span></div>
+    <div class="tile"><i class="fn-global-recipe"></i><span class="nm">recipe</span></div>
+    <div class="tile"><i class="fn-global-cart"></i><span class="nm">cart</span></div>
+    <div class="tile"><i class="fn-global-edit"></i><span class="nm">edit</span></div>
+    <div class="tile"><i class="fn-global-delete"></i><span class="nm">delete</span></div>
+    <div class="tile"><i class="fn-global-view"></i><span class="nm">view</span></div>
+    <div class="tile"><i class="fn-global-filter"></i><span class="nm">filter</span></div>
+    <div class="tile"><i class="fn-global-bell-alerts"></i><span class="nm">alerts</span></div>
+  </div>
+</div></body></html>

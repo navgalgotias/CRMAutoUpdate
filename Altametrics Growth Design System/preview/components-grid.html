@@ -1,0 +1,64 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="_base.css">
+<style>
+  body{ background:var(--body-bg); } .card{ background:var(--body-bg); width:1000px; }
+  .grid-wrap{ width:100%; border:1px solid var(--border-default-color); border-radius:8px; overflow:hidden; background:var(--bg-primary); box-shadow:var(--shadow); }
+  table.tbl{ width:100%; border-collapse:collapse; border:0; }
+  .tbl th{ background:var(--table-dark-cell); text-transform:uppercase; font-size:11px; letter-spacing:.04em; font-weight:600; color:var(--body-textColor); text-align:left; padding:11px 14px; }
+  .tbl th.num{ text-align:right; }
+  .tbl td{ padding:0 8px; height:46px; border-top:1px solid var(--table-border-color); font-size:13px; }
+  .tbl td.id{ font-family:var(--ds-mono); color:var(--iron); padding-left:18px; }
+  .tbl td.num{ text-align:right; font-family:var(--ds-mono); padding-right:18px; }
+  .tbl tr.editing{ background:var(--table-hover-bg); }
+  .gcell{ width:100%; height:26px; border:0; background:transparent; padding:0 6px; font-size:13px; font-family:inherit; color:var(--body-textColor); border-radius:4px; }
+  .gcell.mono{ font-family:var(--ds-mono); }
+  .gcell.focused{ border:1px solid var(--input-focus-border-color); background:var(--bg-primary); box-shadow:0 0 0 3px rgba(0,91,196,.12); }
+  .grow{ width:30px; height:30px; border:1px solid var(--border-default-color); border-radius:6px; background:var(--bg-primary); display:inline-flex; align-items:center; justify-content:center; cursor:pointer; color:var(--red); }
+  .add-row td{ height:auto; padding:10px 14px; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Editable grid · &lt;fn-grid&gt;</div><div class="muted" style="font-size:12px">Inline-edit grid for spreadsheet-like entry · per-cell types, validation, add/remove rows, column resize</div></div>
+  <div class="grid-wrap">
+    <table class="tbl">
+      <thead><tr>
+        <th style="width:36px">#</th><th>Role</th><th>Day</th><th>Start</th><th>End</th>
+        <th class="num">Hours</th><th class="num">Pay rate</th><th style="width:44px"></th>
+      </tr></thead>
+      <tbody>
+        <tr class="editing">
+          <td class="id">1</td>
+          <td><input class="gcell" value="Bartender"></td>
+          <td><input class="gcell focused" value="Mon"></td>
+          <td><input class="gcell mono" value="16:00"></td>
+          <td><input class="gcell mono" value="23:00"></td>
+          <td class="num">7</td><td class="num">$24.00</td>
+          <td><button class="grow" aria-label="Remove row 1"><iconify-icon icon="ph:trash"></iconify-icon></button></td>
+        </tr>
+        <tr>
+          <td class="id">2</td>
+          <td><input class="gcell" value="Server"></td>
+          <td><input class="gcell" value="Mon"></td>
+          <td><input class="gcell mono" value="17:00"></td>
+          <td><input class="gcell mono" value="23:00"></td>
+          <td class="num">6</td><td class="num">$18.50</td>
+          <td><button class="grow" aria-label="Remove row 2"><iconify-icon icon="ph:trash"></iconify-icon></button></td>
+        </tr>
+        <tr>
+          <td class="id">3</td>
+          <td><input class="gcell" value="Line cook"></td>
+          <td><input class="gcell" value="Mon"></td>
+          <td><input class="gcell mono" value="15:00"></td>
+          <td><input class="gcell mono" value="22:00"></td>
+          <td class="num">7</td><td class="num">$22.00</td>
+          <td><button class="grow" aria-label="Remove row 3"><iconify-icon icon="ph:trash"></iconify-icon></button></td>
+        </tr>
+        <tr class="add-row"><td colspan="8">
+          <button class="btn btn-outline-secondary btn-sm"><iconify-icon icon="ph:plus" style="margin-right:6px"></iconify-icon>Add row</button>
+        </td></tr>
+      </tbody>
+    </table>
+  </div>
+</div></body></html>

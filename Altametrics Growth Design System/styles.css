@@ -1,0 +1,7 @@
+/* ============================================================================
+   AG Design System — root stylesheet (compiled entry for consuming projects)
+   tokens.css     → design tokens + @font-face (Inter, fn-global icons)
+   components.css → fn-* / hw-* component classes
+   ============================================================================ */
+@import url("tokens.css");
+@import url("components.css");

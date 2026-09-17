@@ -1,0 +1,937 @@
+<!doctype html>
+<!-- @dsCard group="Brand" name="AG Design System Deck" subtitle="15-slide deck — full component &amp; pattern inventory" viewport="1920x1080" -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Altametrics Growth Design System — Deck</title>
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="ds-styles.css" />
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<style>
+  deck-stage:not(:defined) { visibility: hidden; }
+  html, body { margin: 0; background: #0e0f13; }
+
+  :root {
+    --ink: #0b0b0b;
+    --navy: #25262e;
+    --mute: #4b5563;
+    --line: #e4e6ee;
+    --brand: #005bc4;
+    --accent: #bf5700;
+    --mono: var(--ds-mono);
+  }
+
+  /* ---- slide base ---- */
+  .slide {
+    width: 1920px; height: 1080px;
+    background: #f6f7ff; color: var(--ink);
+    font-family: "Inter", sans-serif;
+    overflow: hidden; position: relative;
+    -webkit-font-smoothing: antialiased;
+  }
+  .pad { padding: 80px 120px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; }
+
+  .eyebrow { font-size: 19px; letter-spacing: .16em; text-transform: uppercase; font-weight: 600; color: var(--brand); }
+  .slide-title { font-size: 54px; font-weight: 600; letter-spacing: -.025em; line-height: 1.04; margin: 14px 0 0; }
+  .slide-lead { font-size: 24px; line-height: 1.45; color: var(--mute); max-width: 1180px; margin: 18px 0 0; font-weight: 400; text-wrap: pretty; }
+
+  .head { display: flex; align-items: flex-end; justify-content: space-between; gap: 40px; }
+  .head .idx { font-family: var(--mono); font-size: 18px; color: var(--mute); font-weight: 500; white-space: nowrap; }
+
+  .foot {
+    position: absolute; left: 120px; right: 120px; bottom: 44px;
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 15px; color: var(--mute);
+    border-top: 1px solid var(--line); padding-top: 18px;
+  }
+  .foot .mono { font-family: var(--mono); letter-spacing: .02em; }
+  .foot .dot { color: var(--brand); font-weight: 700; }
+
+  .logo-mark { width: 56px; height: 56px; border-radius: 13px; background: linear-gradient(135deg, var(--blue) 0%, var(--cyan) 100%); color: #fff; font-weight: 800; font-size: 25px; letter-spacing: -.04em; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+  /* ===== COVER ===== */
+  .cover { background: radial-gradient(120% 120% at 78% 12%, #2c3550 0%, #1a1b22 52%, #131319 100%); color: #fff; }
+  .cover .pad { justify-content: center; }
+  .cover .brandrow { display: flex; align-items: center; gap: 20px; }
+  .cover .brandrow .nm { font-size: 22px; font-weight: 600; }
+  .cover h1 { font-size: 108px; font-weight: 700; letter-spacing: -.035em; line-height: .98; margin: 60px 0 0; max-width: 1400px; }
+  .cover h1 .accent { color: #6ab0ff; }
+  .cover .sub { font-size: 29px; color: #b9c0d4; margin-top: 34px; max-width: 1120px; line-height: 1.45; font-weight: 400; }
+  .cover .chips { display: flex; gap: 14px; margin-top: 52px; flex-wrap: wrap; }
+  .cover .chip { font-size: 18px; font-family: var(--mono); letter-spacing: .02em; padding: 10px 18px; border-radius: 999px; border: 1px solid rgba(255,255,255,.22); color: #d7ddee; background: rgba(255,255,255,.04); }
+  .cover .footc { position: absolute; left: 120px; right: 120px; bottom: 56px; display: flex; justify-content: space-between; align-items: center; font-size: 17px; color: #8b92a8; font-family: var(--mono); border-top: 1px solid rgba(255,255,255,.12); padding-top: 24px; }
+
+  /* ===== cards & grids ===== */
+  .grid { display: grid; gap: 22px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 26px 28px; display: flex; flex-direction: column; }
+  .card .clabel { display: flex; align-items: baseline; gap: 12px; margin-bottom: 18px; }
+  .card .clabel .nm { font-size: 19px; font-weight: 600; letter-spacing: -.01em; }
+  .card .clabel .sel { font-family: var(--mono); font-size: 14px; color: var(--mute); }
+  .card h3 { font-size: 15px; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); margin: 0 0 16px; font-weight: 600; }
+  .demo { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+  .note { margin-top: auto; padding-top: 16px; font-size: 15px; color: var(--mute); line-height: 1.45; }
+
+  /* specimen sizing bumps so UI reads at deck scale */
+  .specimen .btn { font-size: 15px; padding: 9px 18px; }
+  .specimen .btn.btn-sm { font-size: 13px; }
+  .specimen label, .specimen .fn-label { font-size: 15px; }
+  .specimen input.form-control, .specimen textarea.form-control { height: 42px; font-size: 15px; }
+  .specimen textarea.form-control { height: auto; }
+  .specimen .fn-select { font-size: 16px; height: 46px; min-width: 200px; }
+  .specimen .fn-tabs.is-horizontal .tab { height: 34px; font-size: 15px; padding: 4px 18px; }
+  .specimen .fn-breadcrumb { font-size: 17px; }
+  .specimen .fn-checkbox, .specimen .fn-radio { font-size: 16px; }
+  .specimen .fn-tag { font-size: 14px; padding: 4px 12px; }
+  .specimen .pt-pill { font-size: 14px; }
+  .specimen .fn-switch { transform: scale(1.25); transform-origin: left center; }
+
+  /* ===== two libraries ===== */
+  .lib { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 40px; flex: 1; }
+  .lib .col { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 40px 44px; display: flex; flex-direction: column; }
+  .lib .col .tag { font-family: var(--mono); font-size: 21px; font-weight: 600; padding: 8px 16px; border-radius: 8px; align-self: flex-start; }
+  .lib .col.fn .tag { background: rgba(0,91,196,.10); color: var(--brand); }
+  .lib .col.hw .tag { background: rgba(191,87,0,.12); color: var(--accent); }
+  .lib .col h2 { font-size: 36px; font-weight: 600; letter-spacing: -.02em; margin: 22px 0 8px; }
+  .lib .col p { font-size: 22px; line-height: 1.5; color: var(--mute); margin: 0 0 22px; }
+  .lib .col ul { list-style: none; margin: auto 0 0; padding: 0; }
+  .lib .col li { font-size: 20px; padding: 14px 0; border-top: 1px solid var(--line); display: flex; gap: 14px; align-items: baseline; }
+  .lib .col li .mono { font-family: var(--mono); font-size: 16px; color: var(--mute); min-width: 120px; }
+
+  /* ===== color ===== */
+  .swatches { display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; margin-top: 36px; }
+  .sw { border-radius: 13px; overflow: hidden; border: 1px solid var(--line); background: #fff; }
+  .sw .chip { height: 104px; }
+  .sw .meta { padding: 14px 16px; }
+  .sw .meta .nm { font-size: 20px; font-weight: 600; }
+  .sw .meta .hex { font-family: var(--mono); font-size: 15px; color: var(--mute); margin-top: 3px; text-transform: uppercase; }
+  .sw .meta .role { font-size: 14px; color: var(--mute); margin-top: 2px; }
+  .surfrow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 18px; }
+  .surf { border-radius: 12px; border: 1px solid var(--line); padding: 20px 22px; display: flex; flex-direction: column; gap: 10px; min-height: 88px; justify-content: space-between; }
+  .surf .nm { font-size: 17px; font-weight: 600; }
+  .surf .hex { font-family: var(--mono); font-size: 14px; color: var(--mute); text-transform: uppercase; }
+  .bubbles { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+  .bubbles .b { padding: 8px 16px; border-radius: 999px; font-size: 16px; font-weight: 500; }
+
+  /* ===== type ===== */
+  .typerows { margin-top: 30px; display: flex; flex-direction: column; flex: 1; }
+  .trow { display: grid; grid-template-columns: 230px 1fr; gap: 40px; align-items: baseline; padding: 20px 0; border-top: 1px solid var(--line); }
+  .trow:last-child { border-bottom: 1px solid var(--line); }
+  .trow .spec { font-family: var(--mono); font-size: 16px; color: var(--mute); padding-top: 10px; }
+  .trow .spec b { color: var(--ink); font-weight: 600; }
+  .trow .samp { letter-spacing: -.02em; color: var(--ink); }
+
+  /* ===== spacing/radii/elevation ===== */
+  .threecol { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 26px; margin-top: 40px; flex: 1; }
+  .spacescale { display: flex; flex-direction: column; gap: 14px; }
+  .spaceitem { display: flex; align-items: center; gap: 20px; }
+  .spaceitem .bar { background: var(--brand); height: 24px; border-radius: 5px; }
+  .spaceitem .lbl { font-family: var(--mono); font-size: 16px; color: var(--mute); white-space: nowrap; }
+  .spaceitem .lbl b { color: var(--ink); }
+  .radiirow { display: flex; gap: 18px; align-items: flex-end; }
+  .radii { width: 84px; height: 84px; background: rgba(0,91,196,.10); border: 2px solid var(--brand); }
+  .radiicap { font-family: var(--mono); font-size: 14px; color: var(--mute); margin-top: 10px; text-align: center; }
+  .elevbox { height: 104px; background: #fff; border: 1px solid var(--line); border-radius: 12px; box-shadow: 0 7px 22px rgba(0,0,0,.15); display: flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: 15px; color: var(--mute); }
+
+  /* ===== icons/motion ===== */
+  .icorow { display: flex; gap: 18px; flex-wrap: wrap; }
+  .ico { width: 76px; height: 76px; border-radius: 12px; background: var(--body-bg); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 34px; color: var(--ink); }
+  .ico iconify-icon { display: block; }
+  .glyphrow { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .glyph { width: 64px; height: 64px; border-radius: 10px; background: rgba(0,91,196,.07); display: flex; align-items: center; justify-content: center; font-size: 26px; color: var(--brand); }
+  .motionrow { display: flex; flex-direction: column; gap: 16px; }
+  .mtrack { display: grid; grid-template-columns: 220px 1fr; gap: 18px; align-items: center; }
+  .mtrack .l { font-family: var(--mono); font-size: 15px; color: var(--mute); }
+  .mtrack .l b { color: var(--ink); }
+  .mbar { height: 12px; border-radius: 999px; background: var(--body-bg); border: 1px solid var(--line); position: relative; overflow: hidden; }
+  .mbar::after { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 42%; background: var(--brand); border-radius: 999px; }
+
+  /* ===== component grids ===== */
+  .cg-3 { grid-template-columns: repeat(3, 1fr); }
+  .cg-4 { grid-template-columns: repeat(4, 1fr); }
+  .cg-2 { grid-template-columns: repeat(2, 1fr); }
+
+  /* mini prime table */
+  .mini-pt { font-size: 14px; }
+  .mini-pt .pt-caption { padding: 12px 16px; }
+  .mini-pt .pt-title { font-size: 16px; }
+  .mini-pt thead th { font-size: 13px; padding: 10px 14px; }
+  .mini-pt tbody td { font-size: 13.5px; padding: 10px 14px; }
+
+  /* editable grid */
+  .egrid { display: grid; grid-template-columns: 1.4fr 1fr 1fr; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background: #fff; }
+  .egrid .gh { background: var(--table-dark-cell); font-size: 13px; font-weight: 600; padding: 10px 12px; text-transform: uppercase; letter-spacing: .04em; }
+  .egrid .gc { padding: 6px 8px; border-top: 1px solid var(--line); }
+  .egrid .gc input { width: 100%; border: 1px solid transparent; background: transparent; font-size: 14px; padding: 6px 8px; border-radius: 4px; font-family: inherit; color: var(--ink); }
+  .egrid .gc input:focus { outline: none; border-color: var(--brand); background: #fff; box-shadow: 0 0 0 3px rgba(0,91,196,.12); }
+  .egrid .gc.edited input { background: rgba(0,91,196,.06); }
+
+  /* charts */
+  .chartwrap { display: flex; gap: 28px; align-items: center; }
+  .donut { width: 132px; height: 132px; border-radius: 50%; background: conic-gradient(var(--blue) 0 46%, var(--green) 46% 72%, var(--orange) 72% 88%, var(--line) 88% 100%); position: relative; flex-shrink: 0; }
+  .donut::after { content: "1,284"; position: absolute; inset: 26px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 700; font-family: var(--mono); letter-spacing: -.02em; }
+  .legend { display: flex; flex-direction: column; gap: 10px; font-size: 15px; }
+  .legend .li { display: flex; align-items: center; gap: 10px; }
+  .legend .dot2 { width: 13px; height: 13px; border-radius: 3px; }
+  .barsbig { display: flex; align-items: flex-end; gap: 12px; height: 150px; }
+  .barsbig .bcol { display: flex; flex-direction: column; align-items: center; gap: 8px; flex: 1; }
+  .barsbig .bcol .b { width: 100%; background: var(--blue); border-radius: 5px 5px 0 0; }
+  .barsbig .bcol:nth-child(even) .b { opacity: .6; }
+  .barsbig .bcol .x { font-size: 13px; color: var(--mute); font-family: var(--mono); }
+
+  /* mini drawer */
+  .mini-drawer { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #fff; box-shadow: 0 4px 14px rgba(0,0,0,.06); }
+  .mini-drawer .dh { padding: 14px 16px; border-bottom: 1px solid var(--line); font-weight: 600; font-size: 16px; display: flex; justify-content: space-between; align-items: center; }
+  .mini-drawer .db { padding: 16px; font-size: 14px; color: var(--mute); line-height: 1.5; }
+  .mini-drawer .df { padding: 12px 16px; border-top: 1px solid var(--line); display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* confirm dialog */
+  .mini-dialog { border-radius: 10px; overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--box-border-color); background: #fff; }
+  .mini-dialog .dh { background: var(--dangerDark); color: #fff; padding: 12px 16px; font-size: 16px; font-weight: 600; display: flex; align-items: center; justify-content: space-between; }
+  .mini-dialog .dc { padding: 18px 16px; font-size: 14.5px; color: var(--ink); line-height: 1.5; }
+  .mini-dialog .da { padding: 12px 16px; border-top: 1px solid var(--line); display: flex; gap: 10px; justify-content: flex-end; }
+
+  /* no-data */
+  .nd { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 4px; }
+  .nd h4 { font-size: 18px; font-weight: 600; margin: 8px 0 0; }
+  .nd p { font-size: 14px; color: var(--mute); margin: 4px 0 0; }
+
+  /* hw header */
+  .hwbar { height: 64px; background: var(--side-nav-bg); border-radius: 12px; display: flex; align-items: center; padding: 0 18px; gap: 18px; color: #fff; position: relative; }
+  .hwbar .hl { display: flex; align-items: center; gap: 16px; }
+  .hwbar .logo-mark { width: 40px; height: 40px; font-size: 18px; border-radius: 9px; }
+  .hwbar .pill { display: flex; align-items: center; gap: 8px; font-size: 15px; color: #cfd6e6; padding: 7px 14px; border-radius: 8px; background: rgba(255,255,255,.06); }
+  .hwbar .center { position: absolute; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 18px; }
+  .hwbar .center .clock { font-family: var(--mono); font-size: 17px; letter-spacing: .02em; }
+  .hwbar .center .wx { display: flex; align-items: center; gap: 8px; font-size: 16px; color: #cfd6e6; }
+  .hwbar .right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .hwbar .ricon { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center; font-size: 19px; }
+  .hwbar .ava { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg,#6ab0ff,#005bc4); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; }
+
+  /* app market tiles */
+  .market { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .market .app { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; }
+  .market .app .ic { width: 40px; height: 40px; border-radius: 9px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; flex-shrink: 0; }
+  .market .app .nm { font-size: 15px; font-weight: 600; }
+  .market .app .ds { font-size: 12.5px; color: var(--mute); }
+
+  /* auth shell */
+  .auth { display: flex; flex-direction: column; gap: 14px; max-width: 320px; }
+  .auth .ah { font-size: 22px; font-weight: 600; letter-spacing: -.01em; }
+  .auth .ap { font-size: 14px; color: var(--mute); margin-top: -8px; }
+
+  /* sidebar menu specimen */
+  .menuspec { width: 240px; border-radius: 10px; overflow: hidden; }
+  .menuspec .fn-menu-sidebar { width: 240px; height: auto; border-radius: 10px; }
+
+  /* patterns */
+  .patterns { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 40px; flex: 1; }
+  .pat { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 24px 26px; display: flex; flex-direction: column; gap: 14px; }
+  .pat .wire { height: 118px; border-radius: 9px; background: var(--body-bg); border: 1px solid var(--line); padding: 9px; display: flex; flex-direction: column; gap: 6px; overflow: hidden; }
+  .pat .wire .r { background: #fff; border: 1px solid var(--line); border-radius: 4px; }
+  .pat .wire .bar { height: 12px; background: var(--side-nav-bg); border-radius: 3px; }
+  .pat .wire .row { display: flex; gap: 6px; flex: 1; }
+  .pat .wire .side { width: 26px; background: var(--side-nav-bg); border-radius: 3px; }
+  .pat .pn { font-size: 19px; font-weight: 600; letter-spacing: -.01em; }
+  .pat .pd { font-size: 14.5px; color: var(--mute); line-height: 1.45; }
+  .pat .ps { font-family: var(--mono); font-size: 13px; color: var(--brand); }
+
+  /* principles */
+  .rules { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 56px; margin-top: 40px; flex: 1; align-content: start; }
+  .rule { display: flex; gap: 22px; align-items: flex-start; padding: 18px 0; border-top: 1px solid var(--line); }
+  .rule .n { font-family: var(--mono); font-size: 21px; font-weight: 600; color: var(--brand); min-width: 42px; }
+  .rule .body h4 { font-size: 23px; font-weight: 600; margin: 0 0 6px; letter-spacing: -.01em; }
+  .rule .body p { font-size: 18px; color: var(--mute); margin: 0; line-height: 1.45; }
+  .rule .body code { font-family: var(--mono); font-size: 15px; background: rgba(0,91,196,.08); color: var(--brand); padding: 1px 7px; border-radius: 5px; }
+
+  /* closing */
+  .close { background: radial-gradient(120% 120% at 22% 88%, #2c3550 0%, #1a1b22 55%, #131319 100%); color: #fff; }
+  .close .pad { justify-content: center; }
+  .close h2 { font-size: 74px; font-weight: 700; letter-spacing: -.03em; line-height: 1.02; margin: 28px 0 0; max-width: 1300px; }
+  .close .recap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 64px; }
+  .close .recap .it .k { font-size: 50px; font-weight: 700; letter-spacing: -.03em; color: #6ab0ff; }
+  .close .recap .it .v { font-size: 20px; color: #b9c0d4; margin-top: 8px; }
+  .close .prov { position: absolute; left: 120px; right: 120px; bottom: 56px; font-size: 17px; color: #8b92a8; font-family: var(--mono); border-top: 1px solid rgba(255,255,255,.12); padding-top: 24px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    [data-deck-active] .anim { animation: rise .55s cubic-bezier(.2,.7,.3,1) both; }
+    [data-deck-active] .anim2 { animation: rise .55s cubic-bezier(.2,.7,.3,1) .07s both; }
+    [data-deck-active] .anim3 { animation: rise .55s cubic-bezier(.2,.7,.3,1) .14s both; }
+    @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  }
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080">
+
+  <!-- 1 · COVER -->
+  <section class="slide cover" data-label="Cover" data-screen-label="Cover">
+    <div class="pad">
+      <div class="brandrow anim">
+        <span class="logo-mark">AG</span>
+        <span class="nm">Altametrics&nbsp;·&nbsp;Growth Platform</span>
+      </div>
+      <h1 class="anim2">The Growth<br /><span class="accent">Design System</span></h1>
+      <p class="sub anim3">One system, two libraries, every screen. The complete reference for building Angular apps on <b style="color:#fff;font-weight:600">foundation</b> and <b style="color:#fff;font-weight:600">hw-foundation</b> — keyboard-accessible, theme-aware and i18n-ready by default.</p>
+      <div class="chips anim3">
+        <span class="chip">28 components</span>
+        <span class="chip">9 page patterns</span>
+        <span class="chip">Light / Dark</span>
+        <span class="chip">WCAG 2.1 AA</span>
+      </div>
+    </div>
+    <div class="footc"><span>Complete component &amp; pattern reference</span><span>v1.0 · June 2026</span></div>
+  </section>
+
+  <!-- 2 · TWO LIBRARIES -->
+  <section class="slide" data-label="Two libraries" data-screen-label="Two libraries">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">What this is</div><h2 class="slide-title anim">Two libraries, one language</h2></div>
+        <div class="idx anim">01 / 13</div>
+      </div>
+      <p class="slide-lead anim2">Every screen in the Altametrics restaurant workforce platform is assembled from two coordinated Angular libraries that share the same tokens, accessibility contract and theming model.</p>
+      <div class="lib">
+        <div class="col fn anim2">
+          <span class="tag">Fn* · fn-*</span>
+          <h2>foundation</h2>
+          <p>The generic UI kit. Imported per-feature module — never the whole library.</p>
+          <ul>
+            <li><span class="mono">Forms</span><span>Button, input, select, switch, pickers, rating &amp; more — 12 controls</span></li>
+            <li><span class="mono">Data</span><span>Prime table, editable grid, pagination, charts</span></li>
+            <li><span class="mono">Nav · feedback</span><span>Tabs, breadcrumb, accordion, dialog, drawer, toast</span></li>
+          </ul>
+        </div>
+        <div class="col hw anim3">
+          <span class="tag">Hw* · hw-*</span>
+          <h2>hw-foundation</h2>
+          <p>The HW-branded application shell wrapping foundation in product chrome.</p>
+          <ul>
+            <li><span class="mono">Shell</span><span>App header: site, profile, apps, weather, time-clock</span></li>
+            <li><span class="mono">Platform</span><span>Auth shell, app market, employee, franchise</span></li>
+            <li><span class="mono">Comms</span><span>Release notes, connect, notifications</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">foundation + hw-foundation</span></div>
+  </section>
+
+  <!-- 3 · COLOR -->
+  <section class="slide" data-label="Color" data-screen-label="Color">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">Foundations · Color</div><h2 class="slide-title anim">Named tokens, never raw hex</h2></div>
+        <div class="idx anim">02 / 13</div>
+      </div>
+      <p class="slide-lead anim" style="margin-top:14px">Colors are consumed only through <code style="font-family:var(--mono);font-size:.9em;background:rgba(0,91,196,.08);color:var(--brand);padding:1px 8px;border-radius:5px">var(--token)</code>. <code style="font-family:var(--mono);font-size:.9em;background:rgba(0,91,196,.08);color:var(--brand);padding:1px 8px;border-radius:5px">--theme</code> aliases the brand so consumer apps retint without touching component CSS.</p>
+      <div class="swatches anim2">
+        <div class="sw"><div class="chip" style="background:#005bc4"></div><div class="meta"><div class="nm">Blue</div><div class="hex">#005bc4</div><div class="role">Primary / theme</div></div></div>
+        <div class="sw"><div class="chip" style="background:#bf5700"></div><div class="meta"><div class="nm">Orange</div><div class="hex">#bf5700</div><div class="role">HW brand accent</div></div></div>
+        <div class="sw"><div class="chip" style="background:#1e7e34"></div><div class="meta"><div class="nm">Green</div><div class="hex">#1e7e34</div><div class="role">Success</div></div></div>
+        <div class="sw"><div class="chip" style="background:#fdc91e"></div><div class="meta"><div class="nm">Yellow</div><div class="hex">#fdc91e</div><div class="role">Warning</div></div></div>
+        <div class="sw"><div class="chip" style="background:#c62828"></div><div class="meta"><div class="nm">Red</div><div class="hex">#c62828</div><div class="role">Danger</div></div></div>
+        <div class="sw"><div class="chip" style="background:#0078a8"></div><div class="meta"><div class="nm">Cyan</div><div class="hex">#0078a8</div><div class="role">Info</div></div></div>
+      </div>
+      <div class="surfrow anim3">
+        <div class="surf" style="background:#f6f7ff"><div class="nm">Body bg</div><div class="hex">#f6f7ff</div></div>
+        <div class="surf" style="background:#ffffff"><div class="nm">Surface</div><div class="hex">#ffffff</div></div>
+        <div class="surf" style="background:#25262e;color:#fff"><div class="nm">Side nav</div><div class="hex" style="color:#b9c0d4">#25262e</div></div>
+        <div class="surf" style="background:#7b42ff;color:#fff"><div class="nm">Purple</div><div class="hex" style="color:#e6dcff">#7b42ff</div></div>
+      </div>
+      <div class="bubbles anim3">
+        <span class="b bubble-primary">Primary</span>
+        <span class="b bubble-success">Success</span>
+        <span class="b bubble-warning">Warning</span>
+        <span class="b bubble-danger">Danger</span>
+        <span class="b bubble-info">Info</span>
+        <span class="b bubble-orange">Orange</span>
+        <span class="b bubble-secondary">Muted</span>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">Dark mode = token overrides, no media queries</span></div>
+  </section>
+
+  <!-- 4 · TYPOGRAPHY -->
+  <section class="slide" data-label="Typography" data-screen-label="Typography">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">Foundations · Type</div><h2 class="slide-title anim">One UI family — Inter</h2></div>
+        <div class="idx anim">03 / 13</div>
+      </div>
+      <div class="typerows">
+        <div class="trow anim2"><div class="spec">Page · <b>28&nbsp;/&nbsp;600</b><br />tracking −.02em</div><div class="samp" style="font-size:56px;font-weight:600">Schedule overview</div></div>
+        <div class="trow anim2"><div class="spec">Section · <b>20&nbsp;/&nbsp;600</b></div><div class="samp" style="font-size:40px;font-weight:600">This week's labor forecast</div></div>
+        <div class="trow anim3"><div class="spec">Card · <b>15&nbsp;/&nbsp;600</b></div><div class="samp" style="font-size:30px;font-weight:600">Front-of-house coverage</div></div>
+        <div class="trow anim3"><div class="spec">Body · <b>14&nbsp;/&nbsp;400</b><br />line-height 1.5</div><div class="samp" style="font-size:26px;font-weight:400;color:var(--mute)">Every user-visible string flows through the i18n pipe — plain, operational, task-first copy.</div></div>
+        <div class="trow anim3"><div class="spec">Mono · <b>tabular</b><br />IDs &amp; numerics</div><div class="samp" style="font-family:var(--mono);font-size:28px;letter-spacing:0">EMP-04821 · 38.5 hrs · $1,284.00</div></div>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">Inter 300–700 · headings weight 600</span></div>
+  </section>
+
+  <!-- 5 · SPACING / RADII / ELEVATION -->
+  <section class="slide" data-label="Spacing &amp; elevation" data-screen-label="Spacing & elevation">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">Foundations · Layout</div><h2 class="slide-title anim">Spacing, radii &amp; elevation</h2></div>
+        <div class="idx anim">04 / 13</div>
+      </div>
+      <div class="threecol">
+        <div class="card anim2">
+          <h3>4-based spacing scale</h3>
+          <div class="spacescale">
+            <div class="spaceitem"><div class="bar" style="width:4px"></div><div class="lbl"><b>space-1</b> · 4px</div></div>
+            <div class="spaceitem"><div class="bar" style="width:8px"></div><div class="lbl"><b>space-2</b> · 8px</div></div>
+            <div class="spaceitem"><div class="bar" style="width:12px"></div><div class="lbl"><b>space-3</b> · 12px</div></div>
+            <div class="spaceitem"><div class="bar" style="width:16px"></div><div class="lbl"><b>space-4</b> · 16px</div></div>
+            <div class="spaceitem"><div class="bar" style="width:24px"></div><div class="lbl"><b>space-5</b> · 24px</div></div>
+            <div class="spaceitem"><div class="bar" style="width:32px"></div><div class="lbl"><b>space-6</b> · 32px</div></div>
+            <div class="spaceitem"><div class="bar" style="width:48px"></div><div class="lbl"><b>space-7</b> · 48px</div></div>
+          </div>
+        </div>
+        <div class="card anim3">
+          <h3>Radii</h3>
+          <div class="radiirow">
+            <div><div class="radii" style="border-radius:4px"></div><div class="radiicap">controls<br />4px</div></div>
+            <div><div class="radii" style="border-radius:6px"></div><div class="radiicap">radius-sm<br />6px</div></div>
+            <div><div class="radii" style="border-radius:9px"></div><div class="radiicap">radius-md<br />9px</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;margin-top:26px">
+            <div style="width:84px;height:42px;background:rgba(0,91,196,.10);border:2px solid var(--brand);border-radius:999px"></div>
+            <div class="radiicap" style="margin:0;text-align:left">pill<br />999px</div>
+          </div>
+        </div>
+        <div class="card anim3">
+          <h3>Elevation</h3>
+          <div class="elevbox">0 7px 22px rgba(0,0,0,.15)</div>
+          <p style="font-size:17px;color:var(--mute);line-height:1.5;margin:20px 0 0">A single elevation token for popovers and dialogs. Dense surfaces are separated by <b style="color:var(--ink);font-weight:600">borders, not shadows</b>.</p>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">Spacing · radii · one elevation token</span></div>
+  </section>
+
+  <!-- 6 · ICONOGRAPHY & MOTION -->
+  <section class="slide" data-label="Icons &amp; motion" data-screen-label="Icons & motion">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">Foundations · Icons &amp; motion</div><h2 class="slide-title anim">Iconography &amp; motion</h2></div>
+        <div class="idx anim">05 / 13</div>
+      </div>
+      <div class="grid cg-2" style="margin-top:38px;flex:1;align-content:start">
+        <div class="card anim2">
+          <div class="clabel"><span class="nm">UI icons — Phosphor</span><span class="sel">&lt;fn-icon lib="ph"&gt;</span></div>
+          <div class="icorow">
+            <div class="ico"><iconify-icon icon="ph:calendar-blank"></iconify-icon></div>
+            <div class="ico"><iconify-icon icon="ph:clock"></iconify-icon></div>
+            <div class="ico"><iconify-icon icon="ph:user-circle"></iconify-icon></div>
+            <div class="ico"><iconify-icon icon="ph:bell"></iconify-icon></div>
+            <div class="ico"><iconify-icon icon="ph:gear"></iconify-icon></div>
+            <div class="ico"><iconify-icon icon="ph:fork-knife"></iconify-icon></div>
+            <div class="ico"><iconify-icon icon="ph:table"></iconify-icon></div>
+            <div class="ico"><iconify-icon icon="ph:magnifying-glass"></iconify-icon></div>
+          </div>
+          <div class="note">Rendered via the Iconify web component. Weights map to Phosphor variants — regular, bold, fill, duotone.</div>
+        </div>
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">Brand glyphs — fn-global font</span><span class="sel">lib="global"</span></div>
+          <div class="glyphrow">
+            <span class="glyph"><iconify-icon icon="ph:caret-down-bold"></iconify-icon></span>
+            <span class="glyph"><iconify-icon icon="ph:caret-up-bold"></iconify-icon></span>
+            <span class="glyph"><iconify-icon icon="ph:caret-left-bold"></iconify-icon></span>
+            <span class="glyph"><iconify-icon icon="ph:caret-right-bold"></iconify-icon></span>
+            <span class="glyph"><iconify-icon icon="ph:dots-three-bold"></iconify-icon></span>
+            <span class="glyph"><iconify-icon icon="ph:funnel"></iconify-icon></span>
+          </div>
+          <div class="note">A custom <code style="font-family:var(--mono);font-size:.92em">fn-global-*</code> icon font from agcdn.altametrics.com — used inside foundation components (caret, filter). No emoji, no unicode glyphs.</div>
+        </div>
+        <div class="card anim3" style="grid-column:1 / -1">
+          <div class="clabel"><span class="nm">Motion</span><span class="sel">linear · .12s–.25s</span></div>
+          <div class="motionrow">
+            <div class="mtrack"><div class="l"><b>Background / border / color</b> · .12s linear</div><div class="mbar"></div></div>
+            <div class="mtrack"><div class="l"><b>Caret rotation · switch thumb</b> · .15s</div><div class="mbar"></div></div>
+            <div class="mtrack"><div class="l"><b>Calendar day-hover lift</b> · soft shadow</div><div class="mbar"></div></div>
+          </div>
+          <div class="note">Short linear transitions only — no bounces, no spring physics. Respectful of <code style="font-family:var(--mono);font-size:.92em">prefers-reduced-motion</code>.</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">Phosphor + fn-global · calm motion</span></div>
+  </section>
+
+  <!-- 7 · COMPONENTS — FORMS I -->
+  <section class="slide" data-label="Forms — controls" data-screen-label="Forms — controls">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">Components · Forms (1 / 2)</div><h2 class="slide-title anim">Form controls</h2></div>
+        <div class="idx anim">06 / 13</div>
+      </div>
+      <div class="grid cg-3 specimen" style="margin-top:36px;flex:1;align-content:start">
+        <div class="card anim2">
+          <div class="clabel"><span class="nm">Button</span><span class="sel">fn-button</span></div>
+          <div class="demo">
+            <button class="btn btn-primary">Primary</button>
+            <button class="btn btn-orange">Accent</button>
+            <button class="btn btn-success">Success</button>
+            <button class="btn btn-danger">Danger</button>
+          </div>
+          <div class="demo" style="margin-top:12px">
+            <button class="btn btn-outline-primary">Outline</button>
+            <button class="btn btn-outline-secondary">Secondary</button>
+            <button class="btn btn-primary btn-round">Round</button>
+          </div>
+          <div class="note">8 intents · solid, outline, round, square · xs → lg · groups.</div>
+        </div>
+        <div class="card anim2">
+          <div class="clabel"><span class="nm">Text input</span><span class="sel">fn-input</span></div>
+          <div class="stack">
+            <div><label>Location</label><input class="form-control" value="Downtown — Store 014" /></div>
+            <div><label>Hourly rate</label><div class="input-group"><span class="input-group-text">$</span><input class="form-control" value="18.50" /></div></div>
+          </div>
+          <div class="note">Validation states, input groups, round variant.</div>
+        </div>
+        <div class="card anim2">
+          <div class="clabel"><span class="nm">Textarea</span><span class="sel">fn-input</span></div>
+          <textarea class="form-control" rows="3">Covers Friday dinner rush — confirm two extra servers before publishing.</textarea>
+          <div class="note">Auto-grow · same focus ring as inputs.</div>
+        </div>
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">Select</span><span class="sel">fn-select</span></div>
+          <div class="stack">
+            <div><label>Role</label><div class="fn-select"><span class="value">Shift lead</span><span class="caret caret-main">▾</span></div></div>
+            <div class="fn-select is-multi" style="height:auto"><span class="chip">Server <span class="x">×</span></span><span class="chip">Host <span class="x">×</span></span></div>
+          </div>
+          <div class="note">Single, multi-chip &amp; searchable (ng-select).</div>
+        </div>
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">Switch</span><span class="sel">fn-switch</span></div>
+          <div class="demo" style="gap:26px">
+            <span class="fn-switch on"></span>
+            <span class="fn-switch"></span>
+            <span class="fn-switch size-lg on"></span>
+          </div>
+          <div class="note">sm / md / lg · .15s thumb travel.</div>
+        </div>
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">Checkbox &amp; radio</span><span class="sel">fn-checkbox · fn-input-radio</span></div>
+          <div class="stack" style="gap:14px">
+            <span class="fn-checkbox on"><span class="box"><svg viewBox="0 0 12 12" fill="none"><path d="M2 6.5L4.5 9L10 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span> Notify manager</span>
+            <span class="fn-radio on"><span class="dot"></span> Repeat weekly</span>
+            <span class="fn-radio"><span class="dot"></span> One-time shift</span>
+          </div>
+          <div class="note">Keyboard-operable via a11yClickable.</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">Reactive forms · associated labels · 2px focus ring</span></div>
+  </section>
+
+  <!-- 8 · COMPONENTS — FORMS II -->
+  <section class="slide" data-label="Forms — pickers" data-screen-label="Forms — pickers">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">Components · Forms (2 / 2)</div><h2 class="slide-title anim">Pickers &amp; rich inputs</h2></div>
+        <div class="idx anim">07 / 13</div>
+      </div>
+      <div class="grid cg-4 specimen" style="margin-top:36px;flex:1;align-content:start">
+        <div class="card anim2">
+          <div class="clabel"><span class="nm">Date &amp; range</span></div>
+          <div class="stack">
+            <div class="single-date-picker"><div class="btn-group btn-group-round"><span class="btn btn-outline-secondary dp-center"><span class="dp-cal-icon"><iconify-icon icon="ph:calendar-blank"></iconify-icon></span><span class="dp-date">Fri, Jun 5</span><span class="dp-drop"><iconify-icon icon="ph:caret-down"></iconify-icon></span></span></div></div>
+            <div class="date-range-picker-input"><span class="drp-cal-prefix"><iconify-icon icon="ph:calendar-blank"></iconify-icon></span><input class="form-control" value="Jun 1 – Jun 7" readonly /><span class="drp-drop"><iconify-icon icon="ph:caret-down"></iconify-icon></span></div>
+          </div>
+          <div class="note">Single + range · mat-calendar popups.</div>
+        </div>
+        <div class="card anim2">
+          <div class="clabel"><span class="nm">Time picker</span></div>
+          <div class="fn-time-picker-search"><input class="form-control" value="09:30 AM" /><span class="fn-global-dropdownArrow"><iconify-icon icon="ph:caret-down"></iconify-icon></span></div>
+          <div class="note" style="margin-top:14px">time · multi-time · duration variants.</div>
+        </div>
+        <div class="card anim2">
+          <div class="clabel"><span class="nm">Phone input</span><span class="sel">fn-tel</span></div>
+          <div class="input-group"><span class="input-group-text">🇺🇸 +1</span><input class="form-control" value="(415) 555-0142" /></div>
+          <div class="note" style="margin-top:14px">Country dial code + formatting.</div>
+        </div>
+        <div class="card anim2">
+          <div class="clabel"><span class="nm">Rating</span><span class="sel">fn-rating</span></div>
+          <div style="font-size:30px;color:var(--yellow);letter-spacing:2px">★★★★<span style="color:var(--line)">★</span></div>
+          <div class="note" style="margin-top:14px">1–5 · read-only &amp; interactive.</div>
+        </div>
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">Color picker</span><span class="sel">fn-color-picker</span></div>
+          <div class="demo" style="gap:10px">
+            <span style="width:40px;height:40px;border-radius:8px;background:#005bc4;border:2px solid #fff;box-shadow:0 0 0 1px var(--line)"></span>
+            <span style="width:40px;height:40px;border-radius:8px;background:#bf5700"></span>
+            <span style="width:40px;height:40px;border-radius:8px;background:#1e7e34"></span>
+            <span style="width:40px;height:40px;border-radius:8px;background:#7b42ff"></span>
+          </div>
+          <div class="note">Swatch + HEX field popover.</div>
+        </div>
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">File upload</span><span class="sel">fn-files</span></div>
+          <div style="border:2px dashed var(--input-border-color);border-radius:8px;padding:18px;text-align:center;color:var(--mute);font-size:14px"><iconify-icon icon="ph:upload-simple" style="font-size:24px;color:var(--brand)"></iconify-icon><div style="margin-top:6px">Drop files or browse</div></div>
+          <div class="note">Drag-drop · progress · type rules.</div>
+        </div>
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">Rich text editor</span><span class="sel">fn-text-editor</span></div>
+          <div style="border:1px solid var(--input-border-color);border-radius:6px;overflow:hidden">
+            <div style="display:flex;gap:4px;padding:8px 10px;border-bottom:1px solid var(--line);color:var(--mute);font-size:18px"><b style="color:var(--ink)">B</b><i>I</i><u>U</u><span><iconify-icon icon="ph:list-bullets"></iconify-icon></span><span><iconify-icon icon="ph:link"></iconify-icon></span></div>
+            <div style="padding:12px;font-size:14px;color:var(--ink)">Shift notes for <b>FOH leads</b>…</div>
+          </div>
+          <div class="note">Toolbar + WYSIWYG body.</div>
+        </div>
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">Float button</span><span class="sel">fn-float-btn</span></div>
+          <div class="demo"><span style="width:52px;height:52px;border-radius:50%;background:var(--blue);color:#fff;display:inline-flex;align-items:center;justify-content:center;box-shadow:var(--shadow);font-size:24px"><iconify-icon icon="ph:plus"></iconify-icon></span></div>
+          <div class="note">Fixed bottom-right FAB for primary action.</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">Dates via the global formatter — never ad-hoc</span></div>
+  </section>
+
+  <!-- 9 · COMPONENTS — DATA -->
+  <section class="slide" data-label="Data display" data-screen-label="Data display">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">Components · Data</div><h2 class="slide-title anim">Data display</h2></div>
+        <div class="idx anim">08 / 13</div>
+      </div>
+      <div class="grid" style="grid-template-columns:1.5fr 1fr;margin-top:34px;flex:1;align-content:start">
+        <div class="card anim2" style="padding:0;overflow:hidden">
+          <div class="pt-wrap mini-pt" style="border:0;border-radius:0">
+            <div class="pt-caption"><span class="pt-title"><span class="pt-title-icon"><iconify-icon icon="ph:table"></iconify-icon></span> Timecards</span><div class="pt-center"></div><div class="pt-right"><span class="fn-tag">Week 23</span></div></div>
+            <table class="pt-table">
+              <thead><tr><th>Employee</th><th>Role</th><th class="right">Hours</th><th class="center">Status</th></tr></thead>
+              <tbody>
+                <tr><td>Jordan Diaz</td><td>Shift lead</td><td class="right" style="font-family:var(--mono)">38.5</td><td class="center"><span class="pt-pill solid-success">Approved</span></td></tr>
+                <tr><td>Mia Chen</td><td>Server</td><td class="right" style="font-family:var(--mono)">27.0</td><td class="center"><span class="pt-pill solid-warning">Pending</span></td></tr>
+                <tr><td>Sam Patel</td><td>Host</td><td class="right" style="font-family:var(--mono)">41.5</td><td class="center"><span class="pt-pill outline-danger">Overtime</span></td></tr>
+              </tbody>
+            </table>
+            <div class="pt-footer"><div class="pt-pager"><span class="pp" disabled>‹</span><span class="pp active">1</span><span class="pp">2</span><span class="pp">3</span><span class="pp">›</span></div></div>
+          </div>
+        </div>
+        <div class="stack anim3" style="gap:22px">
+          <div class="card" style="padding:24px 26px">
+            <div class="clabel"><span class="nm">Editable grid</span><span class="sel">fn-grid</span></div>
+            <div class="egrid">
+              <div class="gh">Item</div><div class="gh">On hand</div><div class="gh">Par</div>
+              <div class="gc"><input value="Romaine" /></div><div class="gc edited"><input value="24" /></div><div class="gc"><input value="30" /></div>
+              <div class="gc"><input value="Tomatoes" /></div><div class="gc"><input value="48" /></div><div class="gc"><input value="40" /></div>
+            </div>
+            <div class="note">Inline-editable cells · keyboard nav · dirty-cell highlight.</div>
+          </div>
+          <div class="card" style="padding:24px 26px">
+            <div class="clabel"><span class="nm">Pagination</span><span class="sel">fn-pagination</span></div>
+            <div class="fn-pager" style="font-size:14px"><span class="page" disabled>‹</span><span class="page active">1</span><span class="page">2</span><span class="page">3</span><span class="page">4</span><span class="page">›</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="card anim3" style="margin-top:22px;padding:24px 28px">
+        <div class="clabel"><span class="nm">Charts</span><span class="sel">fn-chart</span></div>
+        <div class="chartwrap">
+          <div class="donut"></div>
+          <div class="legend">
+            <div class="li"><span class="dot2" style="background:var(--blue)"></span> Labor 46%</div>
+            <div class="li"><span class="dot2" style="background:var(--green)"></span> Food 26%</div>
+            <div class="li"><span class="dot2" style="background:var(--orange)"></span> Overhead 16%</div>
+            <div class="li"><span class="dot2" style="background:var(--line)"></span> Other 12%</div>
+          </div>
+          <div class="barsbig" style="flex:1;margin-left:20px">
+            <div class="bcol"><div class="b" style="height:60%"></div><div class="x">Mon</div></div>
+            <div class="bcol"><div class="b" style="height:80%"></div><div class="x">Tue</div></div>
+            <div class="bcol"><div class="b" style="height:48%"></div><div class="x">Wed</div></div>
+            <div class="bcol"><div class="b" style="height:92%"></div><div class="x">Thu</div></div>
+            <div class="bcol"><div class="b" style="height:100%"></div><div class="x">Fri</div></div>
+            <div class="bcol"><div class="b" style="height:74%"></div><div class="x">Sat</div></div>
+            <div class="bcol"><div class="b" style="height:40%"></div><div class="x">Sun</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">Prime table · grid · pagination · charts</span></div>
+  </section>
+
+  <!-- 10 · COMPONENTS — NAVIGATION -->
+  <section class="slide" data-label="Navigation" data-screen-label="Navigation">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">Components · Navigation</div><h2 class="slide-title anim">Navigation</h2></div>
+        <div class="idx anim">09 / 13</div>
+      </div>
+      <div class="grid" style="grid-template-columns:1fr 1fr 1fr;margin-top:36px;flex:1;align-content:start">
+        <div class="stack anim2" style="gap:22px">
+          <div class="card specimen" style="padding:24px 26px">
+            <div class="clabel"><span class="nm">Breadcrumb</span><span class="sel">fn-breadcrumb</span></div>
+            <div class="fn-breadcrumb"><a>Scheduling</a><span class="sep">/</span><a>Week 23</a><span class="sep">/</span><span class="current">Friday</span></div>
+          </div>
+          <div class="card specimen" style="padding:24px 26px">
+            <div class="clabel"><span class="nm">Tabs</span><span class="sel">fn-tab</span></div>
+            <div class="fn-tabs is-horizontal" style="padding:0"><span class="tab active">Day</span><span class="tab">Week</span><span class="tab">Month <span class="count-num">4</span></span></div>
+            <div class="note">Pill-active horizontal · arrow-active vertical.</div>
+          </div>
+        </div>
+        <div class="card anim3" style="padding:24px 26px">
+          <div class="clabel"><span class="nm">Sidebar menu</span><span class="sel">fn-menu-sidebar</span></div>
+          <div class="menuspec">
+            <nav class="fn-menu-sidebar is-static-expanded">
+              <ul class="menu-nav">
+                <li class="menu-item active"><span class="menu-icon"><iconify-icon icon="ph:calendar-blank"></iconify-icon></span><span class="menu-label">Schedule</span></li>
+                <li class="menu-item"><span class="menu-icon"><iconify-icon icon="ph:clock"></iconify-icon></span><span class="menu-label">Timecards</span><span class="badge">3</span></li>
+                <li class="menu-item"><span class="menu-icon"><iconify-icon icon="ph:package"></iconify-icon></span><span class="menu-label">Inventory</span></li>
+                <li class="menu-item"><span class="menu-icon"><iconify-icon icon="ph:users"></iconify-icon></span><span class="menu-label">Team</span></li>
+              </ul>
+            </nav>
+          </div>
+          <div class="note">50px collapsed → 240px on hover · active left border.</div>
+        </div>
+        <div class="card anim3" style="padding:24px 26px">
+          <div class="clabel"><span class="nm">Accordion</span><span class="sel">fn-accordian</span></div>
+          <div class="fn-accordian">
+            <div class="fn-panel fn-panel-expend">
+              <div class="fn-panel-header" aria-expanded="true"><span>Shift details</span><span class="fn-panel_icon"><svg width="13" height="9" viewBox="0 0 12 8" fill="none"><path d="M2 2.5L6 6L10 2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+            </div>
+            <div class="fn-panel" style="margin-top:10px"><div class="fn-panel-header" aria-expanded="false"><span>Break rules</span><span class="fn-panel_icon"><svg width="13" height="9" viewBox="0 0 12 8" fill="none"><path d="M2 2.5L6 6L10 2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div>
+            <div class="fn-panel" style="margin-top:10px"><div class="fn-panel-header" aria-expanded="false"><span>Overtime policy</span><span class="fn-panel_icon"><svg width="13" height="9" viewBox="0 0 12 8" fill="none"><path d="M2 2.5L6 6L10 2.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div></div>
+          </div>
+          <div class="note">Collapsed = light · expanded = navy header.</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">Breadcrumb · tabs · sidebar menu · accordion</span></div>
+  </section>
+
+  <!-- 11 · COMPONENTS — FEEDBACK -->
+  <section class="slide" data-label="Feedback" data-screen-label="Feedback">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">Components · Feedback</div><h2 class="slide-title anim">Feedback &amp; status</h2></div>
+        <div class="idx anim">10 / 13</div>
+      </div>
+      <div class="grid cg-4 specimen" style="margin-top:34px;flex:1;align-content:start">
+        <div class="card anim2">
+          <div class="clabel"><span class="nm">Dialog</span><span class="sel">fn-dialog</span></div>
+          <div class="mini-dialog">
+            <div class="dh">Delete shift?<span style="opacity:.8">×</span></div>
+            <div class="dc">This removes Jordan's Friday dinner shift. This can't be undone.</div>
+            <div class="da"><button class="btn btn-outline-secondary btn-sm">Cancel</button><button class="btn btn-danger btn-sm">Delete</button></div>
+          </div>
+        </div>
+        <div class="card anim2">
+          <div class="clabel"><span class="nm">Drawer</span><span class="sel">fn-drawer</span></div>
+          <div class="mini-drawer">
+            <div class="dh">Edit employee<span style="opacity:.6">×</span></div>
+            <div class="db">Slide-over panel for detail edits without leaving the list.</div>
+            <div class="df"><button class="btn btn-primary btn-sm">Save</button></div>
+          </div>
+        </div>
+        <div class="card anim2">
+          <div class="clabel"><span class="nm">Toaster</span><span class="sel">fn-toast</span></div>
+          <div class="stack" style="gap:10px">
+            <div class="fn-toast success" style="font-size:13.5px"><span class="icon"><iconify-icon icon="ph:check-circle-fill"></iconify-icon></span><div><div class="title">Saved</div>Schedule published</div></div>
+            <div class="fn-toast danger" style="font-size:13.5px"><span class="icon"><iconify-icon icon="ph:warning-circle-fill"></iconify-icon></span><div><div class="title">Failed</div>Check connection</div></div>
+          </div>
+        </div>
+        <div class="card anim2">
+          <div class="clabel"><span class="nm">Loaders</span><span class="sel">fn-spinner · skeleton</span></div>
+          <div class="demo" style="gap:18px;align-items:center">
+            <span class="fn-spinner"></span>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px"><span class="fn-skeleton" style="height:12px;width:90%"></span><span class="fn-skeleton" style="height:12px;width:65%"></span><span class="fn-skeleton" style="height:12px;width:80%"></span></div>
+          </div>
+          <div class="note">Spinner + shimmer skeletons.</div>
+        </div>
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">No-data box</span><span class="sel">fn-no-data</span></div>
+          <div class="nd">
+            <svg width="92" height="92" viewBox="0 0 200 200" role="img" aria-label="Empty">
+              <circle cx="100" cy="102" r="78" fill="#e8eaf3"></circle>
+              <path d="M70 110 L100 122 L130 110 L130 148 L100 160 L70 148 Z" fill="#dfe2ec" stroke="#9aa0ad" stroke-width="3" stroke-linejoin="round"></path>
+              <path d="M70 110 L100 98 L130 110 L100 122 Z" fill="#eef0f6" stroke="#9aa0ad" stroke-width="3" stroke-linejoin="round"></path>
+              <path d="M70 110 L54 92 L86 86 L100 98 Z" fill="#f4f5fa" stroke="#9aa0ad" stroke-width="3" stroke-linejoin="round"></path>
+              <path d="M130 110 L146 92 L114 86 L100 98 Z" fill="#f4f5fa" stroke="#9aa0ad" stroke-width="3" stroke-linejoin="round"></path>
+            </svg>
+            <h4>No data to display</h4>
+            <p>No shifts scheduled yet.</p>
+          </div>
+        </div>
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">Tag / badge</span><span class="sel">fn-tag</span></div>
+          <div class="demo">
+            <span class="fn-tag">Scheduled</span>
+            <span class="pt-pill solid-success">Approved</span>
+            <span class="pt-pill solid-warning">Pending</span>
+            <span class="pt-pill outline-danger">Overtime</span>
+          </div>
+          <div class="note">Soft chips + solid/outline status pills.</div>
+        </div>
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">Avatar</span><span class="sel">fn-avtar-text</span></div>
+          <div class="demo" style="align-items:center">
+            <span class="fn-avtar size-sm">JD</span>
+            <span class="fn-avtar">MC</span>
+            <span class="fn-avtar size-lg">SP</span>
+            <span class="fn-avtar-stack"><span class="fn-avtar">A</span><span class="fn-avtar">B</span><span class="fn-avtar">C</span></span>
+          </div>
+          <div class="note">Initials · sizes · overlap stack.</div>
+        </div>
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">Progress</span><span class="sel">fn-progress</span></div>
+          <div class="stack" style="gap:14px">
+            <div><div class="fn-progress"><div class="bar" style="width:72%"></div></div></div>
+            <div><div class="fn-progress success"><div class="bar" style="width:100%"></div></div></div>
+            <div><div class="fn-progress danger"><div class="bar" style="width:34%"></div></div></div>
+          </div>
+          <div class="note">Determinate · semantic colors.</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">Status never by color alone — icon + label</span></div>
+  </section>
+
+  <!-- 12 · HW-FOUNDATION -->
+  <section class="slide" data-label="HW-Foundation" data-screen-label="HW-Foundation">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">Library · hw-foundation</div><h2 class="slide-title anim">The branded app shell</h2></div>
+        <div class="idx anim">11 / 13</div>
+      </div>
+      <div class="card anim2" style="margin-top:30px;padding:22px 24px">
+        <div class="clabel"><span class="nm">App header</span><span class="sel">hw-header-main</span></div>
+        <div class="hwbar">
+          <div class="hl">
+            <span class="logo-mark">AG</span>
+            <span class="pill"><iconify-icon icon="ph:squares-four"></iconify-icon> My Apps</span>
+            <span class="pill"><iconify-icon icon="ph:map-pin"></iconify-icon> Downtown — Store 014 <iconify-icon icon="ph:caret-down"></iconify-icon></span>
+          </div>
+          <div class="center">
+            <span class="wx"><iconify-icon icon="ph:cloud-sun"></iconify-icon> 72° San Francisco</span>
+            <span class="clock">9:41 AM · PST</span>
+          </div>
+          <div class="right">
+            <span class="ricon"><iconify-icon icon="ph:clock"></iconify-icon></span>
+            <span class="ricon"><iconify-icon icon="ph:bell"></iconify-icon></span>
+            <span class="ricon"><iconify-icon icon="ph:gear"></iconify-icon></span>
+            <span class="ava">JD</span>
+          </div>
+        </div>
+        <div class="note" style="padding-top:14px">50px tall on <code style="font-family:var(--mono);font-size:.92em">--side-nav-bg</code>. Three zones — left (logo · apps · site), center (weather + clock), right (time-clock · alerts · profile).</div>
+      </div>
+      <div class="grid cg-2" style="margin-top:22px;flex:1;align-content:start">
+        <div class="card anim3">
+          <div class="clabel"><span class="nm">App market</span><span class="sel">hw-app-market</span></div>
+          <div class="market">
+            <div class="app"><span class="ic" style="background:var(--blue)"><iconify-icon icon="ph:calendar-blank"></iconify-icon></span><div><div class="nm">Scheduling</div><div class="ds">Installed</div></div></div>
+            <div class="app"><span class="ic" style="background:var(--green)"><iconify-icon icon="ph:package"></iconify-icon></span><div><div class="nm">Inventory</div><div class="ds">Installed</div></div></div>
+            <div class="app"><span class="ic" style="background:var(--orange)"><iconify-icon icon="ph:chart-line"></iconify-icon></span><div><div class="nm">Analytics</div><div class="ds">Get app</div></div></div>
+            <div class="app"><span class="ic" style="background:var(--cyan)"><iconify-icon icon="ph:clock"></iconify-icon></span><div><div class="nm">Time clock</div><div class="ds">Installed</div></div></div>
+            <div class="app"><span class="ic" style="background:var(--purple)"><iconify-icon icon="ph:chat-circle"></iconify-icon></span><div><div class="nm">Messaging</div><div class="ds">Get app</div></div></div>
+            <div class="app"><span class="ic" style="background:var(--iron)"><iconify-icon icon="ph:users"></iconify-icon></span><div><div class="nm">HR</div><div class="ds">Installed</div></div></div>
+          </div>
+          <div class="note">Tile launcher across the product suite.</div>
+        </div>
+        <div class="card anim3 specimen">
+          <div class="clabel"><span class="nm">Auth shell</span><span class="sel">hw-auth</span></div>
+          <div class="auth">
+            <div class="ah">Sign in</div>
+            <div class="ap">to Altametrics Growth</div>
+            <div><label>Email</label><input class="form-control" value="jordan@store014.com" /></div>
+            <div><label>Password</label><input class="form-control" type="password" value="········" /></div>
+            <button class="btn btn-primary" style="margin-top:4px">Continue</button>
+          </div>
+          <div class="note">Shared auth chrome — login, reset, MFA, release notes.</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">Hw* · the consumer-facing product chrome</span></div>
+  </section>
+
+  <!-- 13 · PATTERNS -->
+  <section class="slide" data-label="Patterns" data-screen-label="Patterns">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">Patterns</div><h2 class="slide-title anim">Nine page patterns</h2></div>
+        <div class="idx anim">12 / 13</div>
+      </div>
+      <div class="patterns">
+        <div class="pat anim2">
+          <div class="wire"><div class="bar"></div><div class="row"><div class="side"></div><div class="r" style="flex:1"></div></div></div>
+          <div class="pn">App shell</div><div class="pd">Header + collapsing sidebar + content region.</div><div class="ps">p-shell</div>
+        </div>
+        <div class="pat anim2">
+          <div class="wire"><div class="bar"></div><div class="r" style="height:14px"></div><div class="r" style="flex:1"></div></div>
+          <div class="pn">Page boilerplate</div><div class="pd">Every routed page: header · title-bar · content.</div><div class="ps">.hw-box-content</div>
+        </div>
+        <div class="pat anim2">
+          <div class="wire"><div class="row"><div class="r" style="flex:1"></div><div class="r" style="flex:1"></div></div><div class="row"><div class="r" style="flex:1"></div><div class="r" style="flex:1"></div></div></div>
+          <div class="pn">Dashboard</div><div class="pd">KPI tiles + charts at a glance.</div><div class="ps">p-dashboard</div>
+        </div>
+        <div class="pat anim3">
+          <div class="wire"><div class="r" style="height:14px"></div><div class="r" style="height:14px"></div><div class="r" style="height:14px"></div><div class="r" style="flex:1"></div></div>
+          <div class="pn">List page</div><div class="pd">Filter bar over a prime table.</div><div class="ps">p-list</div>
+        </div>
+        <div class="pat anim3">
+          <div class="wire"><div class="r" style="height:14px"></div><div class="r" style="height:14px"></div><div class="r" style="height:14px"></div></div>
+          <div class="pn">Form page</div><div class="pd">Sectioned reactive form + actions.</div><div class="ps">p-form</div>
+        </div>
+        <div class="pat anim3">
+          <div class="wire"><div class="row"><div class="r" style="flex:2"></div><div class="r" style="flex:1;background:#fff"></div></div></div>
+          <div class="pn">Detail + drawer</div><div class="pd">Record view with slide-over edit.</div><div class="ps">p-detail</div>
+        </div>
+        <div class="pat anim3">
+          <div class="wire" style="align-items:center;justify-content:center"><div class="r" style="width:60%;height:46px"></div></div>
+          <div class="pn">Auth</div><div class="pd">Login, reset, MFA on the auth shell.</div><div class="ps">p-auth</div>
+        </div>
+        <div class="pat anim3">
+          <div class="wire"><div class="row"><div class="side" style="width:40px"></div><div class="r" style="flex:1"></div></div></div>
+          <div class="pn">Settings</div><div class="pd">Left nav + grouped preference panels.</div><div class="ps">p-settings</div>
+        </div>
+        <div class="pat anim3">
+          <div class="wire" style="align-items:center;justify-content:center"><div class="r" style="width:50%;height:50px;border-style:dashed"></div></div>
+          <div class="pn">Empty &amp; loading</div><div class="pd">No-data box + skeleton states.</div><div class="ps">p-empty</div>
+        </div>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">Every screen starts from a documented pattern</span></div>
+  </section>
+
+  <!-- 14 · PRINCIPLES -->
+  <section class="slide" data-label="Principles" data-screen-label="Principles">
+    <div class="pad">
+      <div class="head">
+        <div><div class="eyebrow anim">How to use</div><h2 class="slide-title anim">Rules for engineers &amp; agents</h2></div>
+        <div class="idx anim">13 / 13</div>
+      </div>
+      <div class="rules">
+        <div class="rule anim2"><div class="n">01</div><div class="body"><h4>Import from the alias</h4><p>Pull from <code>foundation</code> / <code>hw-foundation</code> — never source paths. One per-feature module, not the whole kit.</p></div></div>
+        <div class="rule anim2"><div class="n">02</div><div class="body"><h4>Prefix discipline</h4><p>Components <code>Fn*</code> / <code>Hw*</code>; selectors <code>fn-*</code> / <code>hw-*</code>. The prefix tells you the library.</p></div></div>
+        <div class="rule anim2"><div class="n">03</div><div class="body"><h4>Colors from tokens only</h4><p>Always <code>var(--blue)</code>, never <code>#005bc4</code>. New colors extend <code>_variable.scss</code> first.</p></div></div>
+        <div class="rule anim3"><div class="n">04</div><div class="body"><h4>Text through i18n</h4><p>Every string via the <code>fnTranslate</code> pipe; dates via the global formatter. No hardcoded copy.</p></div></div>
+        <div class="rule anim3"><div class="n">05</div><div class="body"><h4>Forms are reactive</h4><p><code>FormGroup</code> + <code>formControlName</code>. HTTP through <code>FnHttpService</code> / <code>HwHttpService</code>.</p></div></div>
+        <div class="rule anim3"><div class="n">06</div><div class="body"><h4>Dark mode = a class</h4><p><code>.dark-theme</code> on <code>&lt;html&gt;</code> swaps tokens only. Every routed page uses the <code>.hw-box-content</code> boilerplate.</p></div></div>
+      </div>
+    </div>
+    <div class="foot"><span><span class="dot">●</span>&nbsp;&nbsp;Altametrics Growth Design System</span><span class="mono">Source of truth: the foundation Angular repos</span></div>
+  </section>
+
+  <!-- 15 · CLOSING -->
+  <section class="slide close" data-label="Close" data-screen-label="Close">
+    <div class="pad">
+      <div class="eyebrow anim" style="color:#6ab0ff">One system · two libraries · every screen</div>
+      <h2 class="anim2">Consistent by construction,<br />accessible by default.</h2>
+      <div class="recap anim3">
+        <div class="it"><div class="k">28</div><div class="v">foundation &amp; hw components</div></div>
+        <div class="it"><div class="k">9</div><div class="v">production page patterns</div></div>
+        <div class="it"><div class="k">2</div><div class="v">themes — light &amp; dark</div></div>
+        <div class="it"><div class="k">AA</div><div class="v">WCAG 2.1 · VPAT focus rings</div></div>
+      </div>
+    </div>
+    <div class="prov">Ported 1:1 from foundation/src/lib/theme/_variable.scss · re-sync tokens.css when the source changes.</div>
+  </section>
+
+</deck-stage>
+<script src="deck-stage.js"></script>
+</body>
+</html>

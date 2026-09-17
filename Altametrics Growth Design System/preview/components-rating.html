@@ -1,0 +1,25 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="_base.css">
+<style>
+  .rate{ display:inline-flex; gap:3px; }
+  .rate .star{ color:var(--yellow); line-height:1; }
+  .rate .star.off{ color:var(--border-default-color); }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Rating · &lt;fn-rating&gt;</div><div class="muted" style="font-size:12px">Star rating · 1–5 (configurable) · read-only and interactive modes</div></div>
+  <div class="col" style="gap:8px">
+    <span class="rate" style="font-size:26px" role="img" aria-label="4 out of 5 stars">
+      <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star off">★</span>
+    </span>
+    <span class="muted" style="font-size:13px">Selected: 4 / 5</span>
+  </div>
+  <div class="row" style="gap:12px;align-items:center;margin-top:6px">
+    <span style="font-size:13px;font-weight:600">Customer review:</span>
+    <span class="rate" style="font-size:20px" role="img" aria-label="5 out of 5 stars">
+      <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+    </span>
+    <span class="muted" style="font-size:13px">"Fast service, super friendly host."</span>
+  </div>
+</div></body></html>

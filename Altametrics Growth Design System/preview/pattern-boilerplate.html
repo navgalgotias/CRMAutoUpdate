@@ -1,0 +1,60 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="../global-icons.css">
+<link rel="stylesheet" href="_base.css">
+<style>
+  body{ background:var(--body-bg); } .card{ background:var(--body-bg); width:1000px; gap:16px; }
+  .hw-header-wrap .lhs iconify-icon{ color:var(--theme); font-size:18px; }
+  .tab-nav .tab-link iconify-icon{ font-size:15px; }
+  /* keep tabbed header on one line — actions never wrap */
+  .hw-header-wrap .row{ flex-wrap:nowrap; }
+  .hw-header-wrap .tab-nav{ flex-wrap:nowrap; }
+  .hw-header-wrap .tab-nav .tab-link{ white-space:nowrap; }
+  .hw-header-wrap .row > .row{ flex:0 0 auto; margin-left:auto; flex-wrap:nowrap; width:auto; }
+  .hw-header-wrap .row > .row .btn{ white-space:nowrap; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Page boilerplate · .hw-box-content</div><div class="muted" style="font-size:12px">3-region structure · header strip (bg-primary-dark) + title + leading theme icon · optional title bar · content body</div></div>
+
+  <div class="mono">Anatomy</div>
+  <div class="hw-box-content">
+    <div class="hw-header-wrap">
+      <div class="row">
+        <div class="lhs flex-1" style="display:flex;align-items:center;gap:8px;font-weight:600"><span class="region-tag">1 HEADER</span><iconify-icon icon="ph:house"></iconify-icon> Page main title</div>
+        <div class="rhs">Page subtitle / context</div>
+      </div>
+    </div>
+    <div class="hw-title">
+      <span class="region-tag sec" style="align-self:center">2 TITLE BAR</span>
+      <button class="btn btn-outline-secondary btn-xs btn-round">Cancel</button>
+      <button class="btn btn-primary btn-xs btn-round">Save</button>
+    </div>
+    <div class="hw-content" style="min-height:110px">
+      <span class="region-tag bdy">3 BODY</span>
+      <span class="muted" style="font-size:12px">Table, form, dashboard grid, detail card, or empty state.</span>
+    </div>
+  </div>
+
+  <div class="mono">Example · tabbed header + actions + inline no-data bar</div>
+  <div class="hw-box-content">
+    <div class="hw-header-wrap">
+      <div class="row" style="justify-content:space-between">
+        <ul class="tab-nav">
+          <li><button class="tab-link active"><iconify-icon icon="ph:users-three-fill"></iconify-icon> Employees</button></li>
+          <li><button class="tab-link"><iconify-icon icon="ph:user-minus"></iconify-icon> Terminated Employees</button></li>
+          <li><button class="tab-link"><iconify-icon icon="ph:clipboard-text"></iconify-icon> Audit Trail</button></li>
+        </ul>
+        <div class="row" style="gap:8px">
+          <button class="btn btn-success btn-sm btn-round" disabled>Push Changes</button>
+          <button class="btn btn-primary btn-sm btn-round"><iconify-icon icon="ph:plus" style="margin-right:6px"></iconify-icon>Add</button>
+          <button class="btn btn-outline-secondary btn-sm btn-round" aria-label="More actions"><iconify-icon icon="ph:caret-down"></iconify-icon></button>
+        </div>
+      </div>
+    </div>
+    <div class="hw-content">
+      <div class="hw-nodata-bar">No_Data_to_display</div>
+    </div>
+  </div>
+</div></body></html>

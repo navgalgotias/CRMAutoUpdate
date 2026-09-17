@@ -1,0 +1,32 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="_base.css">
+<style>
+  .tel-stage{ max-width:380px; }
+  .tel-wrap{ display:flex; align-items:stretch; }
+  .tel-trigger{
+    display:inline-flex; align-items:center; gap:6px; height:30px; padding:0 10px;
+    border:1px solid var(--input-border-color); border-right:0; border-radius:4px 0 0 4px;
+    background:var(--bg-primary); cursor:pointer; font-size:13px;
+  }
+  .tel-trigger img{ width:20px; height:14px; border-radius:2px; object-fit:cover; }
+  .tel-trigger .dial{ font-family:var(--ds-mono); }
+  .tel-wrap .form-control{ border-radius:0 4px 4px 0; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Phone input · &lt;fn-tel-input&gt;</div><div class="muted" style="font-size:12px">Wraps intl-tel-input · flag trigger opens a searchable country list (flag + name + dial code)</div></div>
+  <div class="tel-stage">
+    <div class="form-group" style="margin:0">
+      <label class="fn-label">Phone</label>
+      <div class="tel-wrap">
+        <button type="button" class="tel-trigger" aria-haspopup="listbox" aria-expanded="false">
+          <img src="https://flagcdn.com/us.svg" alt="">
+          <span class="dial">+1</span>
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none" style="color:var(--iron)"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <input class="form-control" placeholder="Phone Number">
+      </div>
+    </div>
+  </div>
+</div></body></html>

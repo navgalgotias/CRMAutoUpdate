@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>vTiger CRM Auto Update</title>
+<meta name="description" content="Upload an Excel sheet and push red-highlighted changes straight into vTiger CRM via its Webservice API." />
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+<!-- Altametrics Growth Design System: tokens + every component class in one file -->
+<link rel="stylesheet" href="Altametrics%20Growth%20Design%20System/styles.css" />
+<!-- Phosphor icons (the only icon system used by the design system) -->
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+<!-- Page-layout only — component styling comes from the design system above. -->
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="container header-inner">
+      <div class="brand">
+        <img src="assets/logo.svg" alt="" class="brand-logo" />
+        <div>
+          <h1>vTiger CRM Auto Update</h1>
+          <p class="tagline">Sync red-highlighted Excel changes into vTiger, ticket by ticket.</p>
+        </div>
+      </div>
+      <div class="header-actions" id="header-actions" hidden>
+        <span class="pt-pill outline-muted" id="connect-status">Not connected</span>
+        <button class="btn btn-outline-secondary btn-sm" id="btn-reconnect" type="button">
+          <iconify-icon icon="ph:arrows-clockwise"></iconify-icon> Reconnect
+        </button>
+        <button class="btn btn-outline-secondary btn-sm is-admin-only" id="btn-open-settings" type="button" hidden>
+          <iconify-icon icon="ph:gear"></iconify-icon> Settings
+        </button>
+        <a class="btn btn-outline-secondary btn-sm is-admin-only" id="link-documentation" href="README.md" target="_blank" rel="noopener" hidden>
+          <iconify-icon icon="ph:book-open-text"></iconify-icon> Documentation
+        </a>
+
+        <div class="profile-menu" id="profile-menu">
+          <button class="profile-trigger" id="btn-profile" type="button" aria-haspopup="true" aria-expanded="false">
+            <span class="fn-avtar" id="avatar-circle">?</span>
+          </button>
+          <div class="profile-dropdown" id="profile-dropdown" hidden>
+            <div class="profile-dropdown-header">
+              <span class="fn-avtar size-lg" id="avatar-circle-lg">?</span>
+              <div class="profile-identity">
+                <div class="profile-name" id="profile-name">—</div>
+                <div class="profile-username" id="profile-username">—</div>
+              </div>
+            </div>
+            <span class="fn-tag bubble-primary" id="profile-role-tag">Team Member</span>
+            <button class="btn btn-outline-danger profile-logout" id="btn-logout" type="button">
+              <iconify-icon icon="ph:sign-out"></iconify-icon> Log Out
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- LOGIN SCREEN -->
+  <section class="login-screen" id="login-screen">
+    <div class="login-split">
+
+      <!-- Promo panel -->
+      <div class="login-promo">
+        <div class="login-promo-hero">
+          <div class="login-promo-badge">
+            <img src="assets/logo.svg" alt="" width="22" height="22" />
+            <span>vTiger CRM Auto Update</span>
+          </div>
+          <h2>Red cells in, <span class="accent">clean tickets out.</span></h2>
+          <p>Upload the sheet you already track changes in — the app finds every red-highlighted cell and pushes just those fields into vTiger, ticket by ticket.</p>
+        </div>
+
+        <div class="login-promo-grid">
+          <div class="promo-item">
+            <span class="promo-icon bubble-primary"><iconify-icon icon="ph:magic-wand"></iconify-icon></span>
+            <div>
+              <h4>Auto-detected changes</h4>
+              <p>Red fills are found automatically — no manual list of what changed.</p>
+            </div>
+          </div>
+          <div class="promo-item">
+            <span class="promo-icon bubble-info"><iconify-icon icon="ph:arrows-left-right"></iconify-icon></span>
+            <div>
+              <h4>Mappings remembered</h4>
+              <p>Match a column to a vTiger field once — it's reused on every upload.</p>
+            </div>
+          </div>
+          <div class="promo-item">
+            <span class="promo-icon bubble-success"><iconify-icon icon="ph:list-checks"></iconify-icon></span>
+            <div>
+              <h4>Review before you push</h4>
+              <p>See exactly which tickets and fields will change, and uncheck any of them.</p>
+            </div>
+          </div>
+          <div class="promo-item">
+            <span class="promo-icon bubble-orange"><iconify-icon icon="ph:shield-check"></iconify-icon></span>
+            <div>
+              <h4>Verified, not just "success"</h4>
+              <p>Each update is re-checked against vTiger so a silently-dropped field gets flagged.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="login-promo-note">
+          <iconify-icon icon="ph:info"></iconify-icon>
+          Need access? Ask your admin to add your vTiger username under Settings → Users.
+        </div>
+      </div>
+
+      <!-- Sign-in panel -->
+      <div class="login-panel">
+        <div class="login-panel-inner">
+          <div class="login-brand">
+            <span class="login-brand-badge"><iconify-icon icon="ph:check-bold"></iconify-icon></span>
+            <span>vTiger CRM Auto Update</span>
+          </div>
+
+          <h2>Welcome back!</h2>
+          <p class="muted">Sign in with your vTiger CRM username — no password needed here.</p>
+
+          <form id="login-form" autocomplete="off">
+            <div class="field">
+              <label for="login-username">Username</label>
+              <input type="text" id="login-username" class="form-control" required placeholder="crm.username" autofocus />
+            </div>
+            <p class="muted" id="login-crm-url" style="font-size:0.8rem;"></p>
+
+            <div class="field-actions" style="justify-content:space-between;">
+              <button type="submit" class="btn btn-primary btn-login" id="btn-login">
+                <span class="btn-login-label"><iconify-icon icon="ph:sign-in"></iconify-icon> Sign In</span>
+                <span class="fn-spinner btn-spinner" aria-hidden="true"></span>
+              </button>
+              <span class="pt-pill outline-muted" id="login-status">Not signed in</span>
+            </div>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="fn-modal-overlay" id="settings-overlay" hidden>
+    <div class="fn-modal" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <div class="fn-modal-header">
+        <h5 class="modal-title" id="settings-title">Connection Settings</h5>
+        <button class="close" id="btn-settings-close" type="button" aria-label="Close">
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 2L10 10M10 2L2 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <div class="fn-modal-content">
+        <p class="muted" style="margin-top:0;">
+          Set the shared CRM URL and ticket module here. Saved in this browser only, and used for everyone who
+          signs in on this device — personal usernames/access keys are entered on the login screen, not here.
+        </p>
+
+        <form id="settings-form" class="form-grid" autocomplete="off">
+          <div class="field" style="grid-column:1/-1;">
+            <label for="settings-url">vTiger CRM URL</label>
+            <input type="url" id="settings-url" class="form-control" required placeholder="https://your-crm-domain.com/" />
+          </div>
+          <div class="field">
+            <label for="settings-module">Ticket Module (API name)</label>
+            <input type="text" id="settings-module" class="form-control" required placeholder="HelpDesk" />
+          </div>
+          <div class="field">
+            <label for="settings-idfield">Unique Identifier Field (API name)</label>
+            <input type="text" id="settings-idfield" class="form-control" required placeholder="ticket_no" list="vtiger-field-list" />
+            <span class="muted" style="font-size:0.78rem;">Must be the real vTiger API field name (e.g. <code>ticket_no</code> or a <code>cf_XXX</code> field) — not the on-screen label.</span>
+          </div>
+
+          <div class="callout callout-info" style="grid-column:1/-1;">
+            <iconify-icon icon="ph:info"></iconify-icon>
+            Stored only in this browser's local storage on this device, and used only to call your own vTiger server. Never sent anywhere else.
+          </div>
+
+          <div class="field field-actions">
+            <button type="submit" class="btn btn-primary">Save Settings</button>
+            <button type="button" class="btn btn-outline-secondary" id="btn-settings-clear">Reset to Defaults</button>
+          </div>
+        </form>
+
+        <hr style="margin:24px 0;border:none;border-top:1px solid var(--border-default-color);" />
+
+        <h3 style="margin-bottom:6px;">Users</h3>
+        <p class="muted" style="margin-top:0;">
+          Every person who should be able to sign in needs an entry here: their vTiger username, their vTiger
+          access key, and their role. On the login screen they only type their username — the app looks up their
+          access key from this list automatically. Admins get full access, including Settings and Documentation;
+          Team Members only get the ticket-update wizard and Reconnect.
+        </p>
+        <div class="callout callout-warning" style="margin-bottom:14px;">
+          <iconify-icon icon="ph:warning"></iconify-icon>
+          This list — including every listed access key — is stored in this browser's local storage on this
+          device only. It is <strong>not</strong> a secure access-control system: anyone with access to this
+          browser (or its dev tools) could read every listed access key or edit roles. Only use this on a
+          trusted, shared device for a trusted internal team — never for credentials that must stay confidential.
+        </div>
+
+        <div class="pt-wrap">
+          <table class="pt-table" id="users-table">
+            <thead><tr><th>Username</th><th>Name</th><th>Access Key</th><th id="users-role-th" class="sortable"><span class="th-inner" role="button" tabindex="0">Role <span class="sort-icon"><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor"><path d="M5 0L0 6H10L5 0Z"/></svg><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor"><path d="M5 6L0 0H10L5 6Z"/></svg></span></span></th><th></th></tr></thead>
+            <tbody id="users-body"></tbody>
+          </table>
+        </div>
+
+        <div class="form-grid" style="margin-top:12px;">
+          <div class="field">
+            <label for="new-user-username">Username</label>
+            <input type="text" id="new-user-username" class="form-control" placeholder="crm.username" />
+          </div>
+          <div class="field">
+            <label for="new-user-firstname">First Name</label>
+            <input type="text" id="new-user-firstname" class="form-control" placeholder="Jane" />
+          </div>
+          <div class="field">
+            <label for="new-user-lastname">Last Name</label>
+            <input type="text" id="new-user-lastname" class="form-control" placeholder="Doe" />
+          </div>
+          <div class="field">
+            <label for="new-user-accesskey">Access Key</label>
+            <input type="password" id="new-user-accesskey" class="form-control" placeholder="Found under My Preferences in vTiger" />
+          </div>
+          <div class="field">
+            <label for="new-user-role">Role</label>
+            <select id="new-user-role">
+              <option value="admin">Admin</option>
+              <option value="member" selected>Team Member</option>
+            </select>
+          </div>
+          <div class="field field-actions">
+            <button type="button" class="btn btn-primary" id="btn-add-user">Add / Update User</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="container" id="app-main" hidden>
+
+    <ol class="stepper" id="stepper">
+      <li class="step active" data-step="1"><span class="step-index">1</span><span class="step-label">Upload</span></li>
+      <li class="step" data-step="2"><span class="step-index">2</span><span class="step-label">Map Fields</span></li>
+      <li class="step" data-step="3"><span class="step-index">3</span><span class="step-label">Review</span></li>
+      <li class="step" data-step="4"><span class="step-index">4</span><span class="step-label">Update</span></li>
+    </ol>
+
+    <!-- STEP 1: UPLOAD -->
+    <section class="hw-box-content panel-step is-disabled" id="panel-1" data-panel="1">
+      <div class="hw-header-wrap">
+        <div class="row">
+          <div class="lhs"><i><iconify-icon icon="ph:upload-simple"></iconify-icon></i> 1. Upload Excel Sheet</div>
+        </div>
+      </div>
+      <div class="hw-content">
+        <p class="muted" style="margin-top:0;">Upload the .xlsx file containing your tracked changes. Cells filled with a red background will be treated as pending updates.</p>
+
+        <div class="upload-box" id="upload-box">
+          <input type="file" id="file-input" accept=".xlsx,.xls" hidden />
+          <div class="upload-box-inner">
+            <iconify-icon icon="ph:upload-simple" style="font-size:36px;color:var(--iron)"></iconify-icon>
+            <p><strong>Click to choose a file</strong> or drag it here</p>
+            <p class="muted" id="file-name">No file selected</p>
+          </div>
+        </div>
+
+        <div class="field" style="max-width:320px;">
+          <label for="sheet-select">Worksheet</label>
+          <select id="sheet-select" disabled></select>
+        </div>
+
+        <button class="btn btn-primary" id="btn-parse" disabled>
+          <iconify-icon icon="ph:magnifying-glass"></iconify-icon> Scan for Red Highlights
+        </button>
+      </div>
+    </section>
+
+    <!-- STEP 2: FIELD MAPPING -->
+    <section class="hw-box-content panel-step is-disabled" id="panel-2" data-panel="2">
+      <div class="hw-header-wrap">
+        <div class="row">
+          <div class="lhs"><i><iconify-icon icon="ph:arrows-left-right"></iconify-icon></i> 2. Map Excel Columns to vTiger Fields</div>
+        </div>
+      </div>
+      <div class="hw-content">
+        <p class="muted" style="margin-top:0;">Match each Excel column that had red changes to the corresponding vTiger field API name. Mappings are remembered on this device.</p>
+
+        <div class="field" style="max-width:360px;margin-bottom:18px;">
+          <label for="identifier-column">Ticket Number Column (Excel)</label>
+          <select id="identifier-column"></select>
+        </div>
+
+        <div class="pt-wrap">
+          <table class="pt-table mapping-table" id="mapping-table">
+            <thead>
+              <tr><th>Excel Column</th><th>Sample Value</th><th>vTiger Field API Name</th><th class="center">Include</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <datalist id="vtiger-field-list"></datalist>
+        <button class="btn btn-primary" id="btn-build-review">Build Review List</button>
+      </div>
+    </section>
+
+    <!-- STEP 3: REVIEW -->
+    <section class="hw-box-content panel-step is-disabled" id="panel-3" data-panel="3">
+      <div class="hw-header-wrap">
+        <div class="row">
+          <div class="lhs"><i><iconify-icon icon="ph:list-checks"></iconify-icon></i> 3. Review Detected Changes</div>
+        </div>
+      </div>
+      <div class="hw-content">
+        <p class="muted" style="margin-top:0;">Only rows with at least one red-highlighted cell are listed. Uncheck any row or field you don't want to push.</p>
+
+        <div class="pt-wrap">
+          <table class="pt-table review-table" id="review-table">
+            <thead><tr id="review-head-row"></tr></thead>
+            <tbody id="review-body"></tbody>
+          </table>
+        </div>
+        <p class="muted" id="review-summary"></p>
+        <button class="btn btn-primary" id="btn-goto-update">Continue to Update</button>
+      </div>
+    </section>
+
+    <!-- STEP 4: UPDATE -->
+    <section class="hw-box-content panel-step is-disabled" id="panel-4" data-panel="4">
+      <div class="hw-header-wrap">
+        <div class="row">
+          <div class="lhs"><i><iconify-icon icon="ph:cloud-arrow-up"></iconify-icon></i> 4. Push Updates to vTiger</div>
+        </div>
+      </div>
+      <div class="hw-content">
+        <p class="muted" style="margin-top:0;">The CRM tab open at your vTiger URL will receive these changes via the Webservice API. Keep this tab open until the process finishes.</p>
+
+        <div class="callout callout-warning">
+          <iconify-icon icon="ph:warning"></iconify-icon>
+          This will modify live records in vTiger CRM. Double-check the review list before continuing.
+        </div>
+
+        <button class="btn btn-danger" id="btn-run-update">Update vTiger CRM Now</button>
+
+        <div class="progress-wrap" id="progress-wrap" hidden>
+          <div class="fn-progress"><div class="bar" id="progress-fill"></div></div>
+          <p id="progress-text">Processing 0 / 0</p>
+        </div>
+
+        <div class="pt-wrap">
+          <table class="pt-table results-table" id="results-table" hidden>
+            <thead><tr><th>Ticket #</th><th>Fields Updated</th><th class="center">Status</th><th>Details</th></tr></thead>
+            <tbody id="results-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="app-footer">
+    <div class="container">
+      <p>vTiger CRM Auto Update &mdash; runs entirely in your browser. No data is sent anywhere except your own vTiger server.</p>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

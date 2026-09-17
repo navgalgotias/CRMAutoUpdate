@@ -1,0 +1,330 @@
+<!doctype html>
+<!-- @dsCard group="Brand" name="Visual variations" subtitle="Three themed directions on a pan/zoom canvas" viewport="1280x760" -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AG Design System — Visual variations</title>
+
+<!-- Fonts: Inter (default), Geist Sans (modern), Source Serif (restaurant) -->
+<!-- Type directions render via system fallbacks (no CDN): Inter is self-hosted;
+     "modern" falls back to a system sans, "warm" to Georgia/ui-serif. -->
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="global-icons.css" />
+<link rel="stylesheet" href="tokens.css" />
+<link rel="stylesheet" href="ds-styles.css" />
+
+<style>
+body { background: #f0f1f5; }
+
+/* Variation 1 — Foundation default (unchanged) */
+.var-default { font-family: "Inter", sans-serif; }
+
+/* Variation 2 — Geist Modern: indigo primary, sharper borders, more breathing room */
+.var-modern {
+  --blue: #4338ca;
+  --primaryDark: #3730a3;
+  --cyan: #06b6d4;
+  --green: #059669;
+  --successDark: #047857;
+  --red: #dc2626;
+  --dangerDark: #b91c1c;
+  --orange: #ea580c;
+  --orangeDark: #c2410c;
+  --yellow: #ca8a04;
+  --iron: #475569;
+  --body-bg: #f8fafc;
+  --bg-primary: #ffffff;
+  --border-default-color: #e2e8f0;
+  --box-border-color: #e2e8f0;
+  --hover-bg-color: #f1f5f9;
+  --side-nav-bg: #0f172a;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --table-dark-cell: #f1f5f9;
+  --table-hover-bg: #f8fafc;
+  --table-border-color: #e2e8f0;
+  --dashboard-header-wrap: rgba(15,23,42,0.04);
+  --input-border-color: #cbd5e1;
+  --input-bg: #ffffff;
+  font-family: "Geist", "Inter", sans-serif;
+  letter-spacing: -.005em;
+}
+.var-modern .btn { border-radius: 8px; }
+.var-modern .btn.btn-xs { padding: 4px 12px; }
+.var-modern .fn-input, .var-modern input.form-control { border-radius: 8px; }
+.var-modern .tile { border-radius: 12px; padding: 18px; }
+.var-modern .hw-box-content { border-radius: 14px; }
+.var-modern .ds-h1, .var-modern .ds-h2, .var-modern .ds-h3 { letter-spacing: -.02em; }
+.var-modern .fn-tag { border-radius: 6px; padding: 3px 8px; font-weight: 600; }
+
+/* Variation 3 — Hospitality-warm: warm palette, fuller body type, prominent imagery */
+.var-warm {
+  --blue: #b8730a;
+  --primaryDark: #92580a;
+  --cyan: #c2410c;
+  --green: #65a30d;
+  --successDark: #4d7c0f;
+  --red: #b91c1c;
+  --dangerDark: #991b1b;
+  --orange: #c2410c;
+  --orangeDark: #9a3412;
+  --yellow: #d97706;
+  --iron: #57534e;
+  --body-bg: #fbf7f2;
+  --bg-primary: #ffffff;
+  --border-default-color: #ede7dc;
+  --box-border-color: #ede7dc;
+  --hover-bg-color: #f6f1e8;
+  --side-nav-bg: #292218;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --table-dark-cell: #f6f1e8;
+  --table-hover-bg: #fbf7f2;
+  --table-border-color: #ede7dc;
+  --dashboard-header-wrap: rgba(120,80,30,0.05);
+  --input-border-color: rgba(120,80,30,0.25);
+  --input-bg: #fffefb;
+  font-family: "Source Serif 4", "Iowan Old Style", Georgia, serif;
+}
+.var-warm h1, .var-warm h2, .var-warm h3, .var-warm .ds-h1, .var-warm .ds-h2, .var-warm .ds-h3 { font-family: "Source Serif 4", Georgia, serif; }
+.var-warm .ds-h1 { letter-spacing: -.01em; }
+.var-warm .btn, .var-warm .fn-input, .var-warm .form-control, .var-warm .fn-select { font-family: "Inter", sans-serif; }
+.var-warm .tile { border-radius: 4px; padding: 18px; border-color: var(--border-default-color); }
+.var-warm .hw-box-content { border-radius: 6px; }
+.var-warm .shift-chip { border-radius: 0; border-left-width: 4px; font-family: "Inter", sans-serif; }
+.var-warm .fn-tag { font-family: "Inter", sans-serif; }
+.var-warm .tbl { font-family: "Inter", sans-serif; }
+
+/* Direction label chrome */
+.direction-tag {
+  position: absolute; top: 14px; left: 14px; z-index: 2;
+  background: rgba(255,255,255,.94); backdrop-filter: blur(6px);
+  border: 1px solid var(--border-default-color, #e5e7eb);
+  border-radius: 999px; padding: 6px 12px;
+  display: inline-flex; gap: 8px; align-items: center;
+  font-size: 11.5px; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+  font-family: "Inter", sans-serif;
+  color: #0f172a;
+}
+.direction-tag .dot { width: 8px; height: 8px; border-radius: 50%; }
+
+.note-bar {
+  background: rgba(255,255,255,.92);
+  border-top: 1px solid var(--border-default-color, #e5e7eb);
+  padding: 12px 18px;
+  font-family: "Inter", sans-serif;
+  font-size: 12px;
+  color: #475569;
+}
+.note-bar b { color: #0f172a; font-weight: 600; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="src/primitives.jsx"></script>
+
+<script type="text/babel">
+const { useState, Fragment } = React;
+
+/* ----- The same Schedule view, rendered inside whichever variation wrapper ----- */
+const DAYS_V = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+const DAY_NUMS_V = ["11","12","13","14","15","16","17"];
+const ROSTER = [
+  { name: "Sana Ahmed",    role: "Manager",   shifts: [{t:"9a-5p",k:"done",h:8},{t:"9a-5p",k:"done",h:8},null,{t:"9a-5p",k:"",h:8},{t:"4p-11p",k:"",h:7},{t:"4p-11p",k:"",h:7},null] },
+  { name: "Rahul Yadav",   role: "Bartender", shifts: [null,{t:"4p-11p",k:"done",h:7},{t:"4p-11p",k:"done",h:7},{t:"4p-11p",k:"",h:7},{t:"4p-12a",k:"",h:8},{t:"4p-12a",k:"",h:8},{t:"12p-8p",k:"swap",h:8}] },
+  { name: "Marco Silva",   role: "Line cook", shifts: [{t:"3p-11p",k:"done",h:8},null,{t:"3p-11p",k:"done",h:8},{t:"3p-11p",k:"",h:8},{t:"3p-11p",k:"",h:8},{t:"12p-10p",k:"",h:10},null] },
+  { name: "Priya Nair",    role: "Server",    shifts: [{t:"11a-4p",k:"done",h:5},{t:"11a-4p",k:"done",h:5},{t:"5p-11p",k:"done",h:6},{t:"5p-11p",k:"",h:6},{t:"5p-11p",k:"",h:6},{t:"5p-11p",k:"late",h:6},{t:"11a-4p",k:"",h:5}] },
+];
+
+function ScheduleSurface({ variation, density = "default" }) {
+  return (
+    <div className={`var-${variation}`} style={{ background: "var(--body-bg)", padding: 0, minHeight: 800 }}>
+      {/* Top bar */}
+      <div className="hw-header-main" style={{ background: "var(--side-nav-bg)" }}>
+        <div className="logo">AG</div>
+        <div className="brandname">HubWorks</div>
+        <div className="site-switch"><Ph name="house" size="13px" /> Riverside Bistro <Ph name="caret-down" size="11px" /></div>
+        <div className="right">
+          <div className="weather"><Ph name="sun" size="13px" /> 68°F</div>
+          <button className="iconbtn" aria-label="Apps"><Ph name="squares-four" /></button>
+          <button className="iconbtn" aria-label="Notifications"><Ph name="bell" /><span className="dot" /></button>
+          <FnAvatar name="Sana Ahmed" size="sm" />
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "220px 1fr", minHeight: "calc(100% - 52px)" }}>
+        {/* Sidebar */}
+        <div className="fn-menu-sidebar" style={{ borderRadius: 0, width: "auto" }}>
+          <div className="menu-section">Workspace</div>
+          <div className="menu-item"><Ph name="house" />Dashboard</div>
+          <div className="menu-item active"><Ph name="calendar" />Schedule<span className="badge">3</span></div>
+          <div className="menu-item"><Ph name="users-three" />Team</div>
+          <div className="menu-item"><Ph name="clock-counter-clockwise" />Time clock</div>
+          <div className="menu-section">Reports</div>
+          <div className="menu-item"><Ph name="chart-pie" />Labor</div>
+          <div className="menu-item"><Ph name="hand-coins" />Payroll</div>
+        </div>
+
+        {/* Page body */}
+        <div style={{ padding: 24 }}>
+          <div className="hw-box-content">
+            <div className="hw-header-wrap">
+              <div className="row">
+                <div className="lhs flex-1"><i className="fn-global-schedule"></i> Schedules</div>
+                <div className="rhs">Week of Mar 11 – Mar 17, 2026</div>
+              </div>
+            </div>
+            <div className="hw-title split">
+              <div className="ds-row">
+                <span style={{ fontSize: 13, fontWeight: 600 }}>This week</span>
+                <FnTag color="primary">{variation === "default" ? "Active sprint" : variation === "modern" ? "Live" : "Service running"}</FnTag>
+              </div>
+              <div className="ds-row">
+                <FnButton type="outline-secondary btn-xs btn-round" iconAddonBefore="copy" text="Copy last week" />
+                <FnButton type="outline-secondary btn-xs btn-round" iconAddonBefore="download-simple" text="Export" />
+                <FnButton type="primary btn-xs btn-round" iconAddonBefore="paper-plane-tilt" text="Publish" />
+              </div>
+            </div>
+            <div className="hw-content" style={{ background: "var(--body-bg)" }}>
+              {/* KPI tiles */}
+              <div className="ds-grid ds-cols-4" style={{ marginBottom: 14 }}>
+                {[
+                  { l: "Hours · week",  v: "187h",      d: "+8h",    dir: "up",   c: "var(--blue)" },
+                  { l: "Labor cost",    v: "$3,842",    d: "−$142",  dir: "down", c: "var(--green)" },
+                  { l: "Open shifts",   v: "5",         d: "2 weekend", dir: "neutral", c: "var(--orange)" },
+                  { l: "Coverage",      v: "94%",       d: "+3pp",   dir: "up",   c: "var(--cyan)" },
+                ].map((t) => (
+                  <div key={t.l} className="tile">
+                    <header>{t.l}<Ph name="dots-three" size="14px" /></header>
+                    <div className="value">{t.v}</div>
+                    <div className="ds-row" style={{ justifyContent: "space-between" }}>
+                      <span className={t.dir === "up" ? "delta up" : t.dir === "down" ? "delta down" : "muted"} style={{ fontSize: 11.5 }}>{t.d}</span>
+                      <div className="spark" aria-hidden="true">{[4,6,8,5,9,7,11].map((h, i) => <span key={i} style={{ height: h * 2, background: t.c }} />)}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Schedule grid */}
+              <div className="sched-grid">
+                <div className="head" style={{ background: "var(--bg-primary)" }}>Employee</div>
+                {DAYS_V.map((d, i) => (
+                  <div key={d} className={`head ${i === 4 ? "today" : ""}`}>
+                    <div>{d}{i === 4 && <span className="bubble-primary" style={{ marginLeft: 6, fontSize: 9, padding: "1px 5px", borderRadius: 3 }}>TODAY</span>}</div>
+                    <div className="muted" style={{ fontSize: 10, fontWeight: 400, fontFamily: "var(--ds-mono)" }}>Mar {DAY_NUMS_V[i]}</div>
+                  </div>
+                ))}
+                {ROSTER.map((emp, ei) => (
+                  <Fragment key={emp.name}>
+                    <div className="cell emp" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <FnAvatar name={emp.name} size="sm" />
+                      <div className="flex-1">
+                        <div style={{ fontSize: 12, fontWeight: 500, lineHeight: 1.2 }}>{emp.name}</div>
+                        <div className="role">{emp.role}</div>
+                      </div>
+                    </div>
+                    {emp.shifts.map((s, di) => (
+                      <div key={di} className="cell" style={{ minHeight: 64, padding: 6, background: "var(--bg-primary)" }}>
+                        {s ? (
+                          <div className={`shift-chip ${s.k}`}>
+                            <span>{emp.role}</span>
+                            <span className="t">{s.t} · {s.h}h</span>
+                          </div>
+                        ) : (
+                          <div style={{ width: "100%", height: 50, border: "1px dashed var(--input-border-color)", borderRadius: 4, display: "flex", alignItems: "center", justifyContent: "center", color: "var(--iron)" }}>
+                            <Ph name="plus" size="13px" />
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </Fragment>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ----- Notes shown at the bottom of each artboard ----- */
+const NOTES = {
+  default: {
+    title: "Direction A — Foundation default",
+    dot:   "var(--blue)",
+    points: [
+      "Inter UI, JetBrains Mono for tabular data, current foundation tokens.",
+      "Blue (#005bc4) primary, indigo/cyan accents. Borders 1px subtle.",
+      "Density follows the existing 30px input / 14px row pattern.",
+    ],
+  },
+  modern: {
+    title: "Direction B — Geist modern",
+    dot:   "#4338ca",
+    points: [
+      "Geist Sans for UI — sharper proportions, tighter letter-spacing.",
+      "Indigo primary (#4338ca), softer slate borders, larger radii (8/12px).",
+      "More breathing room — tile padding raised from 16 → 18, radii 6 → 8/12.",
+    ],
+  },
+  warm: {
+    title: "Direction C — Hospitality warm",
+    dot:   "#c2410c",
+    points: [
+      "Source Serif headings paired with Inter body — a more hospitable feel.",
+      "Warm amber/olive palette, cream surface (#fbf7f2), small radii (4/6px).",
+      "Slight shift away from corporate cool — fits sit-down dining brands.",
+    ],
+  },
+};
+
+function ArtboardWithNotes({ variation }) {
+  const n = NOTES[variation];
+  return (
+    <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: "#fff" }}>
+      <div style={{ position: "relative", flex: 1, overflow: "auto" }}>
+        <span className="direction-tag"><span className="dot" style={{ background: n.dot }} /> {n.title}</span>
+        <ScheduleSurface variation={variation} />
+      </div>
+      <div className="note-bar">
+        <div style={{ display: "flex", gap: 16, alignItems: "flex-start" }}>
+          {n.points.map((p, i) => <div key={i} style={{ flex: 1 }}><b>{i === 0 ? "Typography" : i === 1 ? "Palette" : "Density"}.</b> {p}</div>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas
+      title="AG Design System — Visual variations"
+      subtitle="Three directions of the schedule view. All built from the same foundation tokens — only the variation wrapper overrides them."
+    >
+      <DCSection id="schedule" title="Schedule — Riverside Bistro · Week of Mar 11">
+        <DCArtboard id="default" label="A · Foundation default" width={1280} height={840}>
+          <ArtboardWithNotes variation="default" />
+        </DCArtboard>
+        <DCArtboard id="modern" label="B · Geist modern" width={1280} height={840}>
+          <ArtboardWithNotes variation="modern" />
+        </DCArtboard>
+        <DCArtboard id="warm" label="C · Hospitality warm" width={1280} height={840}>
+          <ArtboardWithNotes variation="warm" />
+        </DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!-- @dsCard group="Spacing" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="_base.css">
+<style>
+  .sp-row{ display:flex; align-items:center; gap:18px; }
+  .sp-tok{ font-family:var(--ds-mono); font-size:12px; background:var(--hover-bg-color); color:var(--body-textColor); padding:5px 10px; border-radius:5px; width:88px; text-align:center; flex-shrink:0; }
+  .sp-px{ font-family:var(--ds-mono); font-size:12px; color:var(--iron); width:44px; flex-shrink:0; }
+  .sp-bar{ height:18px; background:var(--blue); border-radius:4px; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Spacing scale</div><div class="muted" style="font-size:12px">4-based steps · <code class="mono">--space-1</code> → <code class="mono">--space-7</code></div></div>
+  <div style="display:flex;flex-direction:column;gap:9px">
+    <div class="sp-row"><span class="sp-tok">--space-1</span><span class="sp-px">4px</span><span class="sp-bar" style="width:var(--space-1)"></span></div>
+    <div class="sp-row"><span class="sp-tok">--space-2</span><span class="sp-px">8px</span><span class="sp-bar" style="width:var(--space-2)"></span></div>
+    <div class="sp-row"><span class="sp-tok">--space-3</span><span class="sp-px">12px</span><span class="sp-bar" style="width:var(--space-3)"></span></div>
+    <div class="sp-row"><span class="sp-tok">--space-4</span><span class="sp-px">16px</span><span class="sp-bar" style="width:var(--space-4)"></span></div>
+    <div class="sp-row"><span class="sp-tok">--space-5</span><span class="sp-px">24px</span><span class="sp-bar" style="width:var(--space-5)"></span></div>
+    <div class="sp-row"><span class="sp-tok">--space-6</span><span class="sp-px">32px</span><span class="sp-bar" style="width:var(--space-6)"></span></div>
+    <div class="sp-row"><span class="sp-tok">--space-7</span><span class="sp-px">48px</span><span class="sp-bar" style="width:var(--space-7)"></span></div>
+  </div>
+  <div class="muted" style="font-size:11.5px;border-top:1px dashed var(--border-default-color);padding-top:10px">In component SCSS prefer the foundation mixins (<code class="mono">@include padding(…)</code>, <code class="mono">@include radius(…)</code>) — they handle RTL automatically.</div>
+</div></body></html>

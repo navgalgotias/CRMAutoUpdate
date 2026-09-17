@@ -1,0 +1,50 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="_base.css">
+<style>
+  body{ background:var(--body-bg); } .card{ background:var(--body-bg); }
+  .fn-tabs-vertical{ border:1px solid var(--border-default-color); border-radius:8px; overflow:hidden; min-height:200px; }
+  .fn-tabs-vertical .fn-tab-list{ width:170px; }
+  .fn-tabs-horizontal{ border:1px solid var(--border-default-color); border-radius:8px; overflow:hidden; }
+  .row-tabs{ display:flex; align-items:center; gap:6px; flex-wrap:wrap; }
+  .row-tabs .tab{ display:inline-flex; align-items:center; gap:6px; padding:6px 12px; border-radius:25px; font-size:13px; cursor:pointer; color:var(--body-textColor); }
+  .row-tabs .tab .count-num{ display:inline-flex; align-items:center; justify-content:center; padding:2px 8px; border-radius:999px; background:var(--table-dark-cell); font-size:11px; font-weight:600; }
+  .row-tabs .tab iconify-icon{ color:var(--iron); font-size:15px; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Tabs · &lt;fn-tab&gt;</div><div class="muted" style="font-size:12px">Two layouts via isVertical · active uses <code class="mono">--theme</code> with white text</div></div>
+
+  <div class="mono" style="margin-top:2px">Vertical · active tab arrow snaps into the panel</div>
+  <div class="fn-tabs-vertical">
+    <div class="fn-tab-list" role="tablist" aria-orientation="vertical">
+      <button class="tab active" role="tab" aria-selected="true">Tab One</button>
+      <button class="tab" role="tab" aria-selected="false">Tab Two</button>
+      <button class="tab" role="tab" aria-selected="false">Tab Three</button>
+      <button class="tab" role="tab" aria-selected="false">Tab Four</button>
+    </div>
+    <div class="fn-tab-panel" role="tabpanel" style="padding:16px 20px;font-size:13px">Tab One Data</div>
+  </div>
+
+  <div class="mono" style="margin-top:8px">Horizontal · pill row above the panel</div>
+  <div class="fn-tabs-horizontal">
+    <div class="fn-tab-row">
+      <div class="fn-tabs is-horizontal" role="tablist">
+        <div class="tab active">Tab One</div>
+        <div class="tab">Tab Two</div>
+        <div class="tab">Tab Three</div>
+        <div class="tab">Tab Four</div>
+      </div>
+    </div>
+    <div class="fn-tab-panel" role="tabpanel" style="font-size:13px;font-weight:600">Tab One Data</div>
+  </div>
+
+  <div class="mono" style="margin-top:8px">Optional icon + count badge</div>
+  <div class="row-tabs">
+    <span class="tab" style="background:var(--theme);color:#fff"><iconify-icon icon="ph:list" style="color:#fff"></iconify-icon> All</span>
+    <span class="tab"><iconify-icon icon="ph:circle-dashed"></iconify-icon><span class="count-num">12</span> Open</span>
+    <span class="tab"><iconify-icon icon="ph:eye"></iconify-icon><span class="count-num">4</span> In review</span>
+    <span class="tab"><iconify-icon icon="ph:check-circle"></iconify-icon> Done</span>
+  </div>
+</div></body></html>

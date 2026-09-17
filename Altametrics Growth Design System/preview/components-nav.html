@@ -1,0 +1,33 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="_base.css"></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Breadcrumb</div></div>
+  <nav class="fn-breadcrumb">
+    <a>Dashboard</a><span class="sep">/</span>
+    <a>Scheduling</a><span class="sep">/</span>
+    <span class="current">Week 24</span>
+  </nav>
+
+  <div class="col" style="margin-top:6px"><div class="eyebrow">Pagination</div><div class="muted" style="font-size:12px">Centered controls (« ‹ pages › ») · circular active page · rows-per-page select</div></div>
+  <div class="pt-footer" style="position:relative;border-top:0;justify-content:center;padding:8px 0">
+    <div class="pt-pager" role="group" aria-label="Pagination">
+      <button class="pp" aria-label="First page">«</button>
+      <button class="pp" aria-label="Previous page">‹</button>
+      <button class="pp">1</button>
+      <button class="pp">2</button>
+      <button class="pp active" aria-current="page">3</button>
+      <button class="pp">4</button>
+      <button class="pp">5</button>
+      <span class="pp" aria-hidden="true">…</span>
+      <button class="pp">12</button>
+      <button class="pp" aria-label="Next page">›</button>
+      <button class="pp" aria-label="Last page">»</button>
+    </div>
+    <div class="pt-pagesize">
+      <select aria-label="Rows per page"><option>15</option><option>10</option><option>20</option><option>30</option></select>
+      <span class="ps-caret" aria-hidden="true"><svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor"><path d="M5 6L0 0H10L5 6Z"/></svg></span>
+    </div>
+  </div>
+</div></body></html>

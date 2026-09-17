@@ -1,0 +1,21 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Local test files
+*.xlsx
+*.xls
+!/assets/**/*.xlsx
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment / secrets (this app has no backend, but keep this safe by default)
+.env
+.env.*

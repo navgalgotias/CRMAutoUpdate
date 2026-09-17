@@ -1,0 +1,69 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="../global-icons.css">
+<link rel="stylesheet" href="_base.css">
+<style>
+  body{ background:var(--body-bg); } .card{ background:var(--body-bg); width:1000px; }
+  .shell{ border:1px solid var(--border-default-color); border-radius:8px; overflow:hidden; }
+  .shell-body{ display:grid; grid-template-columns:50px 1fr; min-height:330px; }
+  /* collapsed dark rail */
+  .rail{ background:var(--side-nav-bg); display:flex; flex-direction:column; padding-top:6px; }
+  .rail .ri{ height:46px; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.6); cursor:pointer; position:relative; }
+  .rail .ri:hover{ color:#fff; }
+  .rail .ri.active{ color:#fff; background:rgba(0,91,196,.28); }
+  .rail .ri.active::before{ content:""; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--theme); }
+  .rail .ri iconify-icon{ font-size:20px; }
+  .shell-page{ background:var(--body-bg); padding:20px; }
+  /* mini header bar */
+  .shell .hw-navbar{ position:relative; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">App shell</div><div class="muted" style="font-size:12px">Root layout · HW header on top, fn-menu-sidebar left, router-outlet center, ag-drawer-host + fn-loader at the tree root</div></div>
+  <div class="shell">
+    <div class="hw-navbar">
+      <ul class="navbar-left">
+        <li class="brand"><span class="logo-box" aria-label="Plum logo"><svg width="26" height="26" viewBox="0 0 32 32" fill="none"><circle cx="16" cy="18" r="10" fill="#e23744"/><path d="M16 8C16 8 13 4 9 4C9 9 13 10 16 10" fill="#3d8b40"/><path d="M16 8C16 8 19 4 23 4C23 9 19 10 16 10" fill="#4caf50"/></svg></span></li>
+        <li class="header-list-item"><span><span class="lead-icon"><iconify-icon icon="ph:squares-four-bold"></iconify-icon></span>My App<span class="caret-ico"><iconify-icon icon="ph:caret-down-bold"></iconify-icon></span></span></li>
+        <li class="header-list-item"><span><span class="lead-icon"><iconify-icon icon="ph:map-pin-bold"></iconify-icon></span>Site 1<span class="caret-ico"><iconify-icon icon="ph:caret-down-bold"></iconify-icon></span></span></li>
+      </ul>
+      <ul class="navbar-center">
+        <li><span class="weather-trigger"><span class="w-ico"><iconify-icon icon="ph:cloud-sun-fill"></iconify-icon></span><iconify-icon icon="ph:caret-down-bold" style="color:var(--blue)"></iconify-icon></span></li>
+        <li class="cursor-default" style="cursor:default"><span class="clock"><span>05:22<sup>A</sup></span><span class="tz">America/New York</span></span></li>
+      </ul>
+      <ul class="navbar-right">
+        <li class="header-list-item"><div class="alert-msg-header"><div class="text-anim-marquee"><div class="msg-wrap"><p>Your trial is not updated.</p></div></div></div></li>
+        <li class="gear-btn" title="Settings" aria-label="Settings"><iconify-icon icon="ph:gear-fill"></iconify-icon></li>
+        <li><span class="user-icon" style="display:inline-flex;align-items:center;justify-content:center;background:#cfe0ff"><iconify-icon icon="ph:user-fill" style="color:#fff;font-size:20px"></iconify-icon></span></li>
+      </ul>
+    </div>
+    <div class="shell-body">
+      <nav class="rail" aria-label="Sidebar menu">
+        <span class="ri" title="Dashboard"><iconify-icon icon="ph:house"></iconify-icon></span>
+        <span class="ri active" title="Schedule"><iconify-icon icon="ph:calendar"></iconify-icon></span>
+        <span class="ri" title="Team"><iconify-icon icon="ph:users-three"></iconify-icon></span>
+        <span class="ri" title="Time clock"><iconify-icon icon="ph:clock-counter-clockwise"></iconify-icon></span>
+        <span class="ri" title="Labor"><iconify-icon icon="ph:chart-pie-slice"></iconify-icon></span>
+        <span class="ri" title="Payroll"><iconify-icon icon="ph:hand-coins"></iconify-icon></span>
+      </nav>
+      <div class="shell-page">
+        <div class="hw-box-content">
+          <div class="hw-header-wrap">
+            <div class="row">
+              <div class="lhs flex-1"><i class="fn-global-schedule"></i> Schedules</div>
+              <div class="rhs">Riverside Bistro · Week of Mar 11</div>
+            </div>
+          </div>
+          <div class="hw-title">
+            <button class="btn btn-outline-secondary btn-xs btn-round"><iconify-icon icon="ph:download-simple" style="margin-right:6px"></iconify-icon>Export</button>
+            <button class="btn btn-primary btn-xs btn-round"><iconify-icon icon="ph:plus" style="margin-right:6px"></iconify-icon>Publish</button>
+          </div>
+          <div class="hw-content" style="min-height:150px">
+            <div class="muted" style="font-size:12px">Page body — table, dashboard, form, etc.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></body></html>

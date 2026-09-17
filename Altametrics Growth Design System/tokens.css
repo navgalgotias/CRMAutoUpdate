@@ -1,0 +1,228 @@
+/* ============================================================================
+   AG Design System — Design Tokens
+   Mirrors projects/foundation/src/lib/theme/_variable.scss 1:1.
+   Light tokens live on :root; dark-mode overrides live under .dark-theme.
+   ============================================================================ */
+
+/* Self-hosted AG icon font (fn-global-*) — class→glyph map + @font-face.
+   @import must precede other rules, so it leads the file. */
+@import url("global-icons.css");
+
+/* Self-hosted brand font — Inter (static 18pt grade, all weights + italics).
+   @import must precede other rules, so it sits with the icon-font import. */
+@import url("inter-font.css");
+
+:root {
+  /* Brand palette (named) */
+  --theme: #005bc4; /* aligned with --blue — consumer apps override this */
+  --theme-fade: rgba(0, 91, 196, 0.3);
+  --white: #ffffff;
+  --black: #000000;
+  --gray: #cccccc;
+  --orange: #bf5700;
+  --green: #1e7e34;
+  --yellow: #fdc91e;
+  --red: #c62828;
+  --blue: #005bc4;
+  --cyan: #0078a8;
+  --iron: #4b5563;
+  --purple: #7b42ff;
+
+  /* Surfaces */
+  --body-bg: #f6f7ff;
+  --bg-primary: #ffffff;
+  --bg-primary-dark: #ffffff;
+  --bg-primary-gray: #ffffff;
+  --body-textColor: #0b0b0b;
+  --gradient-bg: #ffffff;
+  --hover-bg-color: #f8f9f9;
+  --side-nav-bg: #25262e;
+
+  /* Structure */
+  --box-border-color: #ebebeb;
+  --border-default-color: #ebebeb;
+  --shadow: 0 7px 22px rgba(0, 0, 0, 0.15);
+  --cdk-overlay-backdrop: rgba(0, 0, 0, 0.68);
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 9px;
+
+  /* Inputs */
+  --input-bg: #ffffff;
+  --input-border-color: rgba(138, 143, 159, 0.4);
+  --input-placeholder-color: #767676;
+  --input-disable-bg: #f5f5f5;
+  --input-disable-color: #f0f0f0;
+  --input-focus-border-color: #80bdff;
+  --action-icon-border: rgba(111, 111, 111, 0.48);
+
+  /* Tables */
+  --table-dark-cell: #eceeef;
+  --table-hover-bg: #fffff4;
+  --table-shadow: rgba(0, 0, 0, 0.05);
+  --table-border-color: #eceeef;
+
+  /* Dashboard */
+  --dashboard-header-wrap: rgba(132, 132, 132, 0.0625);
+  --dashboard-body-wrap: #ffffff;
+  --dashboard-wrap-border: #d3e2ff;
+
+  /* Misc */
+  --progress-bg: #e6ebf0;
+  --dropdown-caret-border: #e9e9e9;
+  --popover-header-bg: white;
+  --font-family: "Inter", sans-serif;
+  --theme-filter: brightness(0) saturate(100%) invert(22%) sepia(86%) saturate(2762%) hue-rotate(223deg) brightness(102%) contrast(110%); /* @kind other */
+
+  /* Light / Dark variants of semantic colors */
+  --successDark: #18732e;
+  --successLight: #cbffca;
+  --orangeDark: #b35304;
+  --orangeLight: #ffe0b2;
+  --warningDark: #fdc91e;
+  --dangerDark: #b71c1c;
+  --dangerLight: #fbdbdc;
+  --primaryDark: #005fcc;
+  --infoDark: #026f9a;
+  --secondaryDark: #bbbbbb;
+  --secondaryLight: #e6ebf0;
+  --ironDark: #424b58;
+  --ironLight: #f3f3f3;
+
+  /* Spacing scale (doc-local convenience; in code use mixins) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* DS chrome (not from foundation — gallery-only) */
+  --ds-sidebar-w: 240px;
+  --ds-topbar-h: 56px;
+  --ds-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, "Liberation Mono", monospace; /* @kind other */ /* system mono stack — no webfont shipped */
+
+  /* Focus ring — VPAT 2px high-contrast */
+  --focus-ring: 0 0 0 2px var(--blue);
+}
+
+.dark-theme {
+  --side-nav-bg: #121418;
+  --body-bg: #26262d;
+  --bg-primary: #1e1f25;
+  --bg-primary-dark: #17181c;
+  --bg-primary-gray: #25262e;
+  --border-default-color: #25262e;
+  --hover-bg-color: #26262d;
+  --primaryColour: #1e1f25;
+  --table-hover-bg: #282721;
+  --table-dark-cell: #0e0e13;
+  --table-border-color: #25262e;
+  --table-even-bg: #2b2c34;
+  --input-bg: #3c3e49;
+  --body-bgColor: #121319;
+  --box-border-color: #35353a;
+  --gradient-bg: linear-gradient(180deg, #000000, rgb(33 33 37));
+  --body-textColor: #d3d3d3;
+  --shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  --input-focus-border-color: #4c9fff;
+  --input-disable-color: #2f2f2f;
+  --input-disable-bg: #1e1f25;
+  --input-placeholder-color: rgba(201, 201, 201, 0.8);
+  --input-border-color: #45464e;
+  --cdk-overlay-backdrop: rgba(0, 0, 0, 0.32);
+  --progress-bg: #0e0f12;
+  --dashboard-header-wrap: #2d3038;
+  --dashboard-body-wrap: #1e1f25;
+  --dashboard-wrap-border: #565759;
+  --popover-header-bg: #2d3038;
+  --dropdown-caret-border: #1e1f25;
+
+  /* Dark brand overrides */
+  --white: #ffffff;
+  --black: #000000;
+  --gray: #cccccc;
+  --orange: #ff821a;
+  --green: #31ce55;
+  --yellow: #fdc91e;
+  --red: #fd5c57;
+  --blue: #4c9fff;
+  --cyan: #14a7e2;
+  --iron: #878787;
+  --purple: #7b42ff;
+  --successDark: #31ce55;
+  --warningDark: #ff821a;
+  --dangerDark: #fd5c57;
+  --primaryDark: #4c9fff;
+  --infoDark: #14a7e2;
+  --secondaryDark: #bbbbbb;
+  --ironDark: #424b58;
+  --focus-ring: 0 0 0 2px var(--blue);
+}
+
+/* ============================================================================
+   Base reset (kept minimal — Tailwind preflight is off in foundation)
+   ============================================================================ */
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-family);
+  background: var(--body-bg);
+  color: var(--body-textColor);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  font-display: swap;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+/* Universal focus — always visible per VPAT */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: 4px;
+}
+
+/* Scrollbars — quiet, themed */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--input-border-color); border-radius: 6px; border: 2px solid transparent; background-clip: padding-box; }
+::-webkit-scrollbar-thumb:hover { background: var(--iron); background-clip: padding-box; border: 2px solid transparent; }
+
+/* ============================================================================
+   Auto-generated semantic classes (mirror of _color.scss output)
+   ============================================================================ */
+.bg-success { background-color: var(--green); }
+.bg-warning { background-color: var(--yellow); }
+.bg-danger  { background-color: var(--red); }
+.bg-primary-c { background-color: var(--blue); }
+.bg-info    { background-color: var(--cyan); }
+.bg-orange  { background-color: var(--orange); }
+.bg-dark    { background-color: var(--iron); }
+
+.f-success { color: var(--green) !important; }
+.f-warning { color: var(--yellow) !important; }
+.f-danger  { color: var(--red) !important; }
+.f-primary { color: var(--blue) !important; }
+.f-info    { color: var(--cyan) !important; }
+.f-orange  { color: var(--orange) !important; }
+.f-iron    { color: var(--iron) !important; }
+.f-muted   { color: var(--iron) !important; }
+
+.bubble-success  { background: rgba(30,126,52,0.18);  color: var(--successDark); }
+.bubble-warning  { background: rgba(253,201,30,0.22); color: #8a6d04; }
+.bubble-danger   { background: rgba(198,40,40,0.16);  color: var(--dangerDark); }
+.bubble-primary  { background: rgba(0,91,196,0.14);   color: var(--primaryDark); }
+.bubble-info     { background: rgba(0,120,168,0.14);  color: var(--infoDark); }
+.bubble-orange   { background: rgba(191,87,0,0.16);   color: var(--orangeDark); }
+.bubble-secondary{ background: rgba(75,85,99,0.12);   color: var(--iron); }
+
+.dark-theme .bubble-success  { background: rgba(49,206,85,0.18);  color: #31ce55; }
+.dark-theme .bubble-warning  { background: rgba(255,130,26,0.22); color: #ff821a; }
+.dark-theme .bubble-danger   { background: rgba(253,92,87,0.16);  color: #fd5c57; }
+.dark-theme .bubble-primary  { background: rgba(76,159,255,0.18); color: #4c9fff; }
+.dark-theme .bubble-info     { background: rgba(20,167,226,0.18); color: #14a7e2; }
+.dark-theme .bubble-orange   { background: rgba(255,130,26,0.18); color: #ff821a; }
+.dark-theme .bubble-secondary{ background: rgba(187,187,187,0.16);color: #bbbbbb; }

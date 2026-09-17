@@ -1,0 +1,64 @@
+<!-- @dsCard group="Components" name="components-eventfilter" subtitle="fn-event-filter / fn-event-check-box-filter — grouped filter dropdown (port of foundation source)" viewport="820x540" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="_base.css">
+<style>
+  /* Layout-only: stack the trigger above the open dropdown for the spec card. */
+  .ef-demo{ display:flex; flex-direction:column; align-items:center; gap:22px; padding:8px 0 6px; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Event filter · &lt;fn-event-filter&gt; · &lt;fn-event-check-box-filter&gt;</div><div class="muted" style="font-size:12px">Funnel button opens a dropdown of grouped columns (event-filter-data). Each header has a 50px theme underline; lists scroll. Checkbox variant adds a “Show All” parent. Footer: Clear (danger) + Apply (info), btn-round btn-xs.</div></div>
+
+  <div class="ef-demo">
+    <!-- fn-button trigger -->
+    <button class="btn btn-outline-secondary btn-round">Filter <iconify-icon icon="ph:funnel" style="color:var(--blue)"></iconify-icon></button>
+
+    <!-- open dropdown (.fn-event-filter) -->
+    <ul class="fn-event-filter">
+      <li>
+        <span class="filter-close"><i class="fn-global-times-o"></i></span>
+
+        <div class="event-filter-data">
+          <div class="event-filter-header"><h3>Highlight Punch For</h3></div>
+          <ul class="event-filter-list">
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Show All</span></label></li>
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Authorized Punches</span></label></li>
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Un-Authorized Punch</span></label></li>
+          </ul>
+        </div>
+
+        <div class="event-filter-data">
+          <div class="event-filter-header"><h3>Violations</h3></div>
+          <ul class="event-filter-list">
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Show All</span></label></li>
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Compliant Punches</span></label></li>
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Violated Punches</span></label></li>
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Mismatch Punches</span></label></li>
+          </ul>
+        </div>
+
+        <div class="event-filter-data">
+          <div class="event-filter-header"><h3>Job Codes</h3></div>
+          <ul class="event-filter-list">
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>All Job Codes</span></label></li>
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Cashier</span></label></li>
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Cook</span></label></li>
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Shift Manager</span></label></li>
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Server</span></label></li>
+            <li class="event-filter-item"><label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Host</span></label></li>
+            <li class="event-filter-item"><label class="fn-checkbox"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Dishwasher</span></label></li>
+            <li class="event-filter-item"><label class="fn-checkbox"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Busser</span></label></li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="event-filter-footer">
+        <div class="row">
+          <div class="col"><button class="btn btn-danger btn-round btn-xs">Clear</button></div>
+          <div class="col text-right"><button class="btn btn-info btn-round btn-xs">Apply</button></div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div></body></html>

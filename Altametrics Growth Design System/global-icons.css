@@ -1,0 +1,165 @@
+/* ============================================================================
+   AG global icon font (fn-global-*) — self-hosted.
+   @font-face points at the uploaded fonts/global.* binaries. The base rule
+   (font-family on the ::before) was missing from the CDN stylesheet, which is
+   why glyphs rendered blank — it is included here so every fn-global-* class
+   resolves to a glyph. Codepoint map mirrors the foundation globalFont set.
+   ============================================================================ */
+@font-face {
+  font-family: 'global';
+  src: url('fonts/global.woff2') format('woff2'),
+       url('fonts/global.woff') format('woff'),
+       url('fonts/global.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+[class^="fn-global-"], [class*=" fn-global-"] {
+  font-family: 'global' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.fn-global-edit:before { content: '\e001';}
+.fn-global-add:before { content: '\e002';}
+.fn-global-attachment:before { content: '\e003';}
+.fn-global-avatar:before { content: '\e004';}
+.fn-global-calendar:before { content: '\e005';}
+.fn-global-check:before { content: '\e006';}
+.fn-global-comments:before { content: '\e007';}
+.fn-global-delete:before { content: '\e008';}
+.fn-global-download:before { content: '\e009';}
+.fn-global-dropdownArrow:before { content: '\e010';}
+.fn-global-expand:before { content: '\e011';}
+.fn-global-file:before { content: '\e012';}
+.fn-global-filter:before { content: '\e013';}
+.fn-global-flag:before { content: '\e014';}
+.fn-global-frequency:before { content: '\e015';}
+.fn-global-help:before { content: '\e016';}
+.fn-global-home:before { content: '\e017';}
+.fn-global-information:before { content: '\e018';}
+.fn-global-listSort:before { content: '\e019';}
+.fn-global-locationSettings:before { content: '\e020';}
+.fn-global-search:before { content: '\e021';}
+.fn-global-send:before { content: '\e022';}
+.fn-global-settings:before { content: '\e023';}
+.fn-global-site:before { content: '\e024';}
+.fn-global-time:before { content: '\e025';}
+.fn-global-view:before { content: '\e026';}
+.fn-global-yesNoTask:before { content: '\e027';}
+.fn-global-plus-o:before { content: '\e028';}
+.fn-global-building:before { content: '\e029';}
+.fn-global-key:before { content: '\e030';}
+.fn-global-logout:before { content: '\e031';}
+.fn-global-mail:before { content: '\e034';}
+.fn-global-myApp:before { content: '\e035';}
+.fn-global-mySites:before { content: '\e036';}
+.fn-global-user:before { content: '\e037';}
+.fn-global-weather:before { content: '\e038';}
+.fn-global-cloud:before { content: '\e039';}
+.fn-global-cloudy:before { content: '\e040';}
+.fn-global-day-cloudy:before { content: '\e041';}
+.fn-global-day-cloudy-gusts:before { content: '\e042';}
+.fn-global-day-fog:before { content: '\e043';}
+.fn-global-day-lightning:before { content: '\e044';}
+.fn-global-day-sunny:before { content: '\e045';}
+.fn-global-day-sunny-overcast:before { content: '\e046';}
+.fn-global-fog:before { content: '\e047';}
+.fn-global-hail:before { content: '\e048';}
+.fn-global-rain:before { content: '\e049';}
+.fn-global-rain-mix:before { content: '\e050';}
+.fn-global-rain-wind:before { content: '\e051';}
+.fn-global-snow:before { content: '\e052';}
+.fn-global-storm-showers:before { content: '\e053';}
+.fn-global-thunderstorm:before { content: '\e054';}
+.fn-global-contact:before { content: '\e055';}
+.fn-global-dailyCoverageReport:before { content: '\e056';}
+.fn-global-department:before { content: '\e057';}
+.fn-global-employee:before { content: '\e058';}
+.fn-global-employeeCertificationReport:before { content: '\e059';}
+.fn-global-timeOffReport:before { content: '\e060';}
+.fn-global-laborBudget:before { content: '\e061';}
+.fn-global-laborLaws:before { content: '\e062';}
+.fn-global-monthlyScheduleReport:before { content: '\e063';}
+.fn-global-myschedule:before { content: '\e064';}
+.fn-global-notesBroadcastReport:before { content: '\e065';}
+.fn-global-operationalHours:before { content: '\e066';}
+.fn-global-position:before { content: '\e067';}
+.fn-global-reports:before { content: '\e068';}
+.fn-global-request:before { content: '\e069';}
+.fn-global-schedule:before { content: '\e070';}
+.fn-global-scheduleReport:before { content: '\e071';}
+.fn-global-scheduleSetting:before { content: '\e072';}
+.fn-global-siteSchedule:before { content: '\e073';}
+.fn-global-timeOff:before { content: '\e074';}
+.fn-global-zipCheckList:before { content: '\e075';}
+.fn-global-zipChitChat:before { content: '\e076';}
+.fn-global-certificate:before { content: '\e077';}
+.fn-global-clock:before { content: '\e078';}
+.fn-global-cloudLibrary:before { content: '\e079';}
+.fn-global-shiftCalendar:before { content: '\e080';}
+.fn-global-teamCenter:before { content: '\e081';}
+.fn-global-siteSetting:before { content: '\e082';}
+.fn-global-globalSetting:before { content: '\e083';}
+.fn-global-dailyReports:before { content: '\e084';}
+.fn-global-globalChecklist:before { content: '\e085';}
+.fn-global-historicalChecklist:before { content: '\e086';}
+.fn-global-taskAssignments:before { content: '\e087';}
+.fn-global-weeklyReports:before { content: '\e088';}
+.fn-global-todayChecklist:before { content: '\e089';}
+.fn-global-siteChecklist:before { content: '\e090';}
+.fn-global-star:before { content: '\e091';}
+.fn-global-times:before { content: '\e092';}
+.fn-global-times-o:before { content: '\e093';}
+.fn-global-times-line:before { content: '\e094';}
+.fn-global-alert:before { content: '\e095';}
+.fn-global-alert-o:before { content: '\e096';}
+.fn-global-check-line:before { content: '\e097';}
+.fn-global-check-o:before { content: '\e098';}
+.fn-global-minus-o:before { content: '\e099';}
+.fn-global-minus-line:before { content: '\e100';}
+.fn-global-plus-line:before { content: '\e101';}
+.fn-global-downArrow-line:before { content: '\e102';}
+.fn-global-downArrow-o:before { content: '\e103';}
+.fn-global-list-o:before { content: '\e104';}
+.fn-global-send-o:before { content: '\e105';}
+.fn-global-settings-o:before { content: '\e106';}
+.fn-global-pdf:before { content: '\e144';}
+.fn-global-image:before { content: '\e145';}
+.fn-global-excel:before { content: '\e146';}
+.fn-global-powerpoint:before { content: '\e147';}
+.fn-global-video:before { content: '\e148';}
+.fn-global-audio:before { content: '\e149';}
+.fn-global-word:before { content: '\e150';}
+.fn-global-zip:before { content: '\e151';}
+.fn-global-json:before { content: '\e152';}
+.fn-global-report:before { content: '\e068';}
+.fn-global-setting:before { content: '\e023';}
+.fn-global-csv:before { content: '\e146';}
+.fn-global-eye:before { content: '\e026';}
+.fn-global-export:before { content: '\e211';}
+.fn-global-template:before { content: '\e374';}
+.fn-global-dashboard:before { content: '\e435';}
+.fn-global-checklist:before { content: '\e085';}
+.fn-global-cloudDownload:before { content: '\e211';}
+.fn-global-print:before { content: '\e216';}
+.fn-global-copy:before { content: '\e200';}
+.fn-global-refresh:before { content: '\e243';}
+.fn-global-lock:before { content: '\e341';}
+.fn-global-unlock:before { content: '\e342';}
+.fn-global-link:before { content: '\e340';}
+.fn-global-tag:before { content: '\e233';}
+.fn-global-save:before { content: '\e230';}
+.fn-global-share:before { content: '\e231';}
+.fn-global-barChart:before { content: '\e228';}
+.fn-global-pieChart:before { content: '\e229';}
+.fn-global-bell-alerts:before { content: '\e291';}
+.fn-global-location:before { content: '\e301';}
+.fn-global-call:before { content: '\e300';}
+.fn-global-light:before { content: '\e261';}
+.fn-global-dark:before { content: '\e262';}

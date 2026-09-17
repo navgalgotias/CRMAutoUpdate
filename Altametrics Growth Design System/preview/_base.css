@@ -1,0 +1,25 @@
+/* Preview-card base — links real AG tokens + component CSS, sizes cards to 700px */
+@import url("../tokens.css");
+@import url("../ds-styles.css");
+
+html, body { margin: 0; background: var(--bg-primary); }
+.card {
+  width: 700px;
+  padding: 18px 22px;
+  background: var(--bg-primary);
+  color: var(--body-textColor);
+  font-family: var(--font-family);
+  display: flex; flex-direction: column; gap: 14px;
+}
+.row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.col { display: flex; flex-direction: column; gap: 3px; }
+.eyebrow { font-size: 10px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--iron); }
+.muted { color: var(--iron); }
+.mono { font-family: var(--ds-mono); font-size: 11px; color: var(--iron); }
+
+/* swatch grid */
+.sw-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.sw { display: flex; flex-direction: column; gap: 6px; }
+.sw .chip { height: 46px; border-radius: 8px; border: 1px solid var(--border-default-color); }
+.sw .nm { font-size: 12px; font-weight: 600; }
+.sw .vr { font-family: var(--ds-mono); font-size: 10.5px; color: var(--iron); }

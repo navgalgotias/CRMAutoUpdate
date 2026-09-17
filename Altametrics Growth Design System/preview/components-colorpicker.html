@@ -1,0 +1,56 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="_base.css">
+<style>
+  .cp-pop{ width:240px; border:1px solid var(--border-default-color); border-radius:10px; background:var(--bg-primary); box-shadow:var(--shadow); padding:10px; }
+  .cp-sv{ height:130px; border-radius:6px; position:relative;
+    background:
+      linear-gradient(to top, #000, transparent),
+      linear-gradient(to right, #fff, #005bc4); }
+  .cp-sv .knob{ position:absolute; right:10px; top:8px; width:13px; height:13px; border-radius:50%; border:2px solid #fff; box-shadow:0 0 0 1px rgba(0,0,0,.3); }
+  .cp-row{ display:flex; align-items:center; gap:10px; margin-top:10px; }
+  .cp-prev{ width:30px; height:30px; border-radius:50%; background:#005bc4; flex-shrink:0; border:1px solid var(--border-default-color); }
+  .cp-hue{ flex:1; height:12px; border-radius:999px; position:relative;
+    background:linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00); }
+  .cp-hue .knob{ position:absolute; left:62%; top:50%; transform:translate(-50%,-50%); width:14px; height:14px; border-radius:50%; background:#fff; box-shadow:0 0 0 1px rgba(0,0,0,.25),0 1px 3px rgba(0,0,0,.3); }
+  .cp-foot{ display:flex; align-items:center; gap:8px; margin-top:12px; }
+  .cp-hex{ font-family:var(--ds-mono); font-size:12px; border:1px solid var(--input-border-color); border-radius:4px; padding:5px 8px; width:84px; }
+  .cp-foot .btn{ font-size:12px; padding:5px 14px; }
+  .cp-spacer{ flex:1; }
+  .cp-trigger{ width:120px; height:40px; border-radius:8px; background:#005bc4; border:1px solid var(--border-default-color); cursor:pointer; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Color picker · &lt;fn-color-picker&gt;</div><div class="muted" style="font-size:12px">Wraps ngx-color-picker · swatch opens sat/value box + hue slider + hex + Cancel/OK</div></div>
+  <div class="row" style="gap:26px;align-items:flex-start">
+    <div class="col" style="gap:8px">
+      <span class="fn-label" style="font-size:12px">Event color</span>
+      <button class="cp-trigger" aria-label="Pick event color · #005bc4" aria-haspopup="dialog"></button>
+    </div>
+    <div class="cp-pop" role="dialog" aria-label="Color picker">
+      <div class="cp-sv"><span class="knob"></span></div>
+      <div class="cp-row">
+        <span class="cp-prev"></span>
+        <span class="cp-hue"><span class="knob"></span></span>
+      </div>
+      <div class="cp-foot">
+        <input class="cp-hex" value="#005bc4">
+        <span class="cp-spacer"></span>
+        <button class="btn btn-danger">Cancel</button>
+        <button class="btn btn-primary">OK</button>
+      </div>
+    </div>
+  </div>
+  <div class="col" style="margin-top:4px"><div class="eyebrow">Preset swatches</div></div>
+  <div class="row" style="gap:6px;align-items:center">
+    <button style="width:26px;height:26px;border-radius:6px;background:#005bc4;border:2px solid var(--body-textColor);cursor:pointer" aria-label="Pick #005bc4"></button>
+    <button style="width:26px;height:26px;border-radius:6px;background:#1e7e34;border:1px solid var(--border-default-color);cursor:pointer" aria-label="Pick #1e7e34"></button>
+    <button style="width:26px;height:26px;border-radius:6px;background:#bf5700;border:1px solid var(--border-default-color);cursor:pointer" aria-label="Pick #bf5700"></button>
+    <button style="width:26px;height:26px;border-radius:6px;background:#fdc91e;border:1px solid var(--border-default-color);cursor:pointer" aria-label="Pick #fdc91e"></button>
+    <button style="width:26px;height:26px;border-radius:6px;background:#c62828;border:1px solid var(--border-default-color);cursor:pointer" aria-label="Pick #c62828"></button>
+    <button style="width:26px;height:26px;border-radius:6px;background:#0078a8;border:1px solid var(--border-default-color);cursor:pointer" aria-label="Pick #0078a8"></button>
+    <button style="width:26px;height:26px;border-radius:6px;background:#7b42ff;border:1px solid var(--border-default-color);cursor:pointer" aria-label="Pick #7b42ff"></button>
+    <button style="width:26px;height:26px;border-radius:6px;background:#4b5563;border:1px solid var(--border-default-color);cursor:pointer" aria-label="Pick #4b5563"></button>
+    <code class="mono" style="margin-left:8px">#005bc4</code>
+  </div>
+</div></body></html>

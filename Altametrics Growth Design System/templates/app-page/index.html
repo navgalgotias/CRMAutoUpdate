@@ -1,0 +1,87 @@
+<!-- @template name="App page" description="Standard routed page: pinned hw-navbar header with working dropdowns + support panel, fixed fn-menu-sidebar, scrolling .hw-box-content body." -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>App page — Altametrics Growth</title>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="./ds-base.js"></script>
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<style>
+  /* Page-level only — all component styling comes from the design system. */
+  html, body { margin: 0; background: var(--body-bg); font-family: "Inter", sans-serif; color: var(--body-textColor); }
+  /* The header (.hw-navbar) and sidebar (.fn-menu-sidebar) pin themselves via
+     the .hw-app-shell / .hw-app-body classes; only .page-pad scrolls. */
+  .page-pad { padding: var(--space-5); }
+  .filter-row { display: flex; gap: var(--space-3); align-items: flex-end; flex-wrap: wrap; margin-bottom: var(--space-4); }
+  .filter-row .grow { flex: 1; }
+</style>
+</head>
+<body>
+
+<div class="hw-app-shell">
+
+  <!-- hw-header-main — canonical markup lives in hw-header.js, so any header
+       update in the design system flows here automatically. Configure via data- attrs. -->
+  <header class="hw-navbar" data-hw-header data-hw-render="standard"
+          data-app-name="My Apps" data-site-name="Downtown — Store 014"
+          data-time="9:41" data-meridiem="A" data-tz="America/Los Angeles"
+          data-version="6.9.0" data-screen-label="App header"></header>
+
+  <div class="hw-app-body">
+    <!-- fn-menu-sidebar — collapsed 50px rail; expands on hover -->
+    <nav class="fn-menu-sidebar" data-screen-label="Sidebar">
+      <ul class="menu-nav">
+        <li class="menu-item active"><span class="menu-icon"><iconify-icon icon="ph:calendar-blank"></iconify-icon></span><span class="menu-label">Schedule</span></li>
+        <li class="menu-item"><span class="menu-icon"><iconify-icon icon="ph:clock"></iconify-icon></span><span class="menu-label">Timecards</span></li>
+        <li class="menu-item"><span class="menu-icon"><iconify-icon icon="ph:package"></iconify-icon></span><span class="menu-label">Inventory</span></li>
+        <li class="menu-item"><span class="menu-icon"><iconify-icon icon="ph:users"></iconify-icon></span><span class="menu-label">Team</span></li>
+        <li class="menu-item"><span class="menu-icon"><iconify-icon icon="ph:chart-pie-slice"></iconify-icon></span><span class="menu-label">Reports</span></li>
+        <li class="menu-item"><span class="menu-icon"><iconify-icon icon="ph:gear"></iconify-icon></span><span class="menu-label">Settings</span></li>
+      </ul>
+    </nav>
+
+    <main class="hw-app-main" data-screen-label="Page content">
+      <div class="page-pad">
+        <!-- The page boilerplate: .hw-box-content > .hw-header-wrap, .hw-title, .hw-content -->
+        <div class="hw-box-content">
+          <div class="hw-header-wrap">
+            <div class="row">
+              <div class="lhs"><i><iconify-icon icon="ph:calendar-blank"></iconify-icon></i> Schedule overview</div>
+              <div class="rhs">Week 23 · Jun 1 – Jun 7</div>
+            </div>
+          </div>
+          <div class="hw-title split">
+            <div class="filter-row" style="margin-bottom:12px;">
+              <div><label>Role</label><div class="fn-select"><span class="value">All roles</span><span class="caret caret-main">▾</span></div></div>
+              <div><label>Search</label><input class="form-control" placeholder="Employee name" style="width:220px;" /></div>
+            </div>
+            <div style="display:flex;gap:8px;padding-bottom:12px;">
+              <button class="btn btn-outline-secondary btn-sm">Export</button>
+              <button class="btn btn-primary btn-sm">Publish schedule</button>
+            </div>
+          </div>
+          <div class="hw-content">
+            <div class="pt-wrap">
+              <table class="pt-table">
+                <thead><tr><th>Employee</th><th>Role</th><th class="right">Hours</th><th class="center">Status</th></tr></thead>
+                <tbody>
+                  <tr><td>Jordan Diaz</td><td>Shift lead</td><td class="right">38.5</td><td class="center"><span class="pt-pill solid-success">Approved</span></td></tr>
+                  <tr><td>Mia Chen</td><td>Server</td><td class="right">27.0</td><td class="center"><span class="pt-pill solid-warning">Pending</span></td></tr>
+                  <tr><td>Sam Patel</td><td>Host</td><td class="right">41.5</td><td class="center"><span class="pt-pill outline-danger">Overtime</span></td></tr>
+                </tbody>
+              </table>
+              <div class="pt-footer"><div class="pt-pager"><span class="pp" disabled>‹</span><span class="pp active">1</span><span class="pp">2</span><span class="pp">›</span></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+</div>
+
+</body>
+</html>

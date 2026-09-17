@@ -1,0 +1,34 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="_base.css">
+<style>
+  .ed{ border:1px solid var(--border-default-color); border-radius:6px; background:var(--bg-primary); }
+  .ed-bar{ display:flex; gap:4px; padding:6px; border-bottom:1px solid var(--border-default-color); background:var(--body-bg); border-radius:6px 6px 0 0; align-items:center; }
+  .ed-bar .ds-iconbtn{ height:26px; width:26px; padding:0; border:1px solid transparent; border-radius:5px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; color:var(--body-textColor); }
+  .ed-bar .ds-iconbtn:hover{ background:var(--hover-bg-color); }
+  .ed-bar .sep{ width:1px; background:var(--border-default-color); margin:0 4px; align-self:stretch; }
+  .ed-body{ padding:16px; min-height:120px; font-size:13px; line-height:1.6; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Rich text editor · &lt;fn-text-editor&gt;</div><div class="muted" style="font-size:12px">Wraps suneditor · shift notes, employee bios, release notes, FAQ content</div></div>
+  <div class="ed">
+    <div class="ed-bar">
+      <button class="ds-iconbtn" aria-label="Bold"><iconify-icon icon="ph:text-b"></iconify-icon></button>
+      <button class="ds-iconbtn" aria-label="Italic"><iconify-icon icon="ph:text-italic"></iconify-icon></button>
+      <button class="ds-iconbtn" aria-label="Underline"><iconify-icon icon="ph:text-underline"></iconify-icon></button>
+      <span class="sep"></span>
+      <button class="ds-iconbtn" aria-label="Bullets"><iconify-icon icon="ph:list-bullets"></iconify-icon></button>
+      <button class="ds-iconbtn" aria-label="Numbered"><iconify-icon icon="ph:list-numbers"></iconify-icon></button>
+      <span class="sep"></span>
+      <button class="ds-iconbtn" aria-label="Link"><iconify-icon icon="ph:link"></iconify-icon></button>
+      <button class="ds-iconbtn" aria-label="Image"><iconify-icon icon="ph:image-square"></iconify-icon></button>
+      <button class="ds-iconbtn" aria-label="Code"><iconify-icon icon="ph:code"></iconify-icon></button>
+    </div>
+    <div class="ed-body">
+      <p style="margin:0 0 8px"><b>Weekend coverage</b> needs an extra server Fri/Sat 5–10pm.</p>
+      <p style="margin:0">Reach out to Priya or Marco — both opted in for extra shifts.</p>
+    </div>
+  </div>
+</div></body></html>

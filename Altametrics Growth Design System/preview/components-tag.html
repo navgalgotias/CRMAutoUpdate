@@ -1,0 +1,32 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="_base.css">
+<style>
+  .chips{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; border:1px solid var(--input-border-color); border-radius:6px; padding:10px 12px; max-width:560px; }
+  .chips .fn-tag{ background:rgba(0,91,196,0.10); color:var(--blue); }
+  .chips .fn-tag .x{ font-size:13px; }
+  .chips input{ border:0; outline:0; background:transparent; flex:1; min-width:90px; font-size:13px; color:var(--body-textColor); font-family:inherit; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Tag / Badge · &lt;fn-tag&gt;</div><div class="muted" style="font-size:12px">Chips input for tag collections (returns FnTagData[]) · <code class="mono">bubble-*</code> classes for static status pills</div></div>
+
+  <div class="mono" style="margin-top:2px">Static status pills · bubble-*</div>
+  <div class="row" style="gap:8px;flex-wrap:wrap">
+    <span class="fn-tag bubble-primary">primary</span>
+    <span class="fn-tag bubble-success">success</span>
+    <span class="fn-tag bubble-warning">warning</span>
+    <span class="fn-tag bubble-danger">danger</span>
+    <span class="fn-tag bubble-info">info</span>
+    <span class="fn-tag bubble-orange">orange</span>
+    <span class="fn-tag bubble-secondary">secondary</span>
+  </div>
+
+  <div class="mono" style="margin-top:8px">Chips input</div>
+  <div class="chips">
+    <span class="fn-tag">Bartender <span class="x">×</span></span>
+    <span class="fn-tag">Weekend <span class="x">×</span></span>
+    <span class="fn-tag">Site lead <span class="x">×</span></span>
+    <input placeholder="Add tag…">
+  </div>
+</div></body></html>

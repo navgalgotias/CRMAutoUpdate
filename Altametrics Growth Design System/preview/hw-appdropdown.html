@@ -1,0 +1,25 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="../global-icons.css">
+<link rel="stylesheet" href="_base.css">
+<style>
+  body{ background:var(--body-bg); } .card{ background:var(--body-bg); }
+  .dd-stage{ display:flex; padding:6px 0 10px; }
+  .dd-stage .hw-dd{ position:static; box-shadow:var(--shadow); }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">My App dropdown · &lt;hw-header-myapp&gt;</div><div class="muted" style="font-size:12px">App switcher opened from the header · colored app tiles + Settings + App Store rows</div></div>
+  <div class="dd-stage">
+    <div class="hw-dd hw-app-list" role="menu">
+      <ul>
+        <li role="menuitem"><span class="app-ico" style="background:#e8a13c"><iconify-icon icon="ph:storefront-fill"></iconify-icon></span>Plum POS</li>
+        <li role="menuitem"><span class="app-ico" style="background:#7b42ff"><iconify-icon icon="ph:chart-pie-slice-fill"></iconify-icon></span>Plum POS DashBoard</li>
+        <li role="menuitem"><span class="app-ico" style="background:#e23744"><iconify-icon icon="ph:clock-fill"></iconify-icon></span>Plum Timekeeping</li>
+        <li role="menuitem"><span class="app-ico" style="background:var(--iron)"><iconify-icon icon="ph:gear-fill"></iconify-icon></span>Settings</li>
+        <li role="menuitem"><span class="app-ico" style="background:var(--theme)"><iconify-icon icon="ph:shopping-bag-fill"></iconify-icon></span>App Store</li>
+      </ul>
+    </div>
+  </div>
+</div></body></html>

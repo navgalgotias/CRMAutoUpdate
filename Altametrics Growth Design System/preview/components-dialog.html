@@ -1,0 +1,52 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../global-icons.css">
+<link rel="stylesheet" href="_base.css">
+<style>
+  .overlay-demo{
+    background:rgba(0,0,0,0.5);
+    border-radius:8px; padding:20px 16px;
+    display:flex; justify-content:center;
+    background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.04) 0 10px,transparent 10px 20px);
+  }
+  .fn-modal{ width:460px; }
+  .fn-modal .fn-modal-header{ padding:14px 18px; }
+  .fn-modal .fn-modal-content{ min-height:auto !important; max-height:none !important; overflow:visible !important; padding:20px; }
+  /* form modals split the footer: destructive left, primary right */
+  .fn-modal .fn-modal-actions{ justify-content:space-between; padding:14px 18px; }
+  .ta-wrap{ position:relative; }
+  .ta-wrap textarea{ min-height:64px; padding-right:64px; }
+  .ta-count{ position:absolute; right:12px; top:14px; font-size:13px; color:var(--iron); font-weight:500; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Dialog &amp; confirm</div><div class="muted" style="font-size:12px">fn-confirm-modal / form modal · gray header + red circular X · white body · divider footer (destructive left, primary right)</div></div>
+  <div class="overlay-demo">
+    <div class="fn-modal">
+      <div class="fn-modal-header">
+        <h5 class="modal-title">Escalate to Role/Employee</h5>
+        <button class="close" aria-label="Close"><svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 2L10 10M10 2L2 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      </div>
+      <div class="fn-modal-content">
+        <div class="form-group">
+          <label class="fn-label">Comment<span class="fn-required">*</span></label>
+          <div class="ta-wrap">
+            <textarea class="form-control" placeholder="Enter your comment here…"></textarea>
+            <span class="ta-count">0 / 255</span>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label class="fn-label">Role/Employee<span class="fn-required">*</span></label>
+          <div class="fn-select" style="width:100%">
+            <span class="placeholder">Search employee</span>
+            <span class="caret caret-main" style="margin-left:auto"><svg width="11" height="11" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          </div>
+        </div>
+      </div>
+      <div class="fn-modal-actions">
+        <button class="btn btn-danger btn-round" style="min-width:104px">Cancel</button>
+        <button class="btn btn-primary btn-round" style="min-width:104px">Escalate</button>
+      </div>
+    </div>
+  </div>
+</div></body></html>

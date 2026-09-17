@@ -1,0 +1,68 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="_base.css">
+<style>
+  body{ background:var(--body-bg); } .card{ background:var(--body-bg); width:1000px; }
+  .pt-wrap{ background:var(--bg-primary); border:1px solid var(--border-default-color); border-radius:8px; overflow:hidden; box-shadow:var(--shadow); width:100%; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Prime Table · &lt;ag-prime-table&gt;</div><div class="muted" style="font-size:12px">Caption (title · Filter · Add) + search · sortable / 3-dot headers · gridline cells · pill renderers · centered paginator</div></div>
+  <div class="pt-wrap">
+    <div class="pt-caption">
+      <span class="pt-title">
+        <span class="pt-title-icon" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="3" y="2" width="10" height="12" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 5h5M5.5 8h5M5.5 11h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+        Templates Hello
+      </span>
+      <div class="pt-center">
+        <button class="btn btn-outline-secondary btn-round"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="margin-right:6px"><path d="M2 3h12l-4.5 6v4l-3 1.5V9L2 3z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>Filter</button>
+      </div>
+      <div class="pt-right">
+        <button class="btn btn-primary btn-round"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" style="margin-right:6px"><path d="M8 3v10M3 8h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Add</button>
+      </div>
+    </div>
+    <div class="pt-search-row">
+      <div class="pt-search">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <input type="search" placeholder="Search keyword">
+      </div>
+    </div>
+    <div class="pt-scroll">
+      <table class="pt-table" role="grid">
+        <thead><tr>
+          <th class="sorted"><span class="th-inner" role="button">ID <span class="sort-icon"><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor"><path d="M5 0L0 6H10L5 0Z"/></svg><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor" style="opacity:.55"><path d="M5 6L0 0H10L5 6Z"/></svg></span></span></th>
+          <th><span class="th-inner" role="button">Template Name <span class="sort-icon"><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor" style="opacity:.55"><path d="M5 0L0 6H10L5 0Z"/></svg><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor" style="opacity:.55"><path d="M5 6L0 0H10L5 6Z"/></svg></span></span></th>
+          <th><span class="th-inner" role="button">Source <span class="sort-icon"><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor" style="opacity:.55"><path d="M5 0L0 6H10L5 0Z"/></svg><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor" style="opacity:.55"><path d="M5 6L0 0H10L5 6Z"/></svg></span></span></th>
+          <th><span class="th-inner" role="button">Event Date <span class="sort-icon"><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor" style="opacity:.55"><path d="M5 0L0 6H10L5 0Z"/></svg><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor" style="opacity:.55"><path d="M5 6L0 0H10L5 6Z"/></svg></span></span></th>
+          <th><span class="th-inner" role="button">Delivery Method <span class="sort-icon"><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor" style="opacity:.55"><path d="M5 0L0 6H10L5 0Z"/></svg><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor" style="opacity:.55"><path d="M5 6L0 0H10L5 6Z"/></svg></span></span></th>
+          <th class="right"><span class="th-inner" role="button">Total <span class="sort-icon"><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor" style="opacity:.55"><path d="M5 0L0 6H10L5 0Z"/></svg><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor" style="opacity:.55"><path d="M5 6L0 0H10L5 6Z"/></svg></span></span></th>
+          <th><span class="th-inner" role="button">Pushed</span></th>
+          <th><span class="th-inner" role="button">Status</span></th>
+        </tr></thead>
+        <tbody>
+          <tr><td class="id">TPL-001</td><td>Summer Promo Banner</td><td>PCM</td><td>03/10/2025</td><td><span class="pt-pill solid-primary">Pickup</span></td><td class="right">$120</td><td><span class="pt-pill solid-success">Pushed</span></td><td>Accepted</td></tr>
+          <tr><td class="id">TPL-002</td><td>Happy Hour Video</td><td>EzCater</td><td>04/12/2025</td><td><span class="pt-pill solid-danger">Delivery</span></td><td class="right">$193</td><td><span class="pt-pill outline-danger">No</span></td><td>Accepted</td></tr>
+          <tr><td class="id">TPL-003</td><td>Breakfast Menu Board</td><td>PlumCater</td><td>05/14/2025</td><td><span class="pt-pill solid-primary">Pickup</span></td><td class="right">$266</td><td><span class="pt-pill solid-success">Pushed</span></td><td>Accepted</td></tr>
+          <tr><td class="id">TPL-004</td><td>Drive-Thru Special</td><td>PCM</td><td>06/16/2025</td><td><span class="pt-pill solid-danger">Delivery</span></td><td class="right">$339</td><td><span class="pt-pill outline-danger">No</span></td><td>Accepted</td></tr>
+          <tr><td class="id">TPL-005</td><td>Weekend Deals Reel</td><td>EzCater</td><td>07/18/2025</td><td><span class="pt-pill solid-primary">Pickup</span></td><td class="right">$412</td><td><span class="pt-pill solid-success">Pushed</span></td><td>Accepted</td></tr>
+          <tr><td class="id">TPL-006</td><td>Kids Meal Spotlight</td><td>PlumCater</td><td>03/20/2025</td><td><span class="pt-pill solid-danger">Delivery</span></td><td class="right">$485</td><td><span class="pt-pill outline-danger">No</span></td><td>Accepted</td></tr>
+          <tr><td class="id">TPL-007</td><td>Combo Offer Slide</td><td>PCM</td><td>04/22/2025</td><td><span class="pt-pill solid-primary">Pickup</span></td><td class="right">$558</td><td><span class="pt-pill solid-success">Pushed</span></td><td>Accepted</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pt-footer" style="position:relative">
+      <div class="pt-pager" role="group" aria-label="Pagination">
+        <button class="pp" aria-label="First page">«</button>
+        <button class="pp" aria-label="Previous page">‹</button>
+        <button class="pp active" aria-current="page">1</button>
+        <button class="pp">2</button>
+        <button class="pp" aria-label="Next page">›</button>
+        <button class="pp" aria-label="Last page">»</button>
+      </div>
+      <div class="pt-pagesize">
+        <select aria-label="Rows per page"><option>10</option><option>20</option><option>30</option></select>
+        <span class="ps-caret" aria-hidden="true"><svg width="10" height="6" viewBox="0 0 10 6" fill="currentColor"><path d="M5 6L0 0H10L5 6Z"/></svg></span>
+      </div>
+    </div>
+  </div>
+</div></body></html>

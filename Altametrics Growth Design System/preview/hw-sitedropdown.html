@@ -1,0 +1,23 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="../global-icons.css">
+<link rel="stylesheet" href="_base.css">
+<style>
+  body{ background:var(--body-bg); } .card{ background:var(--body-bg); }
+  .dd-stage{ display:flex; padding:6px 0 10px; }
+  .dd-stage .hw-dd{ position:static; box-shadow:var(--shadow); }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Site dropdown · &lt;hw-header-site&gt;</div><div class="muted" style="font-size:12px">Site switcher · "Choose Site(s)" header, pin icon, name + optional address</div></div>
+  <div class="dd-stage">
+    <div class="hw-dd hw-site-list" role="menu">
+      <div class="choose-site"><h2>Choose Site(s)</h2></div>
+      <ul>
+        <li role="menuitem"><span class="site-icon"><iconify-icon icon="ph:map-pin-fill"></iconify-icon></span><span class="site-name">Red Panda Pappers</span></li>
+        <li role="menuitem"><span class="site-icon"><iconify-icon icon="ph:map-pin-fill"></iconify-icon></span><span class="site-name">Site 1</span><span class="site-address">Plum Restaurant</span></li>
+      </ul>
+    </div>
+  </div>
+</div></body></html>

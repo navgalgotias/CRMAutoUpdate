@@ -1,0 +1,30 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="_base.css">
+<style>
+  .filt{ width:280px; padding:14px; border:1px solid var(--border-default-color); border-radius:8px; background:var(--bg-primary); box-shadow:var(--shadow); }
+  .filt-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+  .filt-head .ttl{ font-size:13px; font-weight:600; }
+  .filt-head .clr{ font-size:12px; color:var(--blue); cursor:pointer; }
+  .filt .ds-stack{ display:flex; flex-direction:column; gap:10px; margin-top:12px; }
+  .filt .input-group .input-group-text iconify-icon{ font-size:14px; color:var(--iron); }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Checkbox filter · &lt;fn-checkbox-filter&gt;</div><div class="muted" style="font-size:12px">Multi-select filter list · search field + counts · Clear action</div></div>
+  <div class="filt">
+    <div class="filt-head"><span class="ttl">Filter by role</span><a class="clr">Clear</a></div>
+    <div class="input-group">
+      <span class="input-group-text"><iconify-icon icon="ph:magnifying-glass"></iconify-icon></span>
+      <input class="form-control" placeholder="Search">
+    </div>
+    <div class="ds-stack">
+      <label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Server <span class="muted">(12)</span></span></label>
+      <label class="fn-checkbox on"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Bartender <span class="muted">(8)</span></span></label>
+      <label class="fn-checkbox"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Line cook <span class="muted">(7)</span></span></label>
+      <label class="fn-checkbox"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Host <span class="muted">(5)</span></span></label>
+      <label class="fn-checkbox"><span class="box"><svg viewBox="0 0 16 16" fill="none"><path d="M3 8l3.5 3.5L13 5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span>Dishwasher <span class="muted">(4)</span></span></label>
+    </div>
+  </div>
+</div></body></html>

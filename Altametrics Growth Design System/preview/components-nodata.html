@@ -1,0 +1,38 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="../global-icons.css">
+<link rel="stylesheet" href="_base.css">
+<style>
+  body{ background:var(--body-bg); }
+  .card{ background:var(--body-bg); }
+  .nd-stage{ display:flex; justify-content:center; padding:18px 0 6px; }
+  .fn-no-data-box .no_data_component{ background:transparent !important; align-items:center; text-align:center; gap:6px; }
+  .fn-no-data-box .no_data_component .vertical_img img{ max-width:150px; width:100%; filter:opacity(.75); }
+  .fn-no-data-box .no_data_component h1{ font-size:15px !important; font-weight:600; margin:12px 0 0; color:var(--body-textColor); }
+  .fn-no-data-box .no_data_component .mt-5{ font-size:12.5px; color:var(--iron); margin-top:6px; }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">No-data box</div><div class="muted" style="font-size:12px">fn-no-data-box · centered illustration + message · blameless empty-state copy (illustration &amp; message-only variants)</div></div>
+  <div class="nd-stage">
+    <div class="fn-no-data-box">
+      <div class="no_data_component">
+        <div class="vertical_img"><svg width="150" height="150" viewBox="0 0 200 200" role="img" aria-label="Empty box">
+          <circle cx="100" cy="102" r="78" fill="#e8eaf3"></circle>
+          <circle cx="58" cy="66" r="3" fill="#c3c8d6"></circle>
+          <circle cx="146" cy="62" r="2.5" fill="#c3c8d6"></circle>
+          <circle cx="154" cy="120" r="3" fill="#c3c8d6"></circle>
+          <circle cx="50" cy="124" r="2.5" fill="#c3c8d6"></circle>
+          <path d="M70 110 L100 122 L130 110 L130 148 L100 160 L70 148 Z" fill="#dfe2ec" stroke="#9aa0ad" stroke-width="2.5" stroke-linejoin="round"></path>
+          <path d="M70 110 L100 98 L130 110 L100 122 Z" fill="#eef0f6" stroke="#9aa0ad" stroke-width="2.5" stroke-linejoin="round"></path>
+          <path d="M70 110 L54 92 L86 86 L100 98 Z" fill="#f4f5fa" stroke="#9aa0ad" stroke-width="2.5" stroke-linejoin="round"></path>
+          <path d="M130 110 L146 92 L114 86 L100 98 Z" fill="#f4f5fa" stroke="#9aa0ad" stroke-width="2.5" stroke-linejoin="round"></path>
+        </svg></div>
+        <div class="no_data_text">
+          <h1>No Data To Display</h1>
+          <div class="mt-5">No shifts scheduled for this week yet. Add one to get started.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></body></html>

@@ -1,0 +1,36 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+<link rel="stylesheet" href="_base.css">
+<style>.in-grid{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px 18px; }</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Text input · &lt;fn-input&gt;</div><div class="muted" style="font-size:12px">30px fixed height · label above (12px / 500) · errors below in red · wraps ControlValueAccessor</div></div>
+  <div class="in-grid">
+    <div class="form-group" style="margin:0">
+      <label class="fn-label">Email<span class="fn-required">*</span></label>
+      <input class="fn-input form-control" placeholder="name@co.com">
+    </div>
+    <div class="form-group" style="margin:0">
+      <label class="fn-label">Password<span class="fn-required">*</span></label>
+      <input class="fn-input form-control" type="password" value="password">
+    </div>
+    <div class="form-group" style="margin:0">
+      <label class="fn-label">Disabled</label>
+      <input class="fn-input form-control" value="Read only" disabled>
+    </div>
+    <div class="form-group" style="margin:0">
+      <label class="fn-label">With error</label>
+      <input class="fn-input form-control is-invalid" value="abc">
+      <div class="fn-error"><iconify-icon icon="ph:warning-circle"></iconify-icon> Minimum 5 characters required</div>
+    </div>
+    <div class="form-group" style="margin:0">
+      <label class="fn-label">Valid</label>
+      <input class="fn-input form-control is-valid" value="sana@altametrics.com">
+    </div>
+    <div class="form-group" style="margin:0">
+      <label class="fn-label">Rounded</label>
+      <input class="fn-input form-control input-round" placeholder="Search…">
+    </div>
+  </div>
+</div></body></html>

@@ -1,0 +1,58 @@
+<!-- @dsCard group="Components" -->
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="_base.css">
+<style>
+  .card{ width:1000px; }
+  .ch-grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+  .ch-card{ border:1px solid var(--border-default-color); border-radius:8px; background:var(--bg-primary); padding:18px; box-shadow:var(--shadow); }
+  .ch-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:18px; }
+  .ch-title{ font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--body-textColor); }
+  .ch-min{ color:var(--iron); }
+  /* column chart */
+  .bars{ display:flex; align-items:flex-end; gap:14px; height:150px; padding:0 4px; }
+  .bar-col{ flex:1; display:flex; flex-direction:column; align-items:center; justify-content:flex-end; gap:6px; height:100%; }
+  .bar-val{ font-size:11px; color:var(--blue); font-weight:600; }
+  .bar{ width:100%; max-width:34px; border-radius:5px 5px 0 0; background:var(--blue); opacity:.65; }
+  .bar.peak{ opacity:1; }
+  .bar-day{ font-family:var(--ds-mono); font-size:10px; color:var(--iron); }
+  /* donut */
+  .donut-wrap{ display:flex; align-items:center; gap:20px; }
+  .donut{ width:130px; height:130px; border-radius:50%; flex-shrink:0;
+    background:conic-gradient(var(--blue) 0 34%, var(--green) 34% 60%, var(--orange) 60% 80%, var(--cyan) 80% 100%);
+    -webkit-mask:radial-gradient(circle 38px at center, transparent 98%, #000 100%);
+            mask:radial-gradient(circle 38px at center, transparent 98%, #000 100%); }
+  .legend{ display:flex; flex-direction:column; gap:10px; font-size:13px; }
+  .legend .lg{ display:flex; align-items:center; gap:8px; }
+  .legend .dot{ width:11px; height:11px; border-radius:50%; flex-shrink:0; }
+  .legend .pct{ color:var(--iron); }
+</style></head>
+<body><div class="card">
+  <div class="col"><div class="eyebrow">Charts · &lt;fn-chart&gt;</div><div class="muted" style="font-size:12px">amCharts 5 wrapper · line, bar, column, pie, donut, gauge, sankey</div></div>
+  <div class="ch-grid">
+    <div class="ch-card">
+      <div class="ch-head"><span class="ch-title">Hours by day · this week</span><span class="ch-min">—</span></div>
+      <div class="bars">
+        <div class="bar-col"><span class="bar-val">42</span><span class="bar" style="height:42%"></span><span class="bar-day">M</span></div>
+        <div class="bar-col"><span class="bar-val">58</span><span class="bar" style="height:58%"></span><span class="bar-day">T</span></div>
+        <div class="bar-col"><span class="bar-val">71</span><span class="bar" style="height:71%"></span><span class="bar-day">W</span></div>
+        <div class="bar-col"><span class="bar-val">64</span><span class="bar" style="height:64%"></span><span class="bar-day">T</span></div>
+        <div class="bar-col"><span class="bar-val">86</span><span class="bar" style="height:86%"></span><span class="bar-day">F</span></div>
+        <div class="bar-col"><span class="bar-val">92</span><span class="bar peak" style="height:92%"></span><span class="bar-day">S</span></div>
+        <div class="bar-col"><span class="bar-val">78</span><span class="bar" style="height:78%"></span><span class="bar-day">S</span></div>
+      </div>
+    </div>
+    <div class="ch-card">
+      <div class="ch-head"><span class="ch-title">Roles distribution</span><span class="ch-min">—</span></div>
+      <div class="donut-wrap">
+        <div class="donut" role="img" aria-label="Roles: Server 34%, Cook 26%, Bartender 20%, Other 20%"></div>
+        <div class="legend">
+          <span class="lg"><span class="dot" style="background:var(--blue)"></span>Server <span class="pct">34%</span></span>
+          <span class="lg"><span class="dot" style="background:var(--green)"></span>Cook <span class="pct">26%</span></span>
+          <span class="lg"><span class="dot" style="background:var(--orange)"></span>Bartender <span class="pct">20%</span></span>
+          <span class="lg"><span class="dot" style="background:var(--cyan)"></span>Other <span class="pct">20%</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></body></html>
