@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <header class="app-header">
+  <header class="app-header" id="app-header" hidden>
     <div class="container header-inner">
       <div class="brand">
         <img src="assets/logo.svg" alt="" class="brand-logo" />
@@ -65,11 +65,21 @@
 
       <!-- Promo panel -->
       <div class="login-promo">
-        <div class="login-promo-hero">
-          <div class="login-promo-badge">
-            <img src="assets/logo.svg" alt="" width="22" height="22" />
-            <span>vTiger CRM Auto Update</span>
+        <div class="login-promo-badge">
+          <img src="assets/logo.svg" alt="" width="22" height="22" />
+          <span>vTiger CRM Auto Update</span>
+        </div>
+
+        <div class="login-carousel" id="login-carousel" data-interval="6000" role="presentation">
+          <img class="login-carousel-slide is-active" src="assets/carousel/slide-1.jpg" alt="" />
+          <img class="login-carousel-slide" src="assets/carousel/slide-2.jpg" alt="" />
+          <img class="login-carousel-slide" src="assets/carousel/slide-3.jpg" alt="" />
+          <div class="login-carousel-dots">
+            <span class="dot is-active"></span><span class="dot"></span><span class="dot"></span>
           </div>
+        </div>
+
+        <div class="login-promo-hero">
           <h2>Red cells in, <span class="accent">clean tickets out.</span></h2>
           <p>Upload the sheet you already track changes in — the app finds every red-highlighted cell and pushes just those fields into vTiger, ticket by ticket.</p>
         </div>
@@ -120,7 +130,7 @@
           </div>
 
           <h2>Welcome back!</h2>
-          <p class="muted" id="login-subtitle">Sign in with your vTiger CRM username.</p>
+          <p class="muted" id="login-subtitle">Sign in with your vTiger CRM username and password.</p>
 
           <form id="login-form" autocomplete="off">
             <div class="field" id="login-username-field">
@@ -128,9 +138,9 @@
               <input type="text" id="login-username" class="form-control" required placeholder="crm.username" autofocus />
             </div>
 
-            <div class="field" id="login-password-field" hidden>
+            <div class="field" id="login-password-field">
               <label for="login-password" id="login-password-label">Password</label>
-              <input type="password" id="login-password" class="form-control" placeholder="Enter your password" />
+              <input type="password" id="login-password" class="form-control" placeholder="Enter your password" autocomplete="new-password" />
             </div>
 
             <div class="field" id="login-password-confirm-field" hidden>
@@ -140,22 +150,23 @@
 
             <p class="callout callout-info" id="login-first-time-hint" hidden>
               <iconify-icon icon="ph:info"></iconify-icon>
-              This is your first sign-in — create a password now. You'll use your username and this password every time after this.
+              First time signing in — the password you enter here will become your password.
             </p>
+
+            <div class="login-remember-row">
+              <span class="fn-switch" id="login-remember-toggle" role="switch" aria-checked="false" tabindex="0"></span>
+              <label for="login-remember-toggle" id="login-remember-label">Remember my password on this device</label>
+            </div>
 
             <p class="muted" id="login-crm-url" style="font-size:0.8rem;"></p>
 
             <div class="field-actions" style="justify-content:space-between;">
               <button type="submit" class="btn btn-primary btn-login" id="btn-login">
-                <span class="btn-login-label"><iconify-icon icon="ph:arrow-right"></iconify-icon> Continue</span>
+                <span class="btn-login-label"><iconify-icon icon="ph:sign-in"></iconify-icon> Sign In</span>
                 <span class="fn-spinner btn-spinner" aria-hidden="true"></span>
               </button>
               <span class="pt-pill outline-muted" id="login-status">Not signed in</span>
             </div>
-
-            <button type="button" class="login-back-link" id="btn-login-back" hidden>
-              <iconify-icon icon="ph:arrow-left"></iconify-icon> Use a different username
-            </button>
           </form>
         </div>
       </div>
@@ -191,6 +202,11 @@
             <label for="settings-idfield">Unique Identifier Field (API name)</label>
             <input type="text" id="settings-idfield" class="form-control" required placeholder="ticket_no" list="vtiger-field-list" />
             <span class="muted" style="font-size:0.78rem;">Must be the real vTiger API field name (e.g. <code>ticket_no</code> or a <code>cf_XXX</code> field) — not the on-screen label.</span>
+          </div>
+          <div class="field">
+            <label for="settings-timeout">Session Timeout (minutes)</label>
+            <input type="number" id="settings-timeout" class="form-control" min="0" step="1" placeholder="30" />
+            <span class="muted" style="font-size:0.78rem;">Signs everyone out after this many minutes of inactivity. Use <code>0</code> or leave blank for never.</span>
           </div>
 
           <div class="callout callout-info" style="grid-column:1/-1;">

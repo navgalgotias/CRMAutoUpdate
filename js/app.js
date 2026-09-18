@@ -145,6 +145,7 @@
   const $ = (id) => document.getElementById(id);
 
   const els = {
+    appHeader: $("app-header"),
     headerActions: $("header-actions"),
     connectStatus: $("connect-status"),
     btnReconnect: $("btn-reconnect"),
@@ -164,17 +165,15 @@
     loginScreen: $("login-screen"),
     loginForm: $("login-form"),
     loginSubtitle: $("login-subtitle"),
-    loginUsernameField: $("login-username-field"),
     loginUsername: $("login-username"),
-    loginPasswordField: $("login-password-field"),
     loginPassword: $("login-password"),
     loginPasswordLabel: $("login-password-label"),
     loginPasswordConfirmField: $("login-password-confirm-field"),
     loginPasswordConfirm: $("login-password-confirm"),
     loginFirstTimeHint: $("login-first-time-hint"),
+    loginRememberToggle: $("login-remember-toggle"),
     loginCrmUrl: $("login-crm-url"),
     btnLogin: $("btn-login"),
-    btnLoginBack: $("btn-login-back"),
     loginStatus: $("login-status"),
 
     usersBody: $("users-body"),
@@ -217,6 +216,7 @@
     settingsUrl: $("settings-url"),
     settingsModule: $("settings-module"),
     settingsIdField: $("settings-idfield"),
+    settingsTimeout: $("settings-timeout"),
     btnSettingsClear: $("btn-settings-clear"),
   };
 
@@ -224,7 +224,7 @@
    * App state
    * ------------------------------------------------------------------- */
   const state = {
-    crm: { url: "", module: "HelpDesk", idField: "ticket_no" },
+    crm: { url: "", module: "HelpDesk", idField: "ticket_no", timeoutMinutes: 30 },
     session: null, // { sessionName, userId } — the vTiger Webservice login session
     auth: null, // { username, role } — the signed-in app user, once logged in
     moduleFields: {}, // { fieldApiName: describe() field metadata }
@@ -244,10 +244,12 @@
   const SESSION_STORAGE_KEY = "vtigerAutoUpdate.session.v1"; // sessionStorage — cleared when the tab/browser closes
 
   // Shared CRM connection config (admin-configurable via Settings).
+  // `timeoutMinutes` is the idle-logout window; 0 disables it (never auto sign out).
   const DEFAULT_CRM_CONFIG = {
     url: "https://qaaltasupportcrm.altametrics.com/",
     module: "HelpDesk",
     idField: "ticket_no",
+    timeoutMinutes: 30,
   };
 
   // Seed user list: { username: { accessKey, role } }. Everyone else must be added by an admin.
@@ -275,6 +277,7 @@
     els.settingsUrl.value = settings.url;
     els.settingsModule.value = settings.module;
     els.settingsIdField.value = settings.idField;
+    els.settingsTimeout.value = settings.timeoutMinutes || "";
   }
 
   /* ---------------------------------------------------------------------
@@ -416,16 +419,61 @@
 
   function showApp() {
     els.loginScreen.hidden = true;
+    els.appHeader.hidden = false;
     els.headerActions.hidden = false;
     els.appMain.hidden = false;
+    scheduleIdleTimer();
   }
 
   function showLogin() {
     els.loginScreen.hidden = false;
+    els.appHeader.hidden = true;
     els.headerActions.hidden = true;
     els.appMain.hidden = true;
+    clearIdleTimer();
     resetLoginForm();
   }
+
+  /* ---------------------------------------------------------------------
+   * Session (idle) timeout — configured in Settings ("Session Timeout").
+   * Any user activity while signed in restarts the countdown; if it ever
+   * fires, the user is signed out the same way the Log Out button does.
+   * timeoutMinutes of 0 (or blank) disables this entirely.
+   * ------------------------------------------------------------------- */
+  let idleTimer = null;
+
+  function clearIdleTimer() {
+    if (idleTimer) {
+      clearTimeout(idleTimer);
+      idleTimer = null;
+    }
+  }
+
+  function scheduleIdleTimer() {
+    clearIdleTimer();
+    const minutes = Number(state.crm.timeoutMinutes) || 0;
+    if (!minutes || !state.auth) return;
+    idleTimer = setTimeout(() => {
+      if (!state.auth) return;
+      clearAuthSession();
+      state.auth = null;
+      state.session = null;
+      showLogin();
+      toast("You were signed out after " + minutes + " minute(s) of inactivity.", "error");
+    }, minutes * 60 * 1000);
+  }
+
+  let lastActivityAt = 0;
+  function handleUserActivity() {
+    if (!state.auth) return;
+    const now = Date.now();
+    if (now - lastActivityAt < 1000) return; // throttle — no need to reset on every pixel of mouse movement
+    lastActivityAt = now;
+    scheduleIdleTimer();
+  }
+  ["mousemove", "mousedown", "keydown", "scroll", "touchstart"].forEach((evt) => {
+    document.addEventListener(evt, handleUserActivity, { passive: true });
+  });
 
   /* ---------------------------------------------------------------------
    * Utilities
@@ -622,6 +670,7 @@
     state.crm.url = settings.url;
     state.crm.module = settings.module;
     state.crm.idField = settings.idField;
+    state.crm.timeoutMinutes = settings.timeoutMinutes;
 
     els.btnReconnect.disabled = true;
     els.connectStatus.textContent = "Connecting...";
@@ -700,97 +749,144 @@
   });
 
   /* ---------------------------------------------------------------------
-   * Login screen — two-stage: username first, then a password step whose
-   * shape depends on whether that user already has one set.
-   *   - No password on record  -> "first sign-in": create + confirm it here,
-   *     it's saved the moment the vTiger connection succeeds.
-   *   - Password on record     -> it must match to proceed.
+   * Login screen — username + password on one screen.
+   *   - No password on record yet -> "first sign-in": a Confirm Password
+   *     field appears and whatever is entered becomes their password the
+   *     moment the vTiger connection succeeds.
+   *   - Password on record        -> it must match to proceed.
    * An admin can reset a user's stored password back to unset (Settings ->
    * Users -> Reset), which puts them through the "create a password" flow
    * again next time they sign in.
+   *
+   * The "Remember my password on this device" toggle stores the password
+   * (per-username) in localStorage, same trust model as the access-key/
+   * password storage documented in README — convenience, not security.
    * ------------------------------------------------------------------- */
-  let loginStage = "username"; // "username" | "password"
+  const REMEMBERED_PASSWORDS_KEY = "vtigerAutoUpdate.rememberedPasswords.v1";
+  const REMEMBERED_USERNAME_KEY = "vtigerAutoUpdate.rememberedUsername.v1";
 
-  function setLoginButtonLabel(icon, text) {
-    els.btnLogin.querySelector(".btn-login-label").innerHTML =
-      '<iconify-icon icon="' + icon + '"></iconify-icon> ' + text;
+  function loadRememberedUsername() {
+    try { return localStorage.getItem(REMEMBERED_USERNAME_KEY) || ""; } catch (_e) { return ""; }
   }
+
+  function setRememberedUsername(username) {
+    try { localStorage.setItem(REMEMBERED_USERNAME_KEY, username); } catch (_e) { /* ignore quota errors */ }
+  }
+
+  function clearRememberedUsername() {
+    try { localStorage.removeItem(REMEMBERED_USERNAME_KEY); } catch (_e) { /* ignore */ }
+  }
+
+  function loadRememberedPasswords() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(REMEMBERED_PASSWORDS_KEY) || "{}");
+      return (saved && typeof saved === "object") ? saved : {};
+    } catch (_e) {
+      return {};
+    }
+  }
+
+  function getRememberedPassword(username) {
+    const map = loadRememberedPasswords();
+    return map[normalizeUsername(username)] || "";
+  }
+
+  function setRememberedPassword(username, password) {
+    const map = loadRememberedPasswords();
+    map[normalizeUsername(username)] = password;
+    try { localStorage.setItem(REMEMBERED_PASSWORDS_KEY, JSON.stringify(map)); } catch (_e) { /* ignore quota errors */ }
+  }
+
+  function clearRememberedPassword(username) {
+    const map = loadRememberedPasswords();
+    delete map[normalizeUsername(username)];
+    try { localStorage.setItem(REMEMBERED_PASSWORDS_KEY, JSON.stringify(map)); } catch (_e) { /* ignore quota errors */ }
+  }
+
+  function setRememberToggle(on) {
+    els.loginRememberToggle.classList.toggle("on", on);
+    els.loginRememberToggle.setAttribute("aria-checked", String(on));
+  }
+
+  function isRememberToggleOn() {
+    return els.loginRememberToggle.classList.contains("on");
+  }
+
+  function toggleRemember() {
+    setRememberToggle(!isRememberToggleOn());
+  }
+
+  els.loginRememberToggle.addEventListener("click", toggleRemember);
+  els.loginRememberToggle.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleRemember(); }
+  });
+
+  /* As soon as a known username is typed, shape the password field(s) for
+   * that user (first-time vs. returning) and prefill a remembered password. */
+  function syncPasswordFieldToUsername() {
+    const username = els.loginUsername.value.trim();
+    const user = username ? getUser(username) : null;
+
+    if (user && !user.password) {
+      els.loginPasswordLabel.textContent = "Create Password";
+      els.loginPassword.placeholder = "Choose a password";
+      els.loginPasswordConfirmField.hidden = false;
+      els.loginFirstTimeHint.hidden = false;
+    } else {
+      els.loginPasswordLabel.textContent = "Password";
+      els.loginPassword.placeholder = "Enter your password";
+      els.loginPasswordConfirmField.hidden = true;
+      els.loginFirstTimeHint.hidden = true;
+    }
+
+    const remembered = user ? getRememberedPassword(user.username) : "";
+    if (remembered) {
+      els.loginPassword.value = remembered;
+      setRememberToggle(true);
+    } else {
+      setRememberToggle(false);
+    }
+  }
+
+  els.loginUsername.addEventListener("blur", syncPasswordFieldToUsername);
 
   function resetLoginForm() {
-    loginStage = "username";
-    els.loginUsername.disabled = false;
     els.loginUsername.value = "";
-    els.loginPasswordField.hidden = true;
-    els.loginPasswordConfirmField.hidden = true;
-    els.loginFirstTimeHint.hidden = true;
-    els.btnLoginBack.hidden = true;
     els.loginPassword.value = "";
     els.loginPasswordConfirm.value = "";
-    els.loginSubtitle.textContent = "Sign in with your vTiger CRM username.";
-    setLoginButtonLabel("ph:arrow-right", "Continue");
+    els.loginPasswordLabel.textContent = "Password";
+    els.loginPassword.placeholder = "Enter your password";
+    els.loginPasswordConfirmField.hidden = true;
+    els.loginFirstTimeHint.hidden = true;
+    setRememberToggle(false);
+    els.loginSubtitle.textContent = "Sign in with your vTiger CRM username and password.";
     els.loginStatus.textContent = "Not signed in";
     els.loginStatus.className = "pt-pill outline-muted";
-  }
 
-  els.btnLoginBack.addEventListener("click", () => {
-    resetLoginForm();
-    els.loginUsername.focus();
-  });
+    // If "Remember" was on at the last successful sign-in, prefill both
+    // fields (e.g. right after a Log Out or a session timeout) instead of
+    // making the user retype everything.
+    const rememberedUsername = loadRememberedUsername();
+    if (rememberedUsername) {
+      els.loginUsername.value = rememberedUsername;
+      syncPasswordFieldToUsername();
+    }
+  }
 
   els.loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    /* ---- Stage 1: look up the username, decide what the password step needs ---- */
-    if (loginStage === "username") {
-      const username = els.loginUsername.value.trim();
-      if (!username) {
-        toast("Please enter your username.", "error");
-        return;
-      }
-
-      const user = getUser(username);
-      if (!user) {
-        els.loginStatus.textContent = "Username not found";
-        els.loginStatus.className = "pt-pill solid-danger";
-        toast("\"" + username + "\" isn't in the registered user list. Ask your admin to add you in Settings.", "error");
-        return;
-      }
-
-      loginStage = "password";
-      els.loginUsername.disabled = true;
-      els.loginPasswordField.hidden = false;
-      els.btnLoginBack.hidden = false;
-      els.loginPassword.value = "";
-      els.loginPasswordConfirm.value = "";
-      els.loginStatus.textContent = "Not signed in";
-      els.loginStatus.className = "pt-pill outline-muted";
-
-      if (user.password) {
-        els.loginPasswordLabel.textContent = "Password";
-        els.loginPassword.placeholder = "Enter your password";
-        els.loginPasswordConfirmField.hidden = true;
-        els.loginFirstTimeHint.hidden = true;
-        els.loginSubtitle.textContent = "Welcome back, " + user.username + ".";
-        setLoginButtonLabel("ph:sign-in", "Sign In");
-      } else {
-        els.loginPasswordLabel.textContent = "Create Password";
-        els.loginPassword.placeholder = "Choose a password";
-        els.loginPasswordConfirmField.hidden = false;
-        els.loginFirstTimeHint.hidden = false;
-        els.loginSubtitle.textContent = "First time signing in as " + user.username + ".";
-        setLoginButtonLabel("ph:shield-check", "Set Password & Sign In");
-      }
-
-      els.loginPassword.focus();
+    const username = els.loginUsername.value.trim();
+    if (!username) {
+      toast("Please enter your username.", "error");
       return;
     }
 
-    /* ---- Stage 2: validate the password, then connect ---- */
-    const username = els.loginUsername.value.trim();
     const user = getUser(username);
     if (!user) {
-      toast("This user is no longer in the registered list. Ask your admin.", "error");
-      resetLoginForm();
+      els.loginStatus.textContent = "Username not found";
+      els.loginStatus.className = "pt-pill solid-danger";
+      toast("\"" + username + "\" isn't in the registered user list. Ask your admin to add you in Settings.", "error");
       return;
     }
 
@@ -830,6 +926,15 @@
     if (ok) {
       if (passwordToSave) {
         setUser(user.username, user.accessKey, user.role, user.firstName, user.lastName, passwordToSave);
+      }
+      if (isRememberToggleOn()) {
+        setRememberedPassword(user.username, password);
+        setRememberedUsername(user.username);
+      } else {
+        clearRememberedPassword(user.username);
+        if (normalizeUsername(loadRememberedUsername()) === normalizeUsername(user.username)) {
+          clearRememberedUsername();
+        }
       }
       state.auth = { username: user.username, role: user.role, firstName: user.firstName, lastName: user.lastName };
       saveAuthSession({ username: user.username });
@@ -1472,12 +1577,15 @@
       url: els.settingsUrl.value.trim(),
       module: els.settingsModule.value.trim() || "HelpDesk",
       idField: els.settingsIdField.value.trim() || "ticket_no",
+      timeoutMinutes: Math.max(0, parseInt(els.settingsTimeout.value, 10) || 0),
     };
     if (!settings.url) {
       toast("Please fill in the CRM URL.", "error");
       return;
     }
     saveSettings(settings);
+    state.crm.timeoutMinutes = settings.timeoutMinutes;
+    scheduleIdleTimer();
     closeSettingsModal();
     toast("Settings saved. Reconnecting...", "success");
     await reconnectCurrentUser(settings);
@@ -1486,6 +1594,8 @@
   els.btnSettingsClear.addEventListener("click", async () => {
     try { localStorage.removeItem(SETTINGS_STORAGE_KEY); } catch (_e) { /* ignore */ }
     applySettingsToModalForm(DEFAULT_CRM_CONFIG);
+    state.crm.timeoutMinutes = DEFAULT_CRM_CONFIG.timeoutMinutes;
+    scheduleIdleTimer();
     toast("Settings reset to defaults. Reconnecting...", "success");
     await reconnectCurrentUser(DEFAULT_CRM_CONFIG);
   });
@@ -1707,4 +1817,32 @@
     }
     showLogin();
   })();
+})();
+
+/* ---------------------------------------------------------------------
+ * Login screen image carousel — purely decorative, auto-advances on a
+ * fixed timer (no controls). Independent of the app above so a missing
+ * image or an empty carousel never affects sign-in.
+ * ------------------------------------------------------------------- */
+(function () {
+  "use strict";
+  const carousel = document.getElementById("login-carousel");
+  if (!carousel) return;
+
+  const slides = carousel.querySelectorAll(".login-carousel-slide");
+  const dots = carousel.querySelectorAll(".login-carousel-dots .dot");
+  if (slides.length < 2) return;
+
+  /* The frame is a fixed size (see CSS) — this only ever toggles opacity on
+   * the images themselves, so nothing on the page reflows when it advances. */
+  const intervalMs = Number(carousel.dataset.interval) || 3000;
+  let index = 0;
+
+  setInterval(() => {
+    slides[index].classList.remove("is-active");
+    if (dots[index]) dots[index].classList.remove("is-active");
+    index = (index + 1) % slides.length;
+    slides[index].classList.add("is-active");
+    if (dots[index]) dots[index].classList.add("is-active");
+  }, intervalMs);
 })();

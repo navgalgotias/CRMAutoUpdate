@@ -25,9 +25,10 @@ Cell scanning happens right after you pick a worksheet in step 1: the app inspec
 No one — not even an Admin — sets another user's password directly. Instead:
 
 1. An Admin adds a user to the **Users** list with just a username, name, vTiger access key, and role (no password).
-2. The first time that person signs in, they type their username, then they're prompted to **create a password** (with a confirmation field). It's saved the moment their vTiger connection succeeds.
+2. The login screen shows username and password together. The first time that person signs in, a **Confirm Password** field appears automatically as soon as they leave the username field (the app recognizes they have no password yet) — whatever they enter is saved as their password the moment their vTiger connection succeeds.
 3. Every sign-in after that asks for that same username + password; a wrong password blocks sign-in before it ever touches vTiger.
-4. If someone forgets their password, an **Admin** can **reset** it from Settings → Users → Password column → **Reset**. That clears the stored password, so the next time they sign in they go through the "create a password" step again — the admin never sees or sets the new one.
+4. If someone forgets their password, an **Admin** can **reset** it from Settings → Users → Password column → **Reset**. That clears the stored password, so the next time they sign in the Confirm Password field reappears — the admin never sees or sets the new one.
+5. **Remember my password on this device** — a toggle on the login screen. Turn it on and both the **username and password** are saved in this browser's `localStorage`; the login screen then shows up already filled in — including right after **Log Out** or an automatic [session timeout](#settings-admins-only) — instead of asking you to retype them. Turn it off (or never turn it on) and neither is stored. Same trust model as the access-key list below: convenient for a trusted personal or shared device, not something to enable on a public one.
 
 ## Project structure
 
@@ -85,7 +86,9 @@ To catch this, the app now:
 
 ## Settings (Admins only)
 
-Click **Settings** in the header to set the shared **CRM URL**, **ticket module**, and **unique identifier field** once. These are saved in this browser's `localStorage` and apply to everyone who signs in on this device — personal usernames/access keys are never entered here, only on the login screen. Use **Reset to Defaults** to restore the built-in placeholder values.
+Click **Settings** in the header to set the shared **CRM URL**, **ticket module**, **unique identifier field**, and **Session Timeout** once. These are saved in this browser's `localStorage` and apply to everyone who signs in on this device — personal usernames/access keys are never entered here, only on the login screen. Use **Reset to Defaults** to restore the built-in placeholder values.
+
+**Session Timeout (minutes)** signs a user out automatically after that many minutes with no mouse/keyboard/scroll activity — same effect as clicking **Log Out**, with a toast explaining why. Set it to `0` (or leave it blank) to disable auto sign-out entirely. Changing it while someone is signed in applies immediately, without needing to reconnect.
 
 ## Users (Admins only)
 
