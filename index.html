@@ -15,7 +15,7 @@
 <!-- Page-layout only — component styling comes from the design system above.
      ?v= is bumped on every change so GitHub Pages / browsers don't serve a
      stale cached copy of this file. -->
-<link rel="stylesheet" href="css/style.css?v=5" />
+<link rel="stylesheet" href="css/style.css?v=6" />
 </head>
 <body>
   <header class="app-header" id="app-header" hidden>
@@ -254,9 +254,10 @@
           <span>
             <strong>Sharing this with your team:</strong> this list lives only in <em>this</em> browser, so teammates
             opening the app on their own device see an empty list and get "Username not found". Use
-            <strong>Export Setup File</strong> below, send that file to them privately (Teams/email — never commit it
-            to the repo), and they click <strong>Import team setup file</strong> on the login screen once. Passwords
-            are never exported — each person creates their own at their first sign-in.
+            <strong>Export Setup File</strong> below — you'll pick a passphrase and the file is
+            <strong>encrypted</strong> (AES-256-GCM) with it. Send the file to your team, send the passphrase
+            through a different channel, and they click <strong>Import team setup file</strong> on the login screen
+            once. Passwords are never exported — each person creates their own at their first sign-in.
           </span>
         </div>
 
@@ -307,6 +308,43 @@
             <button type="button" class="btn btn-primary" id="btn-add-user">Add / Update User</button>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Passphrase prompt — used when encrypting an export and decrypting an import -->
+  <div class="fn-modal-overlay" id="passphrase-overlay" hidden>
+    <div class="fn-modal" id="passphrase-modal" role="dialog" aria-modal="true" aria-labelledby="passphrase-title">
+      <div class="fn-modal-header">
+        <h5 class="modal-title" id="passphrase-title">Passphrase</h5>
+        <button class="close" id="btn-passphrase-close" type="button" aria-label="Close">
+          <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M2 2L10 10M10 2L2 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+
+      <form class="fn-modal-content" id="passphrase-form" autocomplete="off">
+        <p class="muted" id="passphrase-description" style="margin-top:0;"></p>
+
+        <div class="field">
+          <label for="passphrase-input">Passphrase</label>
+          <input type="password" id="passphrase-input" class="form-control" autocomplete="new-password" />
+        </div>
+
+        <div class="field" id="passphrase-confirm-field">
+          <label for="passphrase-confirm">Confirm Passphrase</label>
+          <input type="password" id="passphrase-confirm" class="form-control" autocomplete="new-password" />
+        </div>
+
+        <div class="callout callout-warning" id="passphrase-hint">
+          <iconify-icon icon="ph:warning"></iconify-icon>
+          Send the passphrase to your team through a <strong>different channel</strong> than the file itself, and
+          keep a copy — without it the file cannot be recovered.
+        </div>
+      </form>
+
+      <div class="fn-modal-actions">
+        <button type="button" class="btn btn-outline-secondary" id="btn-passphrase-cancel">Cancel</button>
+        <button type="button" class="btn btn-primary" id="btn-passphrase-confirm">Continue</button>
       </div>
     </div>
   </div>
@@ -447,6 +485,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="js/app.js?v=3"></script>
+  <script src="js/app.js?v=4"></script>
 </body>
 </html>

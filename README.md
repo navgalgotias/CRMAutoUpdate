@@ -107,17 +107,34 @@ This list — **including every listed access key and password** — is stored p
 
 There is **no backend**, so the Users list and Settings live only in the browser where they were entered. Sending a teammate the app's URL is not enough — their browser starts empty, so their username isn't on the list and they're rejected with **"Username not found."** To onboard them:
 
-1. **Admin:** open **Settings → Users → Export Setup File**. This downloads `crm-auto-update-setup.json` containing the CRM settings and the user list.
-2. **Send that file to your team privately** — Teams, Slack DM, email. **Never commit it to the repository** (it contains everyone's vTiger access keys; `.gitignore` already blocks that filename as a safety net).
-3. **Teammate:** open the app's URL and click **"First time on this device? Import team setup file"** at the bottom of the login card, then pick the file. Their browser is now set up.
+1. **Admin:** open **Settings → Users → Export Setup File**, choose a **passphrase**, and the browser downloads an encrypted `crm-auto-update-setup.json` containing the CRM settings and the user list.
+2. **Send the file to your team, and the passphrase through a different channel** (e.g. file by email, passphrase over a call or chat). **Never commit the file to the repository** — `.gitignore` already blocks that filename as a safety net.
+3. **Teammate:** open the app's URL, click **"First time on this device? Import team setup file"** at the bottom of the login card, pick the file, and enter the passphrase. Their browser is now set up.
 4. They sign in with their own username and create their own password on that first sign-in.
 
 Notes:
 
+- **The file is encrypted**, so it's useless to anyone without the passphrase — see [File encryption](#file-encryption) below.
 - **Passwords are never exported.** Each person sets their own on their own device, so the file only carries usernames, names, roles, and access keys.
 - Importing **merges**: entries in the file are added or updated, anything already on that device is left alone, and a password already set on that device is preserved — so you can re-send an updated file after adding people, without resetting anyone.
 - Admins can also use **Import Setup File** inside Settings to load a file (e.g. moving your own setup to a new laptop).
 - Whenever you add or remove people, export and re-share the file — there's nothing that syncs automatically.
+
+### File encryption
+
+The setup file is encrypted in the browser with the **Web Crypto API** — no libraries, nothing uploaded anywhere:
+
+- Your passphrase is stretched into a 256-bit key with **PBKDF2-HMAC-SHA256, 250,000 iterations**, using a random 16-byte salt per export.
+- The payload is encrypted with **AES-256-GCM** and a random 12-byte IV.
+- The saved file is a small JSON envelope holding the algorithm details, salt, IV, and the ciphertext — everything needed to decrypt *except* the passphrase.
+- AES-GCM is authenticated, so a wrong passphrase or a tampered file fails cleanly with "wrong passphrase, or the file has been altered" rather than importing junk.
+
+Two things to know:
+
+- **There is no recovery.** Lose the passphrase and the file is unrecoverable — just export a fresh one from the admin's browser.
+- **Encryption requires a secure page.** `crypto.subtle` is only available over **https://** or **http://localhost**, so export/import won't work if you open `index.html` directly from disk as a `file://` page. GitHub Pages and any normal web host are fine; locally, serve the folder (e.g. `npx serve .`) instead of double-clicking the file.
+
+Setup files exported before encryption was added still import as-is.
 
 ## Login sessions
 
@@ -133,7 +150,7 @@ Signing in stores your **username only** in `sessionStorage` (not `localStorage`
 > ⚠️ **Hosting this on a public GitHub Pages site publishes `js/app.js` — including the seeded `alta_support` access key baked into `DEFAULT_USERS`.** Anyone who finds the page can read that key from the source and use it against your vTiger instance. If this app is (or ever was) deployed publicly: rotate that access key in vTiger, and replace the seeded entry with a placeholder so no real credential is committed. Everyone else's keys should arrive via the [exported setup file](#sharing-the-app-with-your-team), never through the repo.
 
 - Your vTiger access key (looked up from the Users list) is used only to call your own vTiger server from your own browser session; nothing is sent to any third party.
-- The exported setup file contains access keys in clear text — share it privately and delete stray copies; it is `.gitignore`d so it can't be committed by accident.
+- The exported setup file is **encrypted** (AES-256-GCM, PBKDF2 250k) with a passphrase you choose, so the access keys inside it are not readable without it. Still send the passphrase separately from the file, and keep the file out of the repo — it is `.gitignore`d as a safety net.
 - The login session itself (your username) lives only in `sessionStorage` for the current browser tab — never written to `localStorage`.
 - Your login password is checked locally against the value stored in the Users list before the app ever calls vTiger — it is **not** your vTiger password and vTiger never sees it.
 - The Users list and the Admin/Team Member split are a **UI convenience**, not a security boundary (see Users above) — every listed access key and password is readable by anyone with access to this browser's dev tools.

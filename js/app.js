@@ -223,6 +223,18 @@
     settingsImportInput: $("settings-import-input"),
     btnImportSetup: $("btn-import-setup"),
     importSetupInput: $("import-setup-input"),
+
+    passphraseOverlay: $("passphrase-overlay"),
+    passphraseForm: $("passphrase-form"),
+    passphraseTitle: $("passphrase-title"),
+    passphraseDescription: $("passphrase-description"),
+    passphraseInput: $("passphrase-input"),
+    passphraseConfirmField: $("passphrase-confirm-field"),
+    passphraseConfirm: $("passphrase-confirm"),
+    passphraseHint: $("passphrase-hint"),
+    btnPassphraseClose: $("btn-passphrase-close"),
+    btnPassphraseCancel: $("btn-passphrase-cancel"),
+    btnPassphraseConfirm: $("btn-passphrase-confirm"),
   };
 
   /* ---------------------------------------------------------------------
@@ -374,6 +386,146 @@
    * file must be shared privately and never committed to the repo.
    * ------------------------------------------------------------------- */
   const SETUP_FILE_MARKER = "vtigerAutoUpdate.setup";
+  const SETUP_ENCRYPTED_MARKER = "vtigerAutoUpdate.setup.encrypted";
+  const PBKDF2_ITERATIONS = 250000;
+
+  /* ---- Passphrase prompt (Promise-based, uses the fn-modal dialog) ---- */
+  let passphraseResolver = null;
+
+  function closePassphraseModal(result) {
+    els.passphraseOverlay.hidden = true;
+    els.passphraseInput.value = "";
+    els.passphraseConfirm.value = "";
+    const resolve = passphraseResolver;
+    passphraseResolver = null;
+    if (resolve) resolve(result);
+  }
+
+  /* Resolves with the passphrase, or null if the person cancelled. */
+  function askPassphrase(options) {
+    return new Promise((resolve) => {
+      if (passphraseResolver) closePassphraseModal(null); // never leave an earlier prompt hanging
+      passphraseResolver = resolve;
+      els.passphraseTitle.textContent = options.title;
+      els.passphraseDescription.textContent = options.description;
+      els.passphraseConfirmField.hidden = !options.confirm;
+      els.passphraseHint.hidden = !options.confirm;
+      els.btnPassphraseConfirm.textContent = options.actionLabel;
+      els.passphraseInput.value = "";
+      els.passphraseConfirm.value = "";
+      els.passphraseOverlay.hidden = false;
+      setTimeout(() => els.passphraseInput.focus(), 0);
+    });
+  }
+
+  function submitPassphrase() {
+    const passphrase = els.passphraseInput.value;
+    if (!passphrase) {
+      toast("Enter a passphrase.", "error");
+      return;
+    }
+    if (!els.passphraseConfirmField.hidden) {
+      if (passphrase.length < 8) {
+        toast("Use a passphrase of at least 8 characters.", "error");
+        return;
+      }
+      if (passphrase !== els.passphraseConfirm.value) {
+        toast("Passphrases do not match.", "error");
+        return;
+      }
+    }
+    closePassphraseModal(passphrase);
+  }
+
+  els.btnPassphraseConfirm.addEventListener("click", submitPassphrase);
+  els.passphraseForm.addEventListener("submit", (e) => { e.preventDefault(); submitPassphrase(); });
+  els.btnPassphraseCancel.addEventListener("click", () => closePassphraseModal(null));
+  els.btnPassphraseClose.addEventListener("click", () => closePassphraseModal(null));
+  els.passphraseOverlay.addEventListener("click", (e) => {
+    if (e.target === els.passphraseOverlay) closePassphraseModal(null);
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && !els.passphraseOverlay.hidden) closePassphraseModal(null);
+  });
+
+  /* ---- AES-GCM encryption of the setup file (Web Crypto, no dependencies) ---- */
+  function bytesToBase64(bytes) {
+    let binary = "";
+    const chunkSize = 0x8000; // chunked so large payloads don't blow the argument limit
+    for (let i = 0; i < bytes.length; i += chunkSize) {
+      binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunkSize));
+    }
+    return btoa(binary);
+  }
+
+  function base64ToBytes(base64) {
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+    return bytes;
+  }
+
+  /* crypto.subtle only exists in a secure context — https:// or localhost.
+   * Opening index.html straight off disk (file://) does not qualify. */
+  function requireSubtleCrypto() {
+    if (!window.crypto || !window.crypto.subtle) {
+      throw new Error(
+        "encryption needs a secure page — open the app over https:// or http://localhost rather than as a file:// page"
+      );
+    }
+    return window.crypto.subtle;
+  }
+
+  async function deriveSetupKey(passphrase, salt, iterations) {
+    const subtle = requireSubtleCrypto();
+    const baseKey = await subtle.importKey(
+      "raw", new TextEncoder().encode(passphrase), "PBKDF2", false, ["deriveKey"]
+    );
+    return subtle.deriveKey(
+      { name: "PBKDF2", salt, iterations: iterations || PBKDF2_ITERATIONS, hash: "SHA-256" },
+      baseKey,
+      { name: "AES-GCM", length: 256 },
+      false,
+      ["encrypt", "decrypt"]
+    );
+  }
+
+  async function encryptSetupPayload(payload, passphrase) {
+    const subtle = requireSubtleCrypto();
+    const salt = window.crypto.getRandomValues(new Uint8Array(16));
+    const iv = window.crypto.getRandomValues(new Uint8Array(12));
+    const key = await deriveSetupKey(passphrase, salt, PBKDF2_ITERATIONS);
+    const ciphertext = new Uint8Array(await subtle.encrypt(
+      { name: "AES-GCM", iv }, key, new TextEncoder().encode(JSON.stringify(payload))
+    ));
+    return {
+      app: SETUP_ENCRYPTED_MARKER,
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      kdf: { name: "PBKDF2", hash: "SHA-256", iterations: PBKDF2_ITERATIONS, salt: bytesToBase64(salt) },
+      cipher: { name: "AES-GCM", iv: bytesToBase64(iv) },
+      data: bytesToBase64(ciphertext),
+    };
+  }
+
+  async function decryptSetupPayload(envelope, passphrase) {
+    const subtle = requireSubtleCrypto();
+    if (!envelope.kdf || !envelope.cipher || !envelope.data) {
+      throw new Error("the encrypted file is missing part of its contents");
+    }
+    const key = await deriveSetupKey(passphrase, base64ToBytes(envelope.kdf.salt), envelope.kdf.iterations);
+    let plaintext;
+    try {
+      // AES-GCM verifies its own authentication tag, so a wrong passphrase
+      // (or an altered file) fails here rather than producing garbage.
+      plaintext = await subtle.decrypt(
+        { name: "AES-GCM", iv: base64ToBytes(envelope.cipher.iv) }, key, base64ToBytes(envelope.data)
+      );
+    } catch (_err) {
+      throw new Error("wrong passphrase, or the file has been altered");
+    }
+    return JSON.parse(new TextDecoder().decode(plaintext));
+  }
 
   function buildSetupPayload() {
     const users = loadUsers();
@@ -390,18 +542,38 @@
     };
   }
 
-  function exportSetupFile() {
-    const json = JSON.stringify(buildSetupPayload(), null, 2);
-    const blob = new Blob([json], { type: "application/json" });
+  function downloadJson(data, filename) {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "crm-auto-update-setup.json";
+    link.download = filename;
     document.body.appendChild(link);
     link.click();
     link.remove();
     URL.revokeObjectURL(url);
-    toast("Setup file downloaded. Send it to your team privately — it contains access keys.", "success");
+  }
+
+  async function exportSetupFile() {
+    const passphrase = await askPassphrase({
+      title: "Encrypt the setup file",
+      description:
+        "Choose a passphrase. The file is encrypted with it, and your team needs the same passphrase to import it.",
+      confirm: true,
+      actionLabel: "Encrypt & Download",
+    });
+    if (!passphrase) return;
+
+    let envelope;
+    try {
+      envelope = await encryptSetupPayload(buildSetupPayload(), passphrase);
+    } catch (err) {
+      toast("Could not encrypt the file: " + err.message + ".", "error");
+      return;
+    }
+
+    downloadJson(envelope, "crm-auto-update-setup.json");
+    toast("Encrypted setup file downloaded. Send the passphrase separately from the file.", "success");
   }
 
   /* Merges an exported file into this browser. Imported entries win over
@@ -434,14 +606,42 @@
 
   function importSetupFile(file, onDone) {
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
+      let parsed;
+      try {
+        parsed = JSON.parse(e.target.result);
+      } catch (_err) {
+        toast("Could not import that file: it isn't valid JSON.", "error");
+        return;
+      }
+
+      // Encrypted files need the passphrase; plain ones (exported before
+      // encryption was added) still import as-is.
+      let payload = parsed;
+      if (parsed && parsed.app === SETUP_ENCRYPTED_MARKER) {
+        const passphrase = await askPassphrase({
+          title: "Enter the passphrase",
+          description: "This setup file is encrypted. Enter the passphrase your admin sent you to unlock it.",
+          confirm: false,
+          actionLabel: "Decrypt & Import",
+        });
+        if (!passphrase) return;
+        try {
+          payload = await decryptSetupPayload(parsed, passphrase);
+        } catch (err) {
+          toast("Could not decrypt that file: " + err.message + ".", "error");
+          return;
+        }
+      }
+
       let count;
       try {
-        count = applySetupPayload(JSON.parse(e.target.result));
+        count = applySetupPayload(payload);
       } catch (err) {
         toast("Could not import that file: " + err.message + ".", "error");
         return;
       }
+
       els.loginCrmUrl.textContent = "Connecting to: " + loadSettings().url;
       toast(count + " user(s) imported. You can sign in with your own username now.", "success");
       if (onDone) onDone();

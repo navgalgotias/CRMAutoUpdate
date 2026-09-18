@@ -654,6 +654,10 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
  * Settings modal
  * ------------------------------------------------------------------- */
 #settings-overlay .fn-modal { width: 100%; max-width: 900px; }
+
+/* Sits above the Settings modal, since an import can be started from inside it. */
+#passphrase-overlay { z-index: 260; }
+#passphrase-overlay .fn-modal { width: 100%; max-width: 440px; }
 #settings-overlay .fn-modal-content { max-height: calc(100vh - 140px); }
 
 /* Safety net: if a pt-table is wider than its card (e.g. the Users table with
