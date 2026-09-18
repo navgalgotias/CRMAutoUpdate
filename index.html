@@ -12,8 +12,10 @@
 <!-- Phosphor icons (the only icon system used by the design system) -->
 <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
 
-<!-- Page-layout only — component styling comes from the design system above. -->
-<link rel="stylesheet" href="css/style.css" />
+<!-- Page-layout only — component styling comes from the design system above.
+     ?v= is bumped on every change so GitHub Pages / browsers don't serve a
+     stale cached copy of this file. -->
+<link rel="stylesheet" href="css/style.css?v=2" />
 </head>
 <body>
   <header class="app-header" id="app-header" hidden>
@@ -415,6 +417,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="js/app.js"></script>
+  <script src="js/app.js?v=2"></script>
 </body>
 </html>
