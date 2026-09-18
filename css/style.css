@@ -153,14 +153,17 @@ html, body {
   min-height: 100vh;
 }
 
-/* ---- Promo panel (left) ---- */
+/* ---- Promo panel (left) ----
+   space-between spreads the three blocks (hero group / feature grid / note)
+   across the full height so the panel is filled rather than a small centered
+   cluster floating in empty blue. */
 .login-promo {
   flex: 1.3 1 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: var(--space-6);
-  padding: var(--space-7) var(--space-6);
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding: var(--space-6) var(--space-6);
   background: linear-gradient(160deg, var(--side-nav-bg) 0%, var(--primaryDark) 100%);
   color: #fff;
 }
@@ -190,14 +193,14 @@ html, body {
 .login-promo-badge img { display: block; }
 
 /* ---- Image carousel (auto-advances, see js/app.js) ----
-   Fixed-size frame that never changes — only the image inside crossfades.
-   object-fit: contain keeps every photo whole (no cropping) without ever
-   resizing the box, so nothing else on the page reflows when it switches. */
+   Fills the panel width; the 512/297 ratio is the shared native ratio of
+   every slide, so the frame never changes size between slides and nothing
+   on the page reflows — only the image inside crossfades. */
 .login-carousel {
   position: relative;
   width: 100%;
-  max-width: 512px;
-  height: 297px; /* matches the 512×297 slide's native size, so it fits with no scaling/cropping */
+  aspect-ratio: 512 / 297;
+  max-height: 46vh;
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: var(--shadow);
@@ -239,25 +242,23 @@ html, body {
 
 .login-promo-hero h2 {
   margin: 0 0 var(--space-3);
-  font-size: 32px;
+  font-size: clamp(26px, 2.6vw, 38px);
   font-weight: 700;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
 }
 .login-promo-hero h2 .accent { color: var(--yellow); }
 .login-promo-hero p {
   margin: 0;
-  max-width: 480px;
-  font-size: 14.5px;
+  font-size: 15px;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .login-promo-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-5);
-  max-width: 560px;
 }
 
 .promo-item { display: flex; align-items: flex-start; gap: var(--space-3); }
@@ -294,11 +295,13 @@ html, body {
   color: rgba(255, 255, 255, 0.75);
   border-top: 1px solid rgba(255, 255, 255, 0.15);
   padding-top: var(--space-4);
-  max-width: 560px;
 }
 .login-promo-note iconify-icon { font-size: 16px; flex-shrink: 0; }
 
-/* ---- Sign-in panel (right) ---- */
+/* ---- Sign-in panel (right) ----
+   A tinted page surface with the form lifted onto its own white card, so the
+   sign-in block reads as a deliberate object instead of text floating on a
+   large blank area. */
 .login-panel {
   flex: 1 1 0;
   min-width: 380px;
@@ -306,10 +309,18 @@ html, body {
   align-items: center;
   justify-content: center;
   padding: var(--space-6) var(--space-5);
-  background: var(--bg-primary);
+  background: var(--body-bg);
 }
 
-.login-panel-inner { width: 100%; max-width: 340px; }
+.login-panel-inner {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg-primary);
+  border: 1px solid var(--box-border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
+  padding: var(--space-6);
+}
 
 .login-brand {
   display: flex;
@@ -323,15 +334,15 @@ html, body {
 }
 
 .login-brand-badge {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: var(--radius-sm);
   background: var(--theme);
   color: #fff;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .login-panel-inner h2 {
@@ -370,12 +381,19 @@ html, body {
 
 .login-panel-inner .field-actions {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: var(--space-3);
-  margin-top: 4px;
+  margin-top: var(--space-2);
 }
 
-.btn-login { position: relative; min-width: 130px; justify-content: center; }
+.btn-login {
+  position: relative;
+  width: 100%;
+  height: 42px;
+  justify-content: center;
+  font-weight: 600;
+}
 
 .btn-login .btn-spinner {
   display: none;
