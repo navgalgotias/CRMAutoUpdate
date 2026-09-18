@@ -120,22 +120,42 @@
           </div>
 
           <h2>Welcome back!</h2>
-          <p class="muted">Sign in with your vTiger CRM username — no password needed here.</p>
+          <p class="muted" id="login-subtitle">Sign in with your vTiger CRM username.</p>
 
           <form id="login-form" autocomplete="off">
-            <div class="field">
+            <div class="field" id="login-username-field">
               <label for="login-username">Username</label>
               <input type="text" id="login-username" class="form-control" required placeholder="crm.username" autofocus />
             </div>
+
+            <div class="field" id="login-password-field" hidden>
+              <label for="login-password" id="login-password-label">Password</label>
+              <input type="password" id="login-password" class="form-control" placeholder="Enter your password" />
+            </div>
+
+            <div class="field" id="login-password-confirm-field" hidden>
+              <label for="login-password-confirm">Confirm Password</label>
+              <input type="password" id="login-password-confirm" class="form-control" placeholder="Re-enter your password" />
+            </div>
+
+            <p class="callout callout-info" id="login-first-time-hint" hidden>
+              <iconify-icon icon="ph:info"></iconify-icon>
+              This is your first sign-in — create a password now. You'll use your username and this password every time after this.
+            </p>
+
             <p class="muted" id="login-crm-url" style="font-size:0.8rem;"></p>
 
             <div class="field-actions" style="justify-content:space-between;">
               <button type="submit" class="btn btn-primary btn-login" id="btn-login">
-                <span class="btn-login-label"><iconify-icon icon="ph:sign-in"></iconify-icon> Sign In</span>
+                <span class="btn-login-label"><iconify-icon icon="ph:arrow-right"></iconify-icon> Continue</span>
                 <span class="fn-spinner btn-spinner" aria-hidden="true"></span>
               </button>
               <span class="pt-pill outline-muted" id="login-status">Not signed in</span>
             </div>
+
+            <button type="button" class="login-back-link" id="btn-login-back" hidden>
+              <iconify-icon icon="ph:arrow-left"></iconify-icon> Use a different username
+            </button>
           </form>
         </div>
       </div>
@@ -191,7 +211,8 @@
           Every person who should be able to sign in needs an entry here: their vTiger username, their vTiger
           access key, and their role. On the login screen they only type their username — the app looks up their
           access key from this list automatically. Admins get full access, including Settings and Documentation;
-          Team Members only get the ticket-update wizard and Reconnect.
+          Team Members only get the ticket-update wizard and Reconnect. Everyone sets their own <strong>password</strong>
+          the first time they sign in — Admins can only <strong>reset</strong> it here to force them to set a new one.
         </p>
         <div class="callout callout-warning" style="margin-bottom:14px;">
           <iconify-icon icon="ph:warning"></iconify-icon>
@@ -202,10 +223,12 @@
         </div>
 
         <div class="pt-wrap">
-          <table class="pt-table" id="users-table">
-            <thead><tr><th>Username</th><th>Name</th><th>Access Key</th><th id="users-role-th" class="sortable"><span class="th-inner" role="button" tabindex="0">Role <span class="sort-icon"><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor"><path d="M5 0L0 6H10L5 0Z"/></svg><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor"><path d="M5 6L0 0H10L5 6Z"/></svg></span></span></th><th></th></tr></thead>
-            <tbody id="users-body"></tbody>
-          </table>
+          <div class="pt-scroll">
+            <table class="pt-table" id="users-table">
+              <thead><tr><th>Username</th><th>Name</th><th>Access Key</th><th id="users-role-th" class="sortable"><span class="th-inner" role="button" tabindex="0">Role <span class="sort-icon"><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor"><path d="M5 0L0 6H10L5 0Z"/></svg><svg width="9" height="6" viewBox="0 0 10 6" fill="currentColor"><path d="M5 6L0 0H10L5 6Z"/></svg></span></span></th><th>Password</th><th></th></tr></thead>
+              <tbody id="users-body"></tbody>
+            </table>
+          </div>
         </div>
 
         <div class="form-grid" style="margin-top:12px;">
@@ -295,12 +318,14 @@
         </div>
 
         <div class="pt-wrap">
-          <table class="pt-table mapping-table" id="mapping-table">
-            <thead>
-              <tr><th>Excel Column</th><th>Sample Value</th><th>vTiger Field API Name</th><th class="center">Include</th></tr>
-            </thead>
-            <tbody></tbody>
-          </table>
+          <div class="pt-scroll">
+            <table class="pt-table mapping-table" id="mapping-table">
+              <thead>
+                <tr><th>Excel Column</th><th>Sample Value</th><th>vTiger Field API Name</th><th class="center">Include</th></tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
         </div>
         <datalist id="vtiger-field-list"></datalist>
         <button class="btn btn-primary" id="btn-build-review">Build Review List</button>
@@ -318,10 +343,12 @@
         <p class="muted" style="margin-top:0;">Only rows with at least one red-highlighted cell are listed. Uncheck any row or field you don't want to push.</p>
 
         <div class="pt-wrap">
-          <table class="pt-table review-table" id="review-table">
-            <thead><tr id="review-head-row"></tr></thead>
-            <tbody id="review-body"></tbody>
-          </table>
+          <div class="pt-scroll">
+            <table class="pt-table review-table" id="review-table">
+              <thead><tr id="review-head-row"></tr></thead>
+              <tbody id="review-body"></tbody>
+            </table>
+          </div>
         </div>
         <p class="muted" id="review-summary"></p>
         <button class="btn btn-primary" id="btn-goto-update">Continue to Update</button>
@@ -351,10 +378,12 @@
         </div>
 
         <div class="pt-wrap">
-          <table class="pt-table results-table" id="results-table" hidden>
-            <thead><tr><th>Ticket #</th><th>Fields Updated</th><th class="center">Status</th><th>Details</th></tr></thead>
-            <tbody id="results-body"></tbody>
-          </table>
+          <div class="pt-scroll">
+            <table class="pt-table results-table" id="results-table" hidden>
+              <thead><tr><th>Ticket #</th><th>Fields Updated</th><th class="center">Status</th><th>Details</th></tr></thead>
+              <tbody id="results-body"></tbody>
+            </table>
+          </div>
         </div>
       </div>
     </section>

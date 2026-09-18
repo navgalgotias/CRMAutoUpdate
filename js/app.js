@@ -163,9 +163,18 @@
 
     loginScreen: $("login-screen"),
     loginForm: $("login-form"),
+    loginSubtitle: $("login-subtitle"),
+    loginUsernameField: $("login-username-field"),
     loginUsername: $("login-username"),
+    loginPasswordField: $("login-password-field"),
+    loginPassword: $("login-password"),
+    loginPasswordLabel: $("login-password-label"),
+    loginPasswordConfirmField: $("login-password-confirm-field"),
+    loginPasswordConfirm: $("login-password-confirm"),
+    loginFirstTimeHint: $("login-first-time-hint"),
     loginCrmUrl: $("login-crm-url"),
     btnLogin: $("btn-login"),
+    btnLoginBack: $("btn-login-back"),
     loginStatus: $("login-status"),
 
     usersBody: $("users-body"),
@@ -242,8 +251,10 @@
   };
 
   // Seed user list: { username: { accessKey, role } }. Everyone else must be added by an admin.
+  // `password` starts unset (null) for every seeded/new user — they create it themselves at
+  // their first sign-in; an admin can only reset it back to null to force that flow again.
   const DEFAULT_USERS = {
-    alta_support: { accessKey: "FcGFJgx1PWe9knbA", role: "admin", firstName: "Alta", lastName: "Support" },
+    alta_support: { accessKey: "FcGFJgx1PWe9knbA", role: "admin", firstName: "Alta", lastName: "Support", password: null },
   };
 
   function loadSettings() {
@@ -301,16 +312,21 @@
     return match ? Object.assign({ username: match }, users[match]) : null;
   }
 
-  function setUser(username, accessKey, role, firstName, lastName) {
+  /* `password` is optional — pass it only when you actually mean to change it (a first-time
+   * set, or an admin reset to null). Omit it (undefined) to keep whatever was already stored,
+   * so edits like renaming a user or changing their role never wipe out their password. */
+  function setUser(username, accessKey, role, firstName, lastName, password) {
     const users = loadUsers();
     const key = normalizeUsername(username);
     const existingKey = Object.keys(users).find((u) => normalizeUsername(u) === key);
+    const existing = existingKey ? users[existingKey] : null;
     if (existingKey) delete users[existingKey];
     users[username.trim()] = {
       accessKey,
       role,
       firstName: (firstName || "").trim(),
       lastName: (lastName || "").trim(),
+      password: password !== undefined ? password : (existing ? existing.password : null),
     };
     saveUsers(users);
   }
@@ -408,6 +424,7 @@
     els.loginScreen.hidden = false;
     els.headerActions.hidden = true;
     els.appMain.hidden = true;
+    resetLoginForm();
   }
 
   /* ---------------------------------------------------------------------
@@ -683,22 +700,120 @@
   });
 
   /* ---------------------------------------------------------------------
-   * Login screen
+   * Login screen — two-stage: username first, then a password step whose
+   * shape depends on whether that user already has one set.
+   *   - No password on record  -> "first sign-in": create + confirm it here,
+   *     it's saved the moment the vTiger connection succeeds.
+   *   - Password on record     -> it must match to proceed.
+   * An admin can reset a user's stored password back to unset (Settings ->
+   * Users -> Reset), which puts them through the "create a password" flow
+   * again next time they sign in.
    * ------------------------------------------------------------------- */
+  let loginStage = "username"; // "username" | "password"
+
+  function setLoginButtonLabel(icon, text) {
+    els.btnLogin.querySelector(".btn-login-label").innerHTML =
+      '<iconify-icon icon="' + icon + '"></iconify-icon> ' + text;
+  }
+
+  function resetLoginForm() {
+    loginStage = "username";
+    els.loginUsername.disabled = false;
+    els.loginUsername.value = "";
+    els.loginPasswordField.hidden = true;
+    els.loginPasswordConfirmField.hidden = true;
+    els.loginFirstTimeHint.hidden = true;
+    els.btnLoginBack.hidden = true;
+    els.loginPassword.value = "";
+    els.loginPasswordConfirm.value = "";
+    els.loginSubtitle.textContent = "Sign in with your vTiger CRM username.";
+    setLoginButtonLabel("ph:arrow-right", "Continue");
+    els.loginStatus.textContent = "Not signed in";
+    els.loginStatus.className = "pt-pill outline-muted";
+  }
+
+  els.btnLoginBack.addEventListener("click", () => {
+    resetLoginForm();
+    els.loginUsername.focus();
+  });
+
   els.loginForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const username = els.loginUsername.value.trim();
-    if (!username) {
-      toast("Please enter your username.", "error");
+
+    /* ---- Stage 1: look up the username, decide what the password step needs ---- */
+    if (loginStage === "username") {
+      const username = els.loginUsername.value.trim();
+      if (!username) {
+        toast("Please enter your username.", "error");
+        return;
+      }
+
+      const user = getUser(username);
+      if (!user) {
+        els.loginStatus.textContent = "Username not found";
+        els.loginStatus.className = "pt-pill solid-danger";
+        toast("\"" + username + "\" isn't in the registered user list. Ask your admin to add you in Settings.", "error");
+        return;
+      }
+
+      loginStage = "password";
+      els.loginUsername.disabled = true;
+      els.loginPasswordField.hidden = false;
+      els.btnLoginBack.hidden = false;
+      els.loginPassword.value = "";
+      els.loginPasswordConfirm.value = "";
+      els.loginStatus.textContent = "Not signed in";
+      els.loginStatus.className = "pt-pill outline-muted";
+
+      if (user.password) {
+        els.loginPasswordLabel.textContent = "Password";
+        els.loginPassword.placeholder = "Enter your password";
+        els.loginPasswordConfirmField.hidden = true;
+        els.loginFirstTimeHint.hidden = true;
+        els.loginSubtitle.textContent = "Welcome back, " + user.username + ".";
+        setLoginButtonLabel("ph:sign-in", "Sign In");
+      } else {
+        els.loginPasswordLabel.textContent = "Create Password";
+        els.loginPassword.placeholder = "Choose a password";
+        els.loginPasswordConfirmField.hidden = false;
+        els.loginFirstTimeHint.hidden = false;
+        els.loginSubtitle.textContent = "First time signing in as " + user.username + ".";
+        setLoginButtonLabel("ph:shield-check", "Set Password & Sign In");
+      }
+
+      els.loginPassword.focus();
       return;
     }
 
+    /* ---- Stage 2: validate the password, then connect ---- */
+    const username = els.loginUsername.value.trim();
     const user = getUser(username);
     if (!user) {
-      els.loginStatus.textContent = "Username not found";
-      els.loginStatus.className = "pt-pill solid-danger";
-      toast("\"" + username + "\" isn't in the registered user list. Ask your admin to add you in Settings.", "error");
+      toast("This user is no longer in the registered list. Ask your admin.", "error");
+      resetLoginForm();
       return;
+    }
+
+    const password = els.loginPassword.value;
+    let passwordToSave = null;
+
+    if (user.password) {
+      if (password !== user.password) {
+        els.loginStatus.textContent = "Incorrect password";
+        els.loginStatus.className = "pt-pill solid-danger";
+        toast("Incorrect password.", "error");
+        return;
+      }
+    } else {
+      if (!password || password.length < 4) {
+        toast("Choose a password with at least 4 characters.", "error");
+        return;
+      }
+      if (password !== els.loginPasswordConfirm.value) {
+        toast("Passwords do not match.", "error");
+        return;
+      }
+      passwordToSave = password;
     }
 
     els.btnLogin.disabled = true;
@@ -713,12 +828,20 @@
     }));
 
     if (ok) {
+      if (passwordToSave) {
+        setUser(user.username, user.accessKey, user.role, user.firstName, user.lastName, passwordToSave);
+      }
       state.auth = { username: user.username, role: user.role, firstName: user.firstName, lastName: user.lastName };
       saveAuthSession({ username: user.username });
       applyRoleToUI(user.role);
       showApp();
       setStep(1);
-      toast("Signed in as " + user.username + " (" + roleLabel(user.role) + ").", "success");
+      toast(
+        (passwordToSave ? "Password created. Signed in as " : "Signed in as ") +
+        user.username + " (" + roleLabel(user.role) + ").",
+        "success"
+      );
+      resetLoginForm();
     } else {
       els.loginStatus.textContent = "Sign-in failed";
       els.loginStatus.className = "pt-pill solid-danger";
@@ -1482,6 +1605,35 @@
       tdRole.appendChild(select);
       tr.appendChild(tdRole);
 
+      const tdPassword = document.createElement("td");
+      if (record.password) {
+        const setTag = document.createElement("span");
+        setTag.className = "fn-tag bubble-success";
+        setTag.textContent = "Set";
+        const resetBtn = document.createElement("button");
+        resetBtn.type = "button";
+        resetBtn.className = "btn-reveal-key";
+        resetBtn.style.marginLeft = "8px";
+        resetBtn.textContent = "Reset";
+        resetBtn.addEventListener("click", () => {
+          setUser(username, record.accessKey, record.role, record.firstName, record.lastName, null);
+          record.password = null;
+          if (state.auth && normalizeUsername(state.auth.username) === normalizeUsername(username)) {
+            state.auth.password = null;
+          }
+          renderUsersTable();
+          toast("Password reset for " + username + " — they'll set a new one at their next sign-in.", "success");
+        });
+        tdPassword.appendChild(setTag);
+        tdPassword.appendChild(resetBtn);
+      } else {
+        const notSetTag = document.createElement("span");
+        notSetTag.className = "fn-tag bubble-orange";
+        notSetTag.textContent = "Not set";
+        tdPassword.appendChild(notSetTag);
+      }
+      tr.appendChild(tdPassword);
+
       const tdRemove = document.createElement("td");
       const removeBtn = document.createElement("button");
       removeBtn.type = "button";
@@ -1500,7 +1652,7 @@
     if (Object.keys(users).length === 0) {
       const tr = document.createElement("tr");
       const td = document.createElement("td");
-      td.colSpan = 5;
+      td.colSpan = 6;
       td.className = "muted";
       td.textContent = "No users added yet — no one will be able to sign in until you add at least one.";
       tr.appendChild(td);

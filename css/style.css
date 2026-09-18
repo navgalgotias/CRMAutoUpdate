@@ -326,6 +326,23 @@ html, body {
 .btn-login.is-loading .btn-login-label { display: none; }
 .btn-login.is-loading .btn-spinner { display: inline-block; }
 
+.login-back-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: var(--space-4);
+  background: none;
+  border: none;
+  padding: 4px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--iron);
+  cursor: pointer;
+}
+.login-back-link:hover { color: var(--theme); }
+
 @media (max-width: 860px) {
   .login-promo { display: none; }
   .login-panel { min-width: 0; }
@@ -531,8 +548,13 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 /* ---------------------------------------------------------------------
  * Settings modal
  * ------------------------------------------------------------------- */
-#settings-overlay .fn-modal { width: 100%; max-width: 760px; }
+#settings-overlay .fn-modal { width: 100%; max-width: 900px; }
 #settings-overlay .fn-modal-content { max-height: calc(100vh - 140px); }
+
+/* Safety net: if a pt-table is wider than its card (e.g. the Users table with
+   many columns on a narrow modal/viewport), scroll horizontally instead of
+   letting .pt-wrap's overflow:hidden silently clip columns off-screen. */
+.pt-scroll { overflow-x: auto; }
 
 .form-grid {
   display: grid;

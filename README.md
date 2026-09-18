@@ -6,7 +6,7 @@ No backend, no build step, no server-side storage. Everything runs in your brows
 
 ## How it works
 
-The app opens on a **login screen** that only asks for your **username** — no password field. Behind the scenes, the app looks your username up in the admin-managed **Users** list (see below), pulls the matching vTiger access key, and uses it to sign in via vTiger's own `login` webservice call. Your entry in that list also decides your **role** for this session:
+The app opens on a **login screen** that first asks for your **username**, then a **password**. Behind the scenes, the app looks your username up in the admin-managed **Users** list (see below), pulls the matching vTiger access key, and uses it to sign in via vTiger's own `login` webservice call. Your entry in that list also decides your **role** for this session:
 
 - **Admin** — full access, including **Settings** and **Documentation**.
 - **Team Member** — access to the ticket-update wizard and **Reconnect** only; Settings and Documentation are hidden.
@@ -19,6 +19,15 @@ Once signed in, a status pill in the header shows *Connected* / *Connection fail
 4. **Update** — click the button and the app looks up each ticket by number, retrieves the current record, applies only the mapped/red fields, and calls vTiger's `update` operation. A results table shows success/failure per ticket.
 
 Cell scanning happens right after you pick a worksheet in step 1: the app inspects every cell's fill color and flags cells with a red-ish background as pending changes.
+
+## Passwords: set at first sign-in
+
+No one — not even an Admin — sets another user's password directly. Instead:
+
+1. An Admin adds a user to the **Users** list with just a username, name, vTiger access key, and role (no password).
+2. The first time that person signs in, they type their username, then they're prompted to **create a password** (with a confirmation field). It's saved the moment their vTiger connection succeeds.
+3. Every sign-in after that asks for that same username + password; a wrong password blocks sign-in before it ever touches vTiger.
+4. If someone forgets their password, an **Admin** can **reset** it from Settings → Users → Password column → **Reset**. That clears the stored password, so the next time they sign in they go through the "create a password" step again — the admin never sees or sets the new one.
 
 ## Project structure
 
@@ -82,13 +91,14 @@ Click **Settings** in the header to set the shared **CRM URL**, **ticket module*
 
 Also inside **Settings**, Admins manage the full list of people who can sign in — each entry has a **username**, **first/last name**, that user's own **vTiger access key**, and a **role**:
 
-- **Add / Update User** adds a brand-new user, or overwrites an existing user's name, access key, and role.
+- **Add / Update User** adds a brand-new user, or overwrites an existing user's name, access key, and role — it never sets their password (see [Passwords](#passwords-set-at-first-sign-in) above).
 - Each row in the table also has its own **Role** dropdown for quickly promoting/demoting someone without retyping their access key, and a **Show/Hide** toggle to reveal an access key when you need to verify it.
+- The **Password** column shows **Not set** (they'll create one at their next sign-in) or **Set**, with a **Reset** button to clear it and put them through that first-sign-in flow again — for example if they forget it.
 - First/last name is used only for display — in the Users table and in the profile menu after signing in (initials avatar, full name, username, role). It's optional; if left blank, the username is shown instead.
 - Anyone who tries to log in with a username *not* on this list is rejected with "Username not found."
-- The default login (`alta_support`) is seeded as **Admin** the first time the app runs on a browser.
+- The default login (`alta_support`) is seeded as **Admin** the first time the app runs on a browser, with no password until its first sign-in.
 
-This list — **including every listed access key** — is stored per-browser via `localStorage`. It is **not** a real access-control or credential-vault system: anyone comfortable with browser dev tools could read `localStorage` directly and see every user's access key, or edit roles. This exists purely as a convenience for a trusted internal team sharing a device, so that most people never have to know or type an access key at all — don't use it for credentials that must stay confidential, and don't treat the Admin/Team Member split as protecting anything from a determined user of the same browser.
+This list — **including every listed access key and password** — is stored per-browser via `localStorage`. It is **not** a real access-control or credential-vault system: anyone comfortable with browser dev tools could read `localStorage` directly and see every user's access key or password, or edit roles. This exists purely as a convenience for a trusted internal team sharing a device, so that most people never have to know or type an access key at all — don't use it for credentials that must stay confidential, and don't treat the Admin/Team Member split (or the password step) as protecting anything from a determined user of the same browser.
 
 ## Login sessions
 
@@ -103,7 +113,8 @@ Signing in stores your **username only** in `sessionStorage` (not `localStorage`
 
 - Your vTiger access key (looked up from the Users list) is used only to call your own vTiger server from your own browser session; nothing is sent to any third party.
 - The login session itself (your username) lives only in `sessionStorage` for the current browser tab — never written to `localStorage`.
-- The Users list and the Admin/Team Member split are a **UI convenience**, not a security boundary (see Users above) — every listed access key is readable by anyone with access to this browser's dev tools.
+- Your login password is checked locally against the value stored in the Users list before the app ever calls vTiger — it is **not** your vTiger password and vTiger never sees it.
+- The Users list and the Admin/Team Member split are a **UI convenience**, not a security boundary (see Users above) — every listed access key and password is readable by anyone with access to this browser's dev tools.
 - Always review the **Review** step carefully before clicking **Update** — updates are applied immediately to live CRM records.
 
 ## Running locally
