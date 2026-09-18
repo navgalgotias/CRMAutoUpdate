@@ -412,6 +412,28 @@ html, body {
   word-break: break-all;
 }
 
+/* One-time "import the setup file your admin sent you" affordance — the only
+   way a new device gets a user list, since there's no backend to sync from. */
+.login-import-row {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--border-default-color);
+  text-align: center;
+}
+.login-import-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  padding: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--iron);
+  cursor: pointer;
+}
+.login-import-link:hover { color: var(--theme); }
+
 .login-remember-row {
   display: flex;
   align-items: center;
@@ -656,6 +678,13 @@ select:disabled { opacity: 0.55; cursor: not-allowed; }
 /* ---------------------------------------------------------------------
  * Users table (Settings modal)
  * ------------------------------------------------------------------- */
+.users-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
 #users-table select { min-width: 130px; }
 #users-table input.form-control { min-width: 150px; }
 #users-table .access-key-cell {

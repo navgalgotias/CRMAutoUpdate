@@ -103,6 +103,22 @@ Also inside **Settings**, Admins manage the full list of people who can sign in 
 
 This list — **including every listed access key and password** — is stored per-browser via `localStorage`. It is **not** a real access-control or credential-vault system: anyone comfortable with browser dev tools could read `localStorage` directly and see every user's access key or password, or edit roles. This exists purely as a convenience for a trusted internal team sharing a device, so that most people never have to know or type an access key at all — don't use it for credentials that must stay confidential, and don't treat the Admin/Team Member split (or the password step) as protecting anything from a determined user of the same browser.
 
+## Sharing the app with your team
+
+There is **no backend**, so the Users list and Settings live only in the browser where they were entered. Sending a teammate the app's URL is not enough — their browser starts empty, so their username isn't on the list and they're rejected with **"Username not found."** To onboard them:
+
+1. **Admin:** open **Settings → Users → Export Setup File**. This downloads `crm-auto-update-setup.json` containing the CRM settings and the user list.
+2. **Send that file to your team privately** — Teams, Slack DM, email. **Never commit it to the repository** (it contains everyone's vTiger access keys; `.gitignore` already blocks that filename as a safety net).
+3. **Teammate:** open the app's URL and click **"First time on this device? Import team setup file"** at the bottom of the login card, then pick the file. Their browser is now set up.
+4. They sign in with their own username and create their own password on that first sign-in.
+
+Notes:
+
+- **Passwords are never exported.** Each person sets their own on their own device, so the file only carries usernames, names, roles, and access keys.
+- Importing **merges**: entries in the file are added or updated, anything already on that device is left alone, and a password already set on that device is preserved — so you can re-send an updated file after adding people, without resetting anyone.
+- Admins can also use **Import Setup File** inside Settings to load a file (e.g. moving your own setup to a new laptop).
+- Whenever you add or remove people, export and re-share the file — there's nothing that syncs automatically.
+
 ## Login sessions
 
 Signing in stores your **username only** in `sessionStorage` (not `localStorage`) — your access key and role are always looked up fresh from the Users list on reconnect, so an admin's changes to your role or key take effect the next time you reconnect or log in. This means:
@@ -114,7 +130,10 @@ Signing in stores your **username only** in `sessionStorage` (not `localStorage`
 
 ## Security notes
 
+> ⚠️ **Hosting this on a public GitHub Pages site publishes `js/app.js` — including the seeded `alta_support` access key baked into `DEFAULT_USERS`.** Anyone who finds the page can read that key from the source and use it against your vTiger instance. If this app is (or ever was) deployed publicly: rotate that access key in vTiger, and replace the seeded entry with a placeholder so no real credential is committed. Everyone else's keys should arrive via the [exported setup file](#sharing-the-app-with-your-team), never through the repo.
+
 - Your vTiger access key (looked up from the Users list) is used only to call your own vTiger server from your own browser session; nothing is sent to any third party.
+- The exported setup file contains access keys in clear text — share it privately and delete stray copies; it is `.gitignore`d so it can't be committed by accident.
 - The login session itself (your username) lives only in `sessionStorage` for the current browser tab — never written to `localStorage`.
 - Your login password is checked locally against the value stored in the Users list before the app ever calls vTiger — it is **not** your vTiger password and vTiger never sees it.
 - The Users list and the Admin/Team Member split are a **UI convenience**, not a security boundary (see Users above) — every listed access key and password is readable by anyone with access to this browser's dev tools.

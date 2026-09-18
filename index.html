@@ -15,7 +15,7 @@
 <!-- Page-layout only — component styling comes from the design system above.
      ?v= is bumped on every change so GitHub Pages / browsers don't serve a
      stale cached copy of this file. -->
-<link rel="stylesheet" href="css/style.css?v=4" />
+<link rel="stylesheet" href="css/style.css?v=5" />
 </head>
 <body>
   <header class="app-header" id="app-header" hidden>
@@ -172,6 +172,13 @@
 
             <p class="muted login-crm-footnote" id="login-crm-url"></p>
           </form>
+
+          <div class="login-import-row">
+            <input type="file" id="import-setup-input" accept=".json,application/json" hidden />
+            <button type="button" class="login-import-link" id="btn-import-setup">
+              <iconify-icon icon="ph:upload-simple"></iconify-icon> First time on this device? Import team setup file
+            </button>
+          </div>
         </div>
       </div>
 
@@ -240,6 +247,27 @@
           device only. It is <strong>not</strong> a secure access-control system: anyone with access to this
           browser (or its dev tools) could read every listed access key or edit roles. Only use this on a
           trusted, shared device for a trusted internal team — never for credentials that must stay confidential.
+        </div>
+
+        <div class="callout callout-info" style="margin-bottom:14px;">
+          <iconify-icon icon="ph:users-three"></iconify-icon>
+          <span>
+            <strong>Sharing this with your team:</strong> this list lives only in <em>this</em> browser, so teammates
+            opening the app on their own device see an empty list and get "Username not found". Use
+            <strong>Export Setup File</strong> below, send that file to them privately (Teams/email — never commit it
+            to the repo), and they click <strong>Import team setup file</strong> on the login screen once. Passwords
+            are never exported — each person creates their own at their first sign-in.
+          </span>
+        </div>
+
+        <div class="users-toolbar">
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-export-setup">
+            <iconify-icon icon="ph:download-simple"></iconify-icon> Export Setup File
+          </button>
+          <input type="file" id="settings-import-input" accept=".json,application/json" hidden />
+          <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-settings-import">
+            <iconify-icon icon="ph:upload-simple"></iconify-icon> Import Setup File
+          </button>
         </div>
 
         <div class="pt-wrap">
@@ -419,6 +447,6 @@
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-  <script src="js/app.js?v=2"></script>
+  <script src="js/app.js?v=3"></script>
 </body>
 </html>

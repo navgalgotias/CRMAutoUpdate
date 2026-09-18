@@ -19,3 +19,7 @@ npm-debug.log*
 # Environment / secrets (this app has no backend, but keep this safe by default)
 .env
 .env.*
+
+# Exported team setup files — these contain vTiger access keys.
+# Share them privately (Teams/email); never commit them to this repo.
+crm-auto-update-setup*.json

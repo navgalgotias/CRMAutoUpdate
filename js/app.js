@@ -218,6 +218,11 @@
     settingsIdField: $("settings-idfield"),
     settingsTimeout: $("settings-timeout"),
     btnSettingsClear: $("btn-settings-clear"),
+    btnExportSetup: $("btn-export-setup"),
+    btnSettingsImport: $("btn-settings-import"),
+    settingsImportInput: $("settings-import-input"),
+    btnImportSetup: $("btn-import-setup"),
+    importSetupInput: $("import-setup-input"),
   };
 
   /* ---------------------------------------------------------------------
@@ -357,6 +362,109 @@
   function roleLabel(role) {
     return role === "admin" ? "Admin" : "Team Member";
   }
+
+  /* ---------------------------------------------------------------------
+   * Setup export / import — the only way to get the same user list and CRM
+   * settings onto another device, since everything here lives in this
+   * browser's localStorage and there is no backend to sync through.
+   *
+   * Passwords are deliberately stripped on export: each person creates their
+   * own at their first sign-in on their own device. Access keys ARE included
+   * (the app can't sign anyone in without them), which is exactly why the
+   * file must be shared privately and never committed to the repo.
+   * ------------------------------------------------------------------- */
+  const SETUP_FILE_MARKER = "vtigerAutoUpdate.setup";
+
+  function buildSetupPayload() {
+    const users = loadUsers();
+    const usersWithoutPasswords = {};
+    Object.keys(users).forEach((username) => {
+      usersWithoutPasswords[username] = Object.assign({}, users[username], { password: null });
+    });
+    return {
+      app: SETUP_FILE_MARKER,
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      settings: loadSettings(),
+      users: usersWithoutPasswords,
+    };
+  }
+
+  function exportSetupFile() {
+    const json = JSON.stringify(buildSetupPayload(), null, 2);
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "crm-auto-update-setup.json";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+    toast("Setup file downloaded. Send it to your team privately — it contains access keys.", "success");
+  }
+
+  /* Merges an exported file into this browser. Imported entries win over
+   * existing ones of the same username; anything already here that isn't in
+   * the file is left alone. Any password already set on this device for a
+   * user is kept, so importing an updated file doesn't force a reset. */
+  function applySetupPayload(data) {
+    if (!data || data.app !== SETUP_FILE_MARKER || !data.users || typeof data.users !== "object") {
+      throw new Error("this isn't a vTiger CRM Auto Update setup file");
+    }
+
+    const existing = loadUsers();
+    const merged = Object.assign({}, existing);
+    Object.keys(data.users).forEach((username) => {
+      const incoming = data.users[username] || {};
+      const localMatch = Object.keys(existing).find((u) => normalizeUsername(u) === normalizeUsername(username));
+      const keptPassword = localMatch ? existing[localMatch].password : null;
+      if (localMatch && localMatch !== username) delete merged[localMatch];
+      merged[username] = Object.assign({}, incoming, { password: incoming.password || keptPassword || null });
+    });
+    saveUsers(merged);
+
+    if (data.settings && data.settings.url) {
+      saveSettings(Object.assign({}, DEFAULT_CRM_CONFIG, data.settings));
+      state.crm.timeoutMinutes = loadSettings().timeoutMinutes;
+    }
+
+    return Object.keys(data.users).length;
+  }
+
+  function importSetupFile(file, onDone) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      let count;
+      try {
+        count = applySetupPayload(JSON.parse(e.target.result));
+      } catch (err) {
+        toast("Could not import that file: " + err.message + ".", "error");
+        return;
+      }
+      els.loginCrmUrl.textContent = "Connecting to: " + loadSettings().url;
+      toast(count + " user(s) imported. You can sign in with your own username now.", "success");
+      if (onDone) onDone();
+    };
+    reader.onerror = () => toast("Could not read that file.", "error");
+    reader.readAsText(file);
+  }
+
+  els.btnExportSetup.addEventListener("click", exportSetupFile);
+
+  els.btnSettingsImport.addEventListener("click", () => els.settingsImportInput.click());
+  els.settingsImportInput.addEventListener("change", () => {
+    const file = els.settingsImportInput.files[0];
+    if (file) importSetupFile(file, () => { renderUsersTable(); applySettingsToModalForm(loadSettings()); });
+    els.settingsImportInput.value = "";
+  });
+
+  els.btnImportSetup.addEventListener("click", () => els.importSetupInput.click());
+  els.importSetupInput.addEventListener("change", () => {
+    const file = els.importSetupInput.files[0];
+    if (file) importSetupFile(file, () => els.loginUsername.focus());
+    els.importSetupInput.value = "";
+  });
 
   /* ---------------------------------------------------------------------
    * Login session (sessionStorage — cleared when the tab/browser closes,
