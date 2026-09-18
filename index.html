@@ -15,7 +15,7 @@
 <!-- Page-layout only — component styling comes from the design system above.
      ?v= is bumped on every change so GitHub Pages / browsers don't serve a
      stale cached copy of this file. -->
-<link rel="stylesheet" href="css/style.css?v=2" />
+<link rel="stylesheet" href="css/style.css?v=3" />
 </head>
 <body>
   <header class="app-header" id="app-header" hidden>
@@ -67,23 +67,25 @@
 
       <!-- Promo panel -->
       <div class="login-promo">
-        <div class="login-promo-badge">
-          <img src="assets/logo.svg" alt="" width="22" height="22" />
-          <span>vTiger CRM Auto Update</span>
-        </div>
-
-        <div class="login-carousel" id="login-carousel" data-interval="6000" role="presentation">
-          <img class="login-carousel-slide is-active" src="assets/carousel/slide-1.jpg" alt="" />
-          <img class="login-carousel-slide" src="assets/carousel/slide-2.jpg" alt="" />
-          <img class="login-carousel-slide" src="assets/carousel/slide-3.jpg" alt="" />
-          <div class="login-carousel-dots">
-            <span class="dot is-active"></span><span class="dot"></span><span class="dot"></span>
+        <div class="login-promo-top">
+          <div class="login-promo-badge">
+            <img src="assets/logo.svg" alt="" width="22" height="22" />
+            <span>vTiger CRM Auto Update</span>
           </div>
-        </div>
 
-        <div class="login-promo-hero">
-          <h2>Red cells in, <span class="accent">clean tickets out.</span></h2>
-          <p>Upload the sheet you already track changes in — the app finds every red-highlighted cell and pushes just those fields into vTiger, ticket by ticket.</p>
+          <div class="login-carousel" id="login-carousel" data-interval="6000" role="presentation">
+            <img class="login-carousel-slide is-active" src="assets/carousel/slide-1.jpg" alt="" />
+            <img class="login-carousel-slide" src="assets/carousel/slide-2.jpg" alt="" />
+            <img class="login-carousel-slide" src="assets/carousel/slide-3.jpg" alt="" />
+            <div class="login-carousel-dots">
+              <span class="dot is-active"></span><span class="dot"></span><span class="dot"></span>
+            </div>
+          </div>
+
+          <div class="login-promo-hero">
+            <h2>Red cells in, <span class="accent">clean tickets out.</span></h2>
+            <p>Upload the sheet you already track changes in — the app finds every red-highlighted cell and pushes just those fields into vTiger, ticket by ticket.</p>
+          </div>
         </div>
 
         <div class="login-promo-grid">
@@ -160,8 +162,6 @@
               <label for="login-remember-toggle" id="login-remember-label">Remember my password on this device</label>
             </div>
 
-            <p class="muted" id="login-crm-url" style="font-size:0.8rem;"></p>
-
             <div class="field-actions" style="justify-content:space-between;">
               <button type="submit" class="btn btn-primary btn-login" id="btn-login">
                 <span class="btn-login-label"><iconify-icon icon="ph:sign-in"></iconify-icon> Sign In</span>
@@ -169,6 +169,8 @@
               </button>
               <span class="pt-pill outline-muted" id="login-status">Not signed in</span>
             </div>
+
+            <p class="muted login-crm-footnote" id="login-crm-url"></p>
           </form>
         </div>
       </div>
