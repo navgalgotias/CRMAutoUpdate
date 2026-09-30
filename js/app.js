@@ -166,6 +166,11 @@
     loginForm: $("login-form"),
     loginSubtitle: $("login-subtitle"),
     loginUsername: $("login-username"),
+    loginPassword: $("login-password"),
+    loginPasswordLabel: $("login-password-label"),
+    loginPasswordConfirmField: $("login-password-confirm-field"),
+    loginPasswordConfirm: $("login-password-confirm"),
+    loginFirstTimeHint: $("login-first-time-hint"),
     loginRememberToggle: $("login-remember-toggle"),
     loginCrmUrl: $("login-crm-url"),
     btnLogin: $("btn-login"),
@@ -264,10 +269,11 @@
     timeoutMinutes: 30,
   };
 
-  // Seed user list: { username: { accessKey, role, firstName, lastName } }.
-  // Everyone else must be added by an admin under Settings -> Users.
+  // Seed user list: { username: { accessKey, role } }. Everyone else must be added by an admin.
+  // `password` starts unset (null) for every seeded/new user — they create it themselves at
+  // their first sign-in; an admin can only reset it back to null to force that flow again.
   const DEFAULT_USERS = {
-    alta_support: { accessKey: "FcGFJgx1PWe9knbA", role: "admin", firstName: "Alta", lastName: "Support" },
+    alta_support: { accessKey: "FcGFJgx1PWe9knbA", role: "admin", firstName: "Alta", lastName: "Support", password: null },
   };
 
   function loadSettings() {
@@ -326,16 +332,21 @@
     return match ? Object.assign({ username: match }, users[match]) : null;
   }
 
-  function setUser(username, accessKey, role, firstName, lastName) {
+  /* `password` is optional — pass it only when you actually mean to change it (a first-time
+   * set, or an admin reset to null). Omit it (undefined) to keep whatever was already stored,
+   * so edits like renaming a user or changing their role never wipe out their password. */
+  function setUser(username, accessKey, role, firstName, lastName, password) {
     const users = loadUsers();
     const key = normalizeUsername(username);
     const existingKey = Object.keys(users).find((u) => normalizeUsername(u) === key);
+    const existing = existingKey ? users[existingKey] : null;
     if (existingKey) delete users[existingKey];
     users[username.trim()] = {
       accessKey,
       role,
       firstName: (firstName || "").trim(),
       lastName: (lastName || "").trim(),
+      password: password !== undefined ? password : (existing ? existing.password : null),
     };
     saveUsers(users);
   }
@@ -369,9 +380,10 @@
    * settings onto another device, since everything here lives in this
    * browser's localStorage and there is no backend to sync through.
    *
-   * The file carries the access keys (the app can't sign anyone in without
-   * them), which is why it is encrypted with a passphrase and must never be
-   * committed to the repo.
+   * Passwords are deliberately stripped on export: each person creates their
+   * own at their first sign-in on their own device. Access keys ARE included
+   * (the app can't sign anyone in without them), which is exactly why the
+   * file must be shared privately and never committed to the repo.
    * ------------------------------------------------------------------- */
   const SETUP_FILE_MARKER = "vtigerAutoUpdate.setup";
   const SETUP_ENCRYPTED_MARKER = "vtigerAutoUpdate.setup.encrypted";
@@ -516,12 +528,17 @@
   }
 
   function buildSetupPayload() {
+    const users = loadUsers();
+    const usersWithoutPasswords = {};
+    Object.keys(users).forEach((username) => {
+      usersWithoutPasswords[username] = Object.assign({}, users[username], { password: null });
+    });
     return {
       app: SETUP_FILE_MARKER,
       version: 1,
       exportedAt: new Date().toISOString(),
       settings: loadSettings(),
-      users: loadUsers(),
+      users: usersWithoutPasswords,
     };
   }
 
@@ -561,7 +578,8 @@
 
   /* Merges an exported file into this browser. Imported entries win over
    * existing ones of the same username; anything already here that isn't in
-   * the file is left alone. */
+   * the file is left alone. Any password already set on this device for a
+   * user is kept, so importing an updated file doesn't force a reset. */
   function applySetupPayload(data) {
     if (!data || data.app !== SETUP_FILE_MARKER || !data.users || typeof data.users !== "object") {
       throw new Error("this isn't a vTiger CRM Auto Update setup file");
@@ -570,9 +588,11 @@
     const existing = loadUsers();
     const merged = Object.assign({}, existing);
     Object.keys(data.users).forEach((username) => {
+      const incoming = data.users[username] || {};
       const localMatch = Object.keys(existing).find((u) => normalizeUsername(u) === normalizeUsername(username));
+      const keptPassword = localMatch ? existing[localMatch].password : null;
       if (localMatch && localMatch !== username) delete merged[localMatch];
-      merged[username] = Object.assign({}, data.users[username] || {});
+      merged[username] = Object.assign({}, incoming, { password: incoming.password || keptPassword || null });
     });
     saveUsers(merged);
 
@@ -1037,20 +1057,21 @@
   });
 
   /* ---------------------------------------------------------------------
-   * Login screen — username only. The username is looked up in the Users
-   * list configured under Settings, and the access key stored alongside it
-   * is what actually authenticates against vTiger. There is no separate
-   * app password: if the username isn't configured, sign-in is refused;
-   * if it is, the configured access key has to be accepted by vTiger.
+   * Login screen — username + password on one screen.
+   *   - No password on record yet -> "first sign-in": a Confirm Password
+   *     field appears and whatever is entered becomes their password the
+   *     moment the vTiger connection succeeds.
+   *   - Password on record        -> it must match to proceed.
+   * An admin can reset a user's stored password back to unset (Settings ->
+   * Users -> Reset), which puts them through the "create a password" flow
+   * again next time they sign in.
    *
-   * The "Remember my username on this device" toggle just prefills the
-   * username next time (e.g. after Log Out or a session timeout).
+   * The "Remember my password on this device" toggle stores the password
+   * (per-username) in localStorage, same trust model as the access-key/
+   * password storage documented in README — convenience, not security.
    * ------------------------------------------------------------------- */
+  const REMEMBERED_PASSWORDS_KEY = "vtigerAutoUpdate.rememberedPasswords.v1";
   const REMEMBERED_USERNAME_KEY = "vtigerAutoUpdate.rememberedUsername.v1";
-
-  // Passwords were dropped from the login flow — clear any left behind by the
-  // previous design rather than leaving them sitting in localStorage.
-  try { localStorage.removeItem("vtigerAutoUpdate.rememberedPasswords.v1"); } catch (_e) { /* ignore */ }
 
   function loadRememberedUsername() {
     try { return localStorage.getItem(REMEMBERED_USERNAME_KEY) || ""; } catch (_e) { return ""; }
@@ -1062,6 +1083,32 @@
 
   function clearRememberedUsername() {
     try { localStorage.removeItem(REMEMBERED_USERNAME_KEY); } catch (_e) { /* ignore */ }
+  }
+
+  function loadRememberedPasswords() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(REMEMBERED_PASSWORDS_KEY) || "{}");
+      return (saved && typeof saved === "object") ? saved : {};
+    } catch (_e) {
+      return {};
+    }
+  }
+
+  function getRememberedPassword(username) {
+    const map = loadRememberedPasswords();
+    return map[normalizeUsername(username)] || "";
+  }
+
+  function setRememberedPassword(username, password) {
+    const map = loadRememberedPasswords();
+    map[normalizeUsername(username)] = password;
+    try { localStorage.setItem(REMEMBERED_PASSWORDS_KEY, JSON.stringify(map)); } catch (_e) { /* ignore quota errors */ }
+  }
+
+  function clearRememberedPassword(username) {
+    const map = loadRememberedPasswords();
+    delete map[normalizeUsername(username)];
+    try { localStorage.setItem(REMEMBERED_PASSWORDS_KEY, JSON.stringify(map)); } catch (_e) { /* ignore quota errors */ }
   }
 
   function setRememberToggle(on) {
@@ -1082,18 +1129,55 @@
     if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggleRemember(); }
   });
 
+  /* As soon as a known username is typed, shape the password field(s) for
+   * that user (first-time vs. returning) and prefill a remembered password. */
+  function syncPasswordFieldToUsername() {
+    const username = els.loginUsername.value.trim();
+    const user = username ? getUser(username) : null;
+
+    if (user && !user.password) {
+      els.loginPasswordLabel.textContent = "Create Password";
+      els.loginPassword.placeholder = "Choose a password";
+      els.loginPasswordConfirmField.hidden = false;
+      els.loginFirstTimeHint.hidden = false;
+    } else {
+      els.loginPasswordLabel.textContent = "Password";
+      els.loginPassword.placeholder = "Enter your password";
+      els.loginPasswordConfirmField.hidden = true;
+      els.loginFirstTimeHint.hidden = true;
+    }
+
+    const remembered = user ? getRememberedPassword(user.username) : "";
+    if (remembered) {
+      els.loginPassword.value = remembered;
+      setRememberToggle(true);
+    } else {
+      setRememberToggle(false);
+    }
+  }
+
+  els.loginUsername.addEventListener("blur", syncPasswordFieldToUsername);
+
   function resetLoginForm() {
     els.loginUsername.value = "";
+    els.loginPassword.value = "";
+    els.loginPasswordConfirm.value = "";
+    els.loginPasswordLabel.textContent = "Password";
+    els.loginPassword.placeholder = "Enter your password";
+    els.loginPasswordConfirmField.hidden = true;
+    els.loginFirstTimeHint.hidden = true;
     setRememberToggle(false);
+    els.loginSubtitle.textContent = "Sign in with your vTiger CRM username and password.";
     els.loginStatus.textContent = "Not signed in";
     els.loginStatus.className = "pt-pill outline-muted";
 
-    // If "Remember" was on at the last successful sign-in, prefill the
-    // username (e.g. right after a Log Out or a session timeout).
+    // If "Remember" was on at the last successful sign-in, prefill both
+    // fields (e.g. right after a Log Out or a session timeout) instead of
+    // making the user retype everything.
     const rememberedUsername = loadRememberedUsername();
     if (rememberedUsername) {
       els.loginUsername.value = rememberedUsername;
-      setRememberToggle(true);
+      syncPasswordFieldToUsername();
     }
   }
 
@@ -1114,6 +1198,28 @@
       return;
     }
 
+    const password = els.loginPassword.value;
+    let passwordToSave = null;
+
+    if (user.password) {
+      if (password !== user.password) {
+        els.loginStatus.textContent = "Incorrect password";
+        els.loginStatus.className = "pt-pill solid-danger";
+        toast("Incorrect password.", "error");
+        return;
+      }
+    } else {
+      if (!password || password.length < 4) {
+        toast("Choose a password with at least 4 characters.", "error");
+        return;
+      }
+      if (password !== els.loginPasswordConfirm.value) {
+        toast("Passwords do not match.", "error");
+        return;
+      }
+      passwordToSave = password;
+    }
+
     els.btnLogin.disabled = true;
     els.btnLogin.classList.add("is-loading");
     els.loginStatus.textContent = "Signing in...";
@@ -1126,17 +1232,28 @@
     }));
 
     if (ok) {
+      if (passwordToSave) {
+        setUser(user.username, user.accessKey, user.role, user.firstName, user.lastName, passwordToSave);
+      }
       if (isRememberToggleOn()) {
+        setRememberedPassword(user.username, password);
         setRememberedUsername(user.username);
-      } else if (normalizeUsername(loadRememberedUsername()) === normalizeUsername(user.username)) {
-        clearRememberedUsername();
+      } else {
+        clearRememberedPassword(user.username);
+        if (normalizeUsername(loadRememberedUsername()) === normalizeUsername(user.username)) {
+          clearRememberedUsername();
+        }
       }
       state.auth = { username: user.username, role: user.role, firstName: user.firstName, lastName: user.lastName };
       saveAuthSession({ username: user.username });
       applyRoleToUI(user.role);
       showApp();
       setStep(1);
-      toast("Signed in as " + user.username + " (" + roleLabel(user.role) + ").", "success");
+      toast(
+        (passwordToSave ? "Password created. Signed in as " : "Signed in as ") +
+        user.username + " (" + roleLabel(user.role) + ").",
+        "success"
+      );
       resetLoginForm();
     } else {
       els.loginStatus.textContent = "Sign-in failed";
@@ -1906,6 +2023,35 @@
       tdRole.appendChild(select);
       tr.appendChild(tdRole);
 
+      const tdPassword = document.createElement("td");
+      if (record.password) {
+        const setTag = document.createElement("span");
+        setTag.className = "fn-tag bubble-success";
+        setTag.textContent = "Set";
+        const resetBtn = document.createElement("button");
+        resetBtn.type = "button";
+        resetBtn.className = "btn-reveal-key";
+        resetBtn.style.marginLeft = "8px";
+        resetBtn.textContent = "Reset";
+        resetBtn.addEventListener("click", () => {
+          setUser(username, record.accessKey, record.role, record.firstName, record.lastName, null);
+          record.password = null;
+          if (state.auth && normalizeUsername(state.auth.username) === normalizeUsername(username)) {
+            state.auth.password = null;
+          }
+          renderUsersTable();
+          toast("Password reset for " + username + " — they'll set a new one at their next sign-in.", "success");
+        });
+        tdPassword.appendChild(setTag);
+        tdPassword.appendChild(resetBtn);
+      } else {
+        const notSetTag = document.createElement("span");
+        notSetTag.className = "fn-tag bubble-orange";
+        notSetTag.textContent = "Not set";
+        tdPassword.appendChild(notSetTag);
+      }
+      tr.appendChild(tdPassword);
+
       const tdRemove = document.createElement("td");
       const removeBtn = document.createElement("button");
       removeBtn.type = "button";
@@ -1924,7 +2070,7 @@
     if (Object.keys(users).length === 0) {
       const tr = document.createElement("tr");
       const td = document.createElement("td");
-      td.colSpan = 5;
+      td.colSpan = 6;
       td.className = "muted";
       td.textContent = "No users added yet — no one will be able to sign in until you add at least one.";
       tr.appendChild(td);

@@ -6,7 +6,7 @@ No backend, no build step, no server-side storage. Everything runs in your brows
 
 ## How it works
 
-The app opens on a **login screen** that asks only for your **username** — there is no password field. Behind the scenes, the app looks your username up in the admin-managed **Users** list (see below), pulls the matching vTiger access key, and uses it to sign in via vTiger's own `login` webservice call. Your entry in that list also decides your **role** for this session:
+The app opens on a **login screen** that first asks for your **username**, then a **password**. Behind the scenes, the app looks your username up in the admin-managed **Users** list (see below), pulls the matching vTiger access key, and uses it to sign in via vTiger's own `login` webservice call. Your entry in that list also decides your **role** for this session:
 
 - **Admin** — full access, including **Settings** and **Documentation**.
 - **Team Member** — access to the ticket-update wizard and **Reconnect** only; Settings and Documentation are hidden.
@@ -20,15 +20,15 @@ Once signed in, a status pill in the header shows *Connected* / *Connection fail
 
 Cell scanning happens right after you pick a worksheet in step 1: the app inspects every cell's fill color and flags cells with a red-ish background as pending changes.
 
-## Signing in: username only
+## Passwords: set at first sign-in
 
-There is no app password. Sign-in is entirely driven by what an Admin configured under **Settings → Users**:
+No one — not even an Admin — sets another user's password directly. Instead:
 
-1. An Admin adds a user there with their username, name, vTiger access key, and role.
-2. On the login screen that person types **just their username**.
-3. The app looks the username up in that list. Not on the list → rejected with **"Username not found"**, before anything is sent to vTiger.
-4. On the list → the app signs in to vTiger with the **access key configured alongside that username**. If vTiger rejects the key, sign-in fails. So the configured username *and* its access key are what actually gate access.
-5. **Remember my username on this device** — a toggle on the login screen. Turn it on and the username is saved in this browser's `localStorage`, so the field comes back pre-filled next time, including right after **Log Out** or an automatic [session timeout](#settings-admins-only). Turn it off and nothing is stored.
+1. An Admin adds a user to the **Users** list with just a username, name, vTiger access key, and role (no password).
+2. The login screen shows username and password together. The first time that person signs in, a **Confirm Password** field appears automatically as soon as they leave the username field (the app recognizes they have no password yet) — whatever they enter is saved as their password the moment their vTiger connection succeeds.
+3. Every sign-in after that asks for that same username + password; a wrong password blocks sign-in before it ever touches vTiger.
+4. If someone forgets their password, an **Admin** can **reset** it from Settings → Users → Password column → **Reset**. That clears the stored password, so the next time they sign in the Confirm Password field reappears — the admin never sees or sets the new one.
+5. **Remember my password on this device** — a toggle on the login screen. Turn it on and both the **username and password** are saved in this browser's `localStorage`; the login screen then shows up already filled in — including right after **Log Out** or an automatic [session timeout](#settings-admins-only) — instead of asking you to retype them. Turn it off (or never turn it on) and neither is stored. Same trust model as the access-key list below: convenient for a trusted personal or shared device, not something to enable on a public one.
 
 ## Project structure
 
@@ -94,14 +94,14 @@ Click **Settings** in the header to set the shared **CRM URL**, **ticket module*
 
 Also inside **Settings**, Admins manage the full list of people who can sign in — each entry has a **username**, **first/last name**, that user's own **vTiger access key**, and a **role**:
 
-- **Add / Update User** adds a brand-new user, or overwrites an existing user's name, access key, and role.
+- **Add / Update User** adds a brand-new user, or overwrites an existing user's name, access key, and role — it never sets their password (see [Passwords](#passwords-set-at-first-sign-in) above).
 - Each row in the table also has its own **Role** dropdown for quickly promoting/demoting someone without retyping their access key, and a **Show/Hide** toggle to reveal an access key when you need to verify it.
-- The **Name** cell is editable inline — type and press Enter (or click away) to save.
+- The **Password** column shows **Not set** (they'll create one at their next sign-in) or **Set**, with a **Reset** button to clear it and put them through that first-sign-in flow again — for example if they forget it.
 - First/last name is used only for display — in the Users table and in the profile menu after signing in (initials avatar, full name, username, role). It's optional; if left blank, the username is shown instead.
 - Anyone who tries to log in with a username *not* on this list is rejected with "Username not found."
-- The default login (`alta_support`) is seeded as **Admin** the first time the app runs on a browser.
+- The default login (`alta_support`) is seeded as **Admin** the first time the app runs on a browser, with no password until its first sign-in.
 
-This list — **including every listed access key** — is stored per-browser via `localStorage`. It is **not** a real access-control or credential-vault system: anyone comfortable with browser dev tools could read `localStorage` directly and see every user's access key, or edit roles. This exists purely as a convenience for a trusted internal team, so that most people never have to know or type an access key at all — don't use it for credentials that must stay confidential, and don't treat the Admin/Team Member split as protecting anything from a determined user of the same browser.
+This list — **including every listed access key and password** — is stored per-browser via `localStorage`. It is **not** a real access-control or credential-vault system: anyone comfortable with browser dev tools could read `localStorage` directly and see every user's access key or password, or edit roles. This exists purely as a convenience for a trusted internal team sharing a device, so that most people never have to know or type an access key at all — don't use it for credentials that must stay confidential, and don't treat the Admin/Team Member split (or the password step) as protecting anything from a determined user of the same browser.
 
 ## Sharing the app with your team
 
@@ -110,13 +110,13 @@ There is **no backend**, so the Users list and Settings live only in the browser
 1. **Admin:** open **Settings → Users → Export Setup File**, choose a **passphrase**, and the browser downloads an encrypted `crm-auto-update-setup.json` containing the CRM settings and the user list.
 2. **Send the file to your team, and the passphrase through a different channel** (e.g. file by email, passphrase over a call or chat). **Never commit the file to the repository** — `.gitignore` already blocks that filename as a safety net.
 3. **Teammate:** open the app's URL, click **"First time on this device? Import team setup file"** at the bottom of the login card, pick the file, and enter the passphrase. Their browser is now set up.
-4. They sign in with their own username — nothing else to set up.
+4. They sign in with their own username and create their own password on that first sign-in.
 
 Notes:
 
 - **The file is encrypted**, so it's useless to anyone without the passphrase — see [File encryption](#file-encryption) below.
-- The file carries usernames, names, roles, and access keys — everything needed to sign in, which is exactly why it must be shared privately.
-- Importing **merges**: entries in the file are added or updated, and anything already on that device is left alone — so you can re-send an updated file after adding people.
+- **Passwords are never exported.** Each person sets their own on their own device, so the file only carries usernames, names, roles, and access keys.
+- Importing **merges**: entries in the file are added or updated, anything already on that device is left alone, and a password already set on that device is preserved — so you can re-send an updated file after adding people, without resetting anyone.
 - Admins can also use **Import Setup File** inside Settings to load a file (e.g. moving your own setup to a new laptop).
 - Whenever you add or remove people, export and re-share the file — there's nothing that syncs automatically.
 
@@ -152,8 +152,8 @@ Signing in stores your **username only** in `sessionStorage` (not `localStorage`
 - Your vTiger access key (looked up from the Users list) is used only to call your own vTiger server from your own browser session; nothing is sent to any third party.
 - The exported setup file is **encrypted** (AES-256-GCM, PBKDF2 250k) with a passphrase you choose, so the access keys inside it are not readable without it. Still send the passphrase separately from the file, and keep the file out of the repo — it is `.gitignore`d as a safety net.
 - The login session itself (your username) lives only in `sessionStorage` for the current browser tab — never written to `localStorage`.
-- There is no app password: whoever can open the browser can sign in as any username configured in that browser's Users list. Sign-in is gated only by the username being configured and vTiger accepting its access key.
-- The Users list and the Admin/Team Member split are a **UI convenience**, not a security boundary (see Users above) — every listed access key is readable by anyone with access to this browser's dev tools.
+- Your login password is checked locally against the value stored in the Users list before the app ever calls vTiger — it is **not** your vTiger password and vTiger never sees it.
+- The Users list and the Admin/Team Member split are a **UI convenience**, not a security boundary (see Users above) — every listed access key and password is readable by anyone with access to this browser's dev tools.
 - Always review the **Review** step carefully before clicking **Update** — updates are applied immediately to live CRM records.
 
 ## Running locally
